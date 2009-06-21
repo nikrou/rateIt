@@ -1,0 +1,237 @@
+# Language: français
+# Module: rateIt - 0.2
+# Date: 2009-06-21 20:26:12
+# Author: JC Denis, http://blog.jcdenis.com
+# Translated with dcTranslater - 0.2.4
+
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+#: index.php:61
+msgid "delete rating"
+msgstr "Effacer les votes"
+
+#: _admin.php:91
+msgid "Do you really want to delete all votes for these entries?"
+msgstr "Êtes vous sûr de vouloir effacer les votes pour ces entrées?"
+
+#: inc/lib.rateit.list.php:145
+msgid "Show rating details"
+msgstr "Voir le détail des votes"
+
+#: _admin.php:145
+msgid "This is a list of all the categories having rating"
+msgstr "Ceci est la liste des catégories aillant des votes"
+
+#: _admin.php:149
+msgid "There is no category rating at this time"
+msgstr "Il n'y a pas de catégorie aillant des votes"
+
+#: index.php:296
+msgid "Note"
+msgstr "Note"
+
+#: index.php:107
+msgid "Votes"
+msgstr "Votes"
+
+#: index.php:109
+msgid "Higher"
+msgstr "Haute"
+
+#: index.php:110
+msgid "Lower"
+msgstr "Basse"
+
+#: index.php:300
+msgid "Id"
+msgstr "Id"
+
+#: _admin.php:159
+msgid "Level"
+msgstr "Niveau"
+
+#: index.php:310
+msgid "Selected categories action:"
+msgstr "Action sur les catégories sélectionnées :"
+
+#: _widgets.php:34
+msgid "Vote for this category"
+msgstr "Voter pour cette catégorie"
+
+#: _public.php:236
+msgid "Vote for this enrty"
+msgstr "Voter pour ce billet"
+
+#: _widgets.php:25
+msgid "Vote"
+msgstr "Vote"
+
+#: _widgets.php:27
+msgid "Enable vote for entries"
+msgstr "Autoriser le vote pour les billets"
+
+#: _widgets.php:29
+msgid "Title for entries:"
+msgstr "Titre pour les billets :"
+
+#: _widgets.php:30
+msgid "Vote for this entry"
+msgstr "Voter pour ce billet"
+
+#: _widgets.php:31
+msgid "Enable vote for categories"
+msgstr "Autoriser le vote pour les catégories"
+
+#: _widgets.php:33
+msgid "Title for categories:"
+msgstr "Titre pour les catégories :"
+
+#: _widgets.php:40
+msgid "Top rated entries"
+msgstr "Billets les mieux notés"
+
+#: _widgets.php:41
+msgid "Length:"
+msgstr "Longueur :"
+
+#: _widgets.php:143
+msgid "Votes:"
+msgstr "Votes :"
+
+#: _widgets.php:142
+msgid "Note:"
+msgstr "Note :"
+
+#: _widgets.php:144
+msgid "Higher:"
+msgstr "Plus haute :"
+
+#: _widgets.php:145
+msgid "Lower:"
+msgstr "Plus basse :"
+
+#: inc/class.rateit.rest.php:33
+msgid "Rating is disabled on this blog"
+msgstr "Le vote est désactivé sur ce blog"
+
+#: inc/class.rateit.rest.php:36
+msgid "Rating failed because of missing informations"
+msgstr "Échec du vote car des information sont manquantes"
+
+#: inc/class.rateit.rest.php:40
+msgid "Rating failed because of a wrong type of entry"
+msgstr "Échec du vote car le type d'entrée est erroné"
+
+#: inc/class.rateit.rest.php:47
+msgid "You have already voted"
+msgstr "Vous avez déjà voté"
+
+#: index.php:19
+msgid "Configuration saved"
+msgstr "Configuration enregistrée"
+
+#: index.php:24
+msgid "About"
+msgstr "À propos"
+
+#: index.php:30
+msgid "Administration"
+msgstr "Administration"
+
+#: index.php:452
+msgid "Uninstall"
+msgstr "Désinstaller"
+
+#: index.php:202
+msgid "This is the list of all entries having rating"
+msgstr "Ceci est la liste des billets aillant des votes"
+
+#: index.php:287
+msgid "This is detailed list for rating of type "%s" and id "%s""
+msgstr "Ceci est la liste détaillée des votes de type %s et d'id %s"
+
+#: index.php:291
+msgid "There is no rating for this request at this time"
+msgstr "Il n'y a pas de vote pour cette requête"
+
+#: index.php:297
+msgid "Quotient"
+msgstr "Quotient"
+
+#: index.php:298
+msgid "Ip"
+msgstr "Ip"
+
+#: index.php:311
+msgid "delete entry"
+msgstr "effacer cette entrée"
+
+#: index.php:362
+msgid "Plugin admistration options on this blog"
+msgstr "Administration de l'extension sur ce blog"
+
+#: index.php:364
+msgid "Enable plugin"
+msgstr "Activer l'extension"
+
+#: index.php:365
+msgid "Include on entries"
+msgstr "Inclure dans les billets"
+
+#: index.php:366
+msgid "Note out of"
+msgstr "Note sur"
+
+#: index.php:367
+msgid "Number of digits"
+msgstr "Nombre de décimales"
+
+#: index.php:436
+msgid "You must check warning in order to delete plugin."
+msgstr "Vous devez vérifier la mise en garde en vue de supprimer l'extension"
+
+#: index.php:439
+msgid "In order to properly uninstall this plugin, you must specify the actions to perform"
+msgstr "Dans le but de désintaller proprement l'extension, vous devez spécifier les actions à effectuer"
+
+#: index.php:443
+msgid "You understand that if you delete this plugin, the other plugins that use there table and class will no longer work."
+msgstr "Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces table et classes ne fonctionneront plus."
+
+#: index.php:416
+msgid "Delete plugin files"
+msgstr "Supprimer les fichiers de l'extension"
+
+#: index.php:445
+msgid "Delete plugin database table"
+msgstr "Supprimer la table de l'extension dans la base de donnée"
+
+#: index.php:447
+msgid "Delete plugin settings"
+msgstr "Supprimer les paramètres de l'extension"
+
+#: index.php:464
+msgid "Version:"
+msgstr "Version :"
+
+#: index.php:466
+msgid "Support:"
+msgstr "Support :"
+
+#: index.php:472
+msgid "Copyrights:"
+msgstr "Droits :"
+
+#: index.php:474
+msgid "Files"
+msgstr "Fichiers"
+
+#: index.php:480
+msgid "Images"
+msgstr "Images :"
+
+#: index.php:487
+msgid "Tools"
+msgstr "Outils"
+

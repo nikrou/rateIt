@@ -1,0 +1,11 @@
+.rateit ul { text-align:center;}
+.rateit ul li { display:inline; list-style-type: none; line-height: 16px; padding-left: 20px;}
+.rateit h3 { border-width: 1px 0; border-style: solid; border-color: #bfbfbf; background: #fbfbfb; padding: 5px; margin: 20px 0 8px 0; font-size: 1.2em; }
+.rateitwidget ul { clear:left; }
+.rateit-rank { float:left;font-weight: bold; background: transparent url(img/rateit_img.png) no-repeat 0 -48px; width:16px; height: 16px; text-align:center; margin-right: 3px; }
+.rateit * a, .rateitwidget * a { text-decoration:none; }
+.rateit-img { float:left; background: transparent url(img/rateit_img.png) no-repeat 0 0; width:16px; height: 16px; text-align:center; }
+.rateit-empty { background-position: 0 0; }
+.rateit-half { background-position: 0 -16px; }
+.rateit-full { background-position: 0 -32px; }
+.rateit-ligh t{ background-position: 0 -48px; }
