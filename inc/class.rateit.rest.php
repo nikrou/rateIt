@@ -25,7 +25,6 @@ class rateItRest
 		$type = isset($post['voteType']) ? $post['voteType'] : null;
 		$id = isset($post['voteId']) ? $post['voteId'] : null;
 		$note = isset($post['voteNote']) ? $post['voteNote'] : null;
-		$ip = $_SERVER['REMOTE_ADDR'];
 
 		$rsp = new xmlTag();
 
@@ -39,18 +38,18 @@ class rateItRest
 		if (!in_array($type,$types))
 			throw new Exception(__('Rating failed because of a wrong type of entry'));
 
-		$ss = new rateIt($core);
-		$rs = $ss->get($type,$id,$ip);
-		if ($rs->total == 0)
-			$ss->set($type,$id,$ip,$note);
-		else
+		$rateIt = new rateIt($core);
+		$voted = $rateIt->voted($type,$id);
+		if ($voted)
 			throw new Exception(__('You have already voted'));
+		else
+			$rateIt->set($type,$id,$note);
 
-		$rs = $ss->get($type,$id);
+		$rs = $rateIt->get($type,$id);
 		$xv = new xmlTag('item');
 		$xv->type = $type;
 		$xv->id = $id;
-		$xv->ip = $ip;
+		$xv->ip = $rateIt->ip;
 		$xv->sum = $rs->sum;
 		$xv->max = $rs->max;
 		$xv->min = $rs->min;

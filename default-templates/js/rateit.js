@@ -1,12 +1,56 @@
-$(function(){if(!document.getElementById){return;} var localized=$('.rateit'); if(localized!=undefined){var rateit=new rateIt(['rateit','rateitwidget']);rateit.init();}});function rateIt(blocs){this.blocs=blocs;};
-rateIt.prototype={blocs:null,service_url:'services.php',ss_title:'rateIt',msg_call_server_error:'Failed to call server',
-init:function(){var This=this;for(i=0;i<this.blocs.length;i++){$('.'+this.blocs[i]).find('.rateit-linker').each(function(){var def=$(this).attr('id').split('-');if (def[2]!=undefined&&def[3]!=undefined){This.clean(this,def[2],def[3]);}});}},
-clean:function(linker,type,id){var This=this;var linker=linker;var a=$(linker).children('p').children('a');var note=0;$(a).each(function(){$(this).attr('href','#');note += 1;$(this).get(0).r_note=note;$(this).get(0).r_id=id;$(this).get(0).r_type=type;$(this).click(function(){
-if (!$(this).hasClass('rateit-disable')){This.vote(this.r_note,this.r_type,this.r_id);}return false;});
-$(this).mouseover(function(){var cur=0;var cur_note = this.r_note;$(this).parent().children('a').each(function(){cur += 1;if (cur_note>cur){$(this).addClass('rateit-light');}});$(this).addClass('rateit-light').text(this.r_note);});
-$(this).mouseout(function(){$(linker).children('p').children('a').removeClass('rateit-light');$(linker).children('p').children('a').each(function(){$(this).text(' ');});});});},
-vote:function(note,type,id){var This=this;$.ajax({timeout:3000,url:this.service_url,error:function(){alert(this.msg_call_server_error);},type:'POST',data:{f:'rateItVote',voteType:type,voteId:id,voteNote:note},success:function(data){
-data=$(data);if(data.find('rsp').attr('status')=='ok'){This.rebuild(data.find('item').attr('type'),data.find('item').attr('id'),data.find('item').attr('quotient'),data.find('item').attr('total'),data.find('item').attr('max'),data.find('item').attr('min'),data.find('item').attr('note'));}else{alert($(data).find('message').text());}}});return false;},
-rebuild:function(type,id,quotient,total,max,min,note){for(i=0;i<this.blocs.length;i++){$('#'+this.blocs[i]+'-total-'+type+'-'+id).text(total);$('#'+this.blocs[i]+'-max-'+type+'-'+id).text(max);$('#'+this.blocs[i]+'-min-'+type+'-'+id).text(min);$('#'+this.blocs[i]+'-note-'+type+'-'+id).text(note);
-$('#'+this.blocs[i]+'-linker-'+type+'-'+id).children('p').empty();var img='empty';for(x=0;x<quotient;x++){var y = x+1;if (note<=x){img='empty';}if (note>x&&note<y){img='half';}if (note>=y){img='full';}
-$('#'+this.blocs[i]+'-linker-'+type+'-'+id).children('p').append('<a class="rateit-img rateit-'+img+' rateit-disable" href="#" title="'+y+' / '+quotient+'"> </a>');}this.clean($('#'+this.blocs[i]+'-linker-'+type+'-'+id),type,id);}}};
+$(function(){if(!document.getElementById){return;}var rateit=new rateIt();rateit.init();});function rateIt(){};
+
+rateIt.prototype={
+
+	blocs:new Array(),
+	service_url:'services.php',
+	msg_call_server_error:'Failed to call server',
+	msg_thanks:'Thank you for having voted',
+
+	init:function(){
+		$.fn.rating.options.required = true;
+
+		var This=this;
+		for(i=0;i<this.blocs.length;i++){
+			$('.'+this.blocs[i]).find('.rateit-linker').each(function(){
+				var def = $(this).attr('id').split('-');
+				if (def[2] == undefined || def[3] == undefined) return;
+				var type=def[2];
+				var id=def[3];
+
+				$(function(){
+					$('input.rateit-'+type+'-'+id).rating({
+						callback:function(note,link){
+							$('input.rateit-'+type+'-'+id).rating('disable');
+							$.ajax({
+								timeout:3000,
+								url:This.service_url,
+								type:'POST',
+								data:{f:'rateItVote',voteType:type,voteId:id,voteNote:note},
+								error:function(){alert(This.msg_call_server_error);},
+								success:function(data){
+									data=$(data);
+									if(data.find('rsp').attr('status')=='ok'){
+										for(i=0;i<This.blocs.length;i++){
+											$('#'+This.blocs[i]+'-total-'+type+'-'+id).text(data.find('item').attr('total'));
+											$('#'+This.blocs[i]+'-max-'+type+'-'+id).text(data.find('item').attr('max'));
+											$('#'+This.blocs[i]+'-min-'+type+'-'+id).text(data.find('item').attr('min'));
+											$('#'+This.blocs[i]+'-note-'+type+'-'+id).text(data.find('item').attr('note'));
+											$('#'+This.blocs[i]+'-quotient-'+type+'-'+id).text(data.find('item').attr('quotient'));
+											$('#'+This.blocs[i]+'-fullnote-'+type+'-'+id).text(data.find('item').attr('note')+'/'+data.find('item').attr('quotient'));
+										}
+										alert(This.msg_thanks);
+									}else{
+										alert($(data).find('message').text());
+									}
+								}
+							});
+						}
+					});
+				});
+				$(this).children('p').children('input:submit').hide();
+				$(this).children('p').after('<p>&nbsp;</p>');
+			});
+		}
+	}
+};

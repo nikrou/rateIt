@@ -17,12 +17,14 @@ class rateItExtList
 	protected $core;
 	protected $rs;
 	protected $rs_count;
+	protected $base_url;
 
-	public function __construct(&$core,&$rs,$rs_count)
+	public function __construct(&$core,&$rs,$rs_count,$base_url=null)
 	{
 		$this->core =& $core;
 		$this->rs =& $rs;
 		$this->rs_count = $rs_count;
+		$this->base_url = $base_url;
 		$this->html_prev = __('&#171;prev.');
 		$this->html_next = __('next&#187;');
 
@@ -66,6 +68,7 @@ class rateItExtList
 			echo $this->html_none;
 		} else {
 			$pager = new pager($page,$this->rs_count,$nb_per_page,10);
+			$pager->base_url = $this->base_url;
 			$pager->html_prev = $this->html_prev;
 			$pager->html_next = $this->html_next;
 			$pager->var_page = 'page';

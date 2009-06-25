@@ -169,11 +169,21 @@ dcPage::jsPageTabs($request_tab).
 
 if (isset($tab['post'])) {
 
+	$pager_base_url = $p_url.
+	'&amp;t=post'.
+	'&amp;cat_id='.$cat_id.
+	'&amp;status='.$status.
+	'&amp;selected='.$selected.
+	'&amp;sortby='.$sortby.
+	'&amp;order='.$order.
+	'&amp;nb='.$nb_per_page.
+	'&amp;page=%s';
+
 	try {
 		$rateIt = new rateIt($core);
 		$posts = $rateIt->getPostsByRate($params);
 		$counter = $rateIt->getPostsByRate($params,true);
-		$post_list = new rateItPostsList($core,$posts,$counter->f(0));
+		$post_list = new rateItPostsList($core,$posts,$counter->f(0),$pager_base_url);
 	} catch (Exception $e) {
 		$core->error->add($e->getMessage());
 	}
@@ -244,8 +254,9 @@ if (isset($tab['details']) && isset($_REQUEST['type']) && isset($_REQUEST['id'])
 	if (isset($_POST['action']) && $_POST['action'] == 'rateit_del_entry' && !empty($_POST['entries'])) {
 		foreach($_POST['entries'] AS $entry) {
 			$val = explode('|',$entry);
-			$rateIt->del($entry[0],$entry[1],$entry[2]);
+			$rateIt->del($val[0],$val[1],$val[2]);
 		}
+		http::redirect($p_url.'&t=details&type='.$_REQUEST['type'].'&id='.$_REQUEST['id'].'&done=1');
 	}
 	$rs = $rateIt->getDetails($_REQUEST['type'],$_REQUEST['id']);
 
@@ -325,6 +336,7 @@ if (isset($tab['admin'])) {
 			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post',true,false);
 			$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 			$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
+			$core->blog->triggerBlog();
 			http::redirect($p_url.'&t=admin&done=1');
 		}
 		catch (Exception $e) {
@@ -465,8 +477,9 @@ under a Creative Commons Attribution 2.5 License<br />
 </ul>
 <h3>'.__('Tools').'</h3>
 <ul>
-<li>Traduced with plugin Translater,</li>
-<li>Packaged with plugin Packager.</li>
+<li>Traduced with Dotclear plugin Translater,</li>
+<li>Packaged with Dotclear plugin Packager.</li>
+<li>Used jQuery Star Rating Plugin v3.12 by <a href="http://www.fyneworks.com/jquery/star-rating/">Fyneworks</a></li>
 </ul>
 </div>
  </body>

@@ -124,20 +124,21 @@ class rateItWidget
 
 			$rateIt = new rateIt($core);
 			$rs = $rateIt->get($type,$id);
+			$voted = $rateIt->voted($type,$id);
 
-			$content = '<div id="rateitwidget-linker-'.$type.'-'.$id.'" class="rateit-linker"><p>';
+			$dis = $voted ?
+				' disabled="disabled"' : '';
+
+			$content = '<form class="rateit-linker" id="raiteitwidget-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.'rateitnow/'.$type.'/'.$id.'/" method="post"><p>';
 			for($i=0;$i<$rs->quotient;$i++){
-				if ($rs->note <= $i)
-					$img = 'empty';
-				if ($rs->note > $i && $rs->note < $i+1)
-					$img = 'half';
-				if ($rs->note >= $i+1)
-					$img = 'full';
+				$chk = $rs->note > $i && $rs->note <= $i+1 ? 
+				' checked="checked"' : '';
 
-				$content .= '<a class="rateit-img rateit-'.$img.'" href="'.$core->blog->url.'rateitnow/'.$type.'/'.$id.'/'.($i+1).'" title="'.($i+1).' / '.$rs->quotient.'">&nbsp;</a>';
+				$content .= '<input name="rateit-'.$type.'-'.$id.'" class="rateit-'.$type.'-'.$id.'" type="radio" value="'.($i+1).'"'.$chk.$dis.'/>';
 			}
 			$content .= 
-				'</p></div>'.
+				($voted ? '' : '<input type="submit" name="submit" value="'.__('Vote').'"/>').
+				'</p></form>'.
 				'<ul>'.
 				'<li>'.__('Note:').'<span id="rateitwidget-note-'.$type.'-'.$id.'" class="rateit-note">'.$rs->note.'</span></li>'.
 				'<li>'.__('Votes:').'<span id="rateitwidget-total-'.$type.'-'.$id.'" class="rateit-total">'.$rs->total.'</span></li>'.

@@ -18,6 +18,7 @@ class rateIt
 	private $quotient;
 	private $digit;
 	private $types;
+	public $ip;
 
 	public function __construct(&$core)
 	{
@@ -26,9 +27,10 @@ class rateIt
 		$this->quotient = $core->blog->settings->rateit_quotient;
 		$this->digit = $core->blog->settings->rateit_digit;
 		$this->types = explode(',',$core->blog->settings->rateit_types);
+		$this->ip = $_SERVER['REMOTE_ADDR'];
 	}
 
-	public function set($type,$id,$ip,$note)
+	public function set($type,$id,$note)
 	{
 		if (!in_array($type,$this->types))
 			return false;
@@ -39,7 +41,7 @@ class rateIt
 		$cur->blog_id = $this->core->blog->id;
 		$cur->rateit_type = (string) $type;
 		$cur->rateit_id = (integer) $id;
-		$cur->rateit_ip = (string) $ip;
+		$cur->rateit_ip = (string) $this->ip;
 		$cur->rateit_note = $note;
 		$cur->rateit_quotient = $this->quotient;
 		$cur->rateit_time = date('Y-m-d H:i:00');
@@ -52,14 +54,8 @@ class rateIt
 	public function get($type=null,$id=null,$ip=null)
 	{
 		$req=
-			'SELECT '.
-			'SUM(rateit_note / rateit_quotient) as rateit_sum, '.
-			'MAX(rateit_note / rateit_quotient) as rateit_max, '.
-			'MIN(rateit_note / rateit_quotient) as rateit_min, '.
-			'(SUM(rateit_note / rateit_quotient) / COUNT(rateit_note)) as rateit_note, '.
-			'COUNT(rateit_note) as rateit_total, '.
-			'rateit_quotient '.
-			'FROM '.$this->table.' WHERE blog_id=\''.$this->core->blog->id.'\' ';
+			'SELECT rateit_note, rateit_quotient '.
+			'FROM '.$this->table.' WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' ';
 		if ($type!=null)
 			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
 		if ($id!=null)
@@ -67,23 +63,50 @@ class rateIt
 		if ($ip!=null)
 			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
 
-		$req .= 'GROUP BY rateit_id';
-
 		$rs = $this->core->con->select($req);
 		$rs->toStatic();
 
+		$note = $sum = $max = $total = 0;
+		$min = 10000;
+		while($rs->fetch()){
+			$note = $rs->rateit_note / $rs->rateit_quotient;
+			$sum += $note;
+			$max = $max < $note ? $note : $max;
+			$min = $min > $note ? $note : $min;
+			$total += 1;
+		}
+		if ($rs->count())
+			$note = $sum / $total;
+		else
+			$min = 0;
+
 		$res = new ArrayObject();
-		$res->max = self::trans($rs->rateit_max);
-		$res->min = self::trans($rs->rateit_min);
-		$res->note = self::trans($rs->rateit_note);
-		$res->total = $rs->rateit_total;
-		$res->sum = $rs->rateit_sum;
+		$res->max = self::trans($max);
+		$res->min = self::trans($min);
+		$res->note = self::trans($note);
+		$res->total = $total;
+		$res->sum = $sum;
 		$res->quotient = $this->quotient;
 		$res->digit = $this->digit;
 
 		return $res;
 	}
-	
+
+	public function voted($type=null,$id=null)
+	{
+		$rs = $this->core->con->select(
+			'SELECT COUNT(*) '.
+			'FROM '.$this->table.' '.
+			'WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' '.
+			'AND rateit_ip=\''.$this->core->con->escape($this->ip).'\' '.
+			($type!=null ? 
+			'AND rateit_type=\''.$this->core->con->escape($type).'\' ' : '').
+			($id!=null ? 
+			'AND rateit_id=\''.$this->core->con->escape($id).'\' ' : '')
+		);
+		return (boolean) $rs->f(0);
+	}
+
 	public function del($type=null,$id=null,$ip=null)
 	{
 		$req = 

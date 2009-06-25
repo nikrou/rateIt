@@ -1,57 +1,57 @@
 # Language: français
-# Module: rateIt - 0.2
-# Date: 2009-06-21 20:26:12
+# Module: rateIt - 0.3
+# Date: 2009-06-25 07:54:03
 # Author: JC Denis, http://blog.jcdenis.com
 # Translated with dcTranslater - 0.2.4
 
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-#: index.php:61
+#: index.php:56
 msgid "delete rating"
 msgstr "Effacer les votes"
 
-#: _admin.php:91
+#: _admin.php:84
 msgid "Do you really want to delete all votes for these entries?"
 msgstr "Êtes vous sûr de vouloir effacer les votes pour ces entrées?"
 
-#: inc/lib.rateit.list.php:145
+#: inc/lib.rateit.list.php:148
 msgid "Show rating details"
 msgstr "Voir le détail des votes"
 
-#: _admin.php:145
+#: _admin.php:137
 msgid "This is a list of all the categories having rating"
 msgstr "Ceci est la liste des catégories aillant des votes"
 
-#: _admin.php:149
+#: _admin.php:141
 msgid "There is no category rating at this time"
 msgstr "Il n'y a pas de catégorie aillant des votes"
 
-#: index.php:296
+#: index.php:288
 msgid "Note"
 msgstr "Note"
 
-#: index.php:107
+#: index.php:98
 msgid "Votes"
 msgstr "Votes"
 
-#: index.php:109
+#: index.php:100
 msgid "Higher"
 msgstr "Haute"
 
-#: index.php:110
+#: index.php:101
 msgid "Lower"
 msgstr "Basse"
 
-#: index.php:300
+#: index.php:292
 msgid "Id"
 msgstr "Id"
 
-#: _admin.php:159
+#: _admin.php:151
 msgid "Level"
 msgstr "Niveau"
 
-#: index.php:310
+#: index.php:301
 msgid "Selected categories action:"
 msgstr "Action sur les catégories sélectionnées :"
 
@@ -59,11 +59,11 @@ msgstr "Action sur les catégories sélectionnées :"
 msgid "Vote for this category"
 msgstr "Voter pour cette catégorie"
 
-#: _public.php:236
+#: _public.php:247
 msgid "Vote for this enrty"
 msgstr "Voter pour ce billet"
 
-#: _widgets.php:25
+#: _widgets.php:140
 msgid "Vote"
 msgstr "Vote"
 
@@ -95,143 +95,143 @@ msgstr "Billets les mieux notés"
 msgid "Length:"
 msgstr "Longueur :"
 
-#: _widgets.php:143
+#: _widgets.php:144
 msgid "Votes:"
 msgstr "Votes :"
 
-#: _widgets.php:142
+#: _widgets.php:143
 msgid "Note:"
 msgstr "Note :"
 
-#: _widgets.php:144
+#: _widgets.php:145
 msgid "Higher:"
 msgstr "Plus haute :"
 
-#: _widgets.php:145
+#: _widgets.php:146
 msgid "Lower:"
 msgstr "Plus basse :"
 
-#: inc/class.rateit.rest.php:33
+#: inc/class.rateit.rest.php:32
 msgid "Rating is disabled on this blog"
 msgstr "Le vote est désactivé sur ce blog"
 
-#: inc/class.rateit.rest.php:36
+#: inc/class.rateit.rest.php:35
 msgid "Rating failed because of missing informations"
 msgstr "Échec du vote car des information sont manquantes"
 
-#: inc/class.rateit.rest.php:40
+#: inc/class.rateit.rest.php:39
 msgid "Rating failed because of a wrong type of entry"
 msgstr "Échec du vote car le type d'entrée est erroné"
 
-#: inc/class.rateit.rest.php:47
+#: inc/class.rateit.rest.php:44
 msgid "You have already voted"
 msgstr "Vous avez déjà voté"
 
-#: index.php:19
+#: index.php:18
 msgid "Configuration saved"
 msgstr "Configuration enregistrée"
 
-#: index.php:24
+#: index.php:22
 msgid "About"
 msgstr "À propos"
 
-#: index.php:30
+#: index.php:28
 msgid "Administration"
 msgstr "Administration"
 
-#: index.php:452
+#: index.php:443
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: index.php:202
+#: index.php:193
 msgid "This is the list of all entries having rating"
 msgstr "Ceci est la liste des billets aillant des votes"
 
-#: index.php:287
+#: index.php:279
 msgid "This is detailed list for rating of type "%s" and id "%s""
 msgstr "Ceci est la liste détaillée des votes de type %s et d'id %s"
 
-#: index.php:291
+#: index.php:283
 msgid "There is no rating for this request at this time"
 msgstr "Il n'y a pas de vote pour cette requête"
 
-#: index.php:297
+#: index.php:289
 msgid "Quotient"
 msgstr "Quotient"
 
-#: index.php:298
+#: index.php:290
 msgid "Ip"
 msgstr "Ip"
 
-#: index.php:311
+#: index.php:302
 msgid "delete entry"
 msgstr "effacer cette entrée"
 
-#: index.php:362
+#: index.php:353
 msgid "Plugin admistration options on this blog"
 msgstr "Administration de l'extension sur ce blog"
 
-#: index.php:364
+#: index.php:355
 msgid "Enable plugin"
 msgstr "Activer l'extension"
 
-#: index.php:365
+#: index.php:356
 msgid "Include on entries"
 msgstr "Inclure dans les billets"
 
-#: index.php:366
+#: index.php:357
 msgid "Note out of"
 msgstr "Note sur"
 
-#: index.php:367
+#: index.php:358
 msgid "Number of digits"
 msgstr "Nombre de décimales"
 
-#: index.php:436
+#: index.php:427
 msgid "You must check warning in order to delete plugin."
 msgstr "Vous devez vérifier la mise en garde en vue de supprimer l'extension"
 
-#: index.php:439
+#: index.php:430
 msgid "In order to properly uninstall this plugin, you must specify the actions to perform"
 msgstr "Dans le but de désintaller proprement l'extension, vous devez spécifier les actions à effectuer"
 
-#: index.php:443
+#: index.php:434
 msgid "You understand that if you delete this plugin, the other plugins that use there table and class will no longer work."
 msgstr "Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces table et classes ne fonctionneront plus."
 
-#: index.php:416
+#: index.php:407
 msgid "Delete plugin files"
 msgstr "Supprimer les fichiers de l'extension"
 
-#: index.php:445
+#: index.php:436
 msgid "Delete plugin database table"
 msgstr "Supprimer la table de l'extension dans la base de donnée"
 
-#: index.php:447
+#: index.php:438
 msgid "Delete plugin settings"
 msgstr "Supprimer les paramètres de l'extension"
 
-#: index.php:464
+#: index.php:455
 msgid "Version:"
 msgstr "Version :"
 
-#: index.php:466
+#: index.php:457
 msgid "Support:"
 msgstr "Support :"
 
-#: index.php:472
+#: index.php:463
 msgid "Copyrights:"
 msgstr "Droits :"
 
-#: index.php:474
+#: index.php:465
 msgid "Files"
 msgstr "Fichiers"
 
-#: index.php:480
+#: index.php:471
 msgid "Images"
 msgstr "Images :"
 
-#: index.php:487
+#: index.php:478
 msgid "Tools"
 msgstr "Outils"
 

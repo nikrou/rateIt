@@ -50,8 +50,9 @@ class rateItAdmin
 
 	public static function adminPostsActionsCombo(&$args)
 	{
-		if ($GLOBALS['core']->blog->settings->rateit_active 
-		 && $GLOBALS['core']->auth->check('delete,contentadmin',$GLOBALS['core']->blog->id)) {
+		global $core;
+		if ($core->blog->settings->rateit_active 
+		 && $core->auth->check('delete,contentadmin',$core->blog->id)) {
 			$args[0][__('delete rating')] = 'rateit_empty';
 		}
 	}

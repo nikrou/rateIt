@@ -36,6 +36,10 @@ if (!$core->blog->settings->rateit_active) {
 		array('rateItPublic','disableValue'));
 	$core->tpl->addValue('rateItNote',
 		array('rateItPublic','disableValue'));
+	$core->tpl->addValue('rateItFullnote',
+		array('rateItPublic','disableValue'));
+	$core->tpl->addValue('rateItQuotient',
+		array('rateItPublic','disableValue'));
 
 } else {
 	$core->addBehavior('publicHeadContent',
@@ -57,8 +61,12 @@ if (!$core->blog->settings->rateit_active) {
 		array('rateItPublic','rateItMax'));
 	$core->tpl->addValue('rateItMin',
 		array('rateItPublic','rateItMin'));
+	$core->tpl->addValue('rateItQuotient',
+		array('rateItPublic','rateItQuotient'));
 	$core->tpl->addValue('rateItNote',
 		array('rateItPublic','rateItNote'));
+	$core->tpl->addValue('rateItFullnote',
+		array('rateItPublic','rateItFullnote'));
 
 	$core->url->register('rateitnow','rateitnow','^rateitnow/(.+)$',
 		array('rateItPublic','rateitnow'));
@@ -106,12 +114,11 @@ class rateItPublic extends dcUrlHandlers
 		$type = $m[1];
 		$id = $m[2];
 		$note = $m[3];
-		$ip = $_SERVER['REMOTE_ADDR'];
 
 		$ss = new rateIt($core);
-		$rs = $ss->get($type,$id,$ip);
-		if ($rs->total == 0) {
-			$ss->set($type,$id,$ip,$note);
+		$voted = $ss->voted($type,$id);
+		if (!$voted) {
+			$ss->set($type,$id,$note);
 			$voted = true;
 		}
 
@@ -170,11 +177,14 @@ class rateItPublic extends dcUrlHandlers
 	public static function publicHeadContent(&$core)
 	{
 		echo "\n".
-		"<style type=\"text/css\">\n@import url(".$core->blog->url."rateit/rateit.css);\n</style>\n".
+		'<script type="text/javascript" src="'.$core->blog->url.'rateit/js/jquery.rating.pack.js"></script>'."\n".
+		"<style type=\"text/css\">\n@import url(".$core->blog->url."rateit/js/jquery.rating.css);\n</style>\n".
 		'<script type="text/javascript" src="'.$core->blog->url.'rateit/js/rateit.js"></script>'."\n".
+		"<style type=\"text/css\">\n@import url(".$core->blog->url."rateit/rateit.css);\n</style>\n".
 		'<script type="text/javascript">'."\n".
 		"//<![CDATA[\n".
 		"rateIt.prototype.service_url = '".html::escapeJS($core->blog->url.'rateitservice/')."';\n".
+		"rateIt.prototype.blocs = ['rateit','rateitwidget'];\n".
 		"\n//]]>\n".
 		"</script>\n";
 	}
@@ -199,10 +209,11 @@ class rateItPublic extends dcUrlHandlers
 		'$rateit_type = !$_ctx->exists("posts") ? "cat" : "post";'."\n".
 		'$rateit_id = !$_ctx->exists("posts") ? $_ctx->categories->cat_id : $_ctx->posts->post_id;'."\n".
 		'$rateIt = new rateIt($core);'."\n".
+		'$rateit_voted= $rateIt->voted($rateit_type,$rateit_id);'."\n".
 		'$_ctx->rateIt = $rateIt->get($rateit_type,$rateit_id);'."\n".
 		'?>'."\n".$content."\n".
 		'<?php'."\n".
-		'unset($rateit_type,$rateit_id);'."\n".
+		'unset($rateit_type,$rateit_id,$rateit_voted);'."\n".
 		'$_ctx->rateIt = null;'."\n".
 		'?>';
 	
@@ -241,19 +252,28 @@ class rateItPublic extends dcUrlHandlers
 		global $core;
 		$f = $core->tpl->getFilters($attr);
 		return 
-		'<div id="rateit-linker-<?php echo $rateit_type."-".$rateit_id; ?>" class="rateit-linker">'."\n".
-		'<p><?php '."\n".
+		'<?php '."\n".
+		'echo \'<form class="rateit-linker" id="raiteit-linker-\'.$rateit_type.\'-\'.$rateit_id.\'" action="'.$core->blog->url.'rateitnow/\'.$rateit_type.\'/\'.$rateit_id.\'/" method="post"><p>\';'."\n".
 		'for($i=0;$i<$_ctx->rateIt->quotient;$i++){'."\n".
-		'	if ($_ctx->rateIt->note <= $i)'."\n".
-		'		$img = "empty";'."\n".
-		'	elseif ($_ctx->rateIt->note > $i && $_ctx->rateIt->note < $i+1)'."\n".
-		'		$img = "half";'."\n".
-		'	elseif ($_ctx->rateIt->note >= $i+1)'."\n".
-		'		$img = "full";'."\n".
-		'echo \''."\n".
-		'<a class="rateit-img rateit-\'.$img.\'" href="'.$core->blog->url.'rateitnow/\'.$rateit_type.\'/\'.$rateit_id.\'/\'.($i+1).\'" title="\'.($i+1).\' / \'.$_ctx->rateIt->quotient.\'">&nbsp;</a>'."\n".
+		'	$dis = $rateit_voted ?'."\n".
+		'		\' disabled="disabled"\' : \'\';'."\n".
+		'	$chk = $_ctx->rateIt->note > $i && $_ctx->rateIt->note <= $i+1 ? '.
+		'		\' checked="checked"\' : \'\';'."\n".
+		'	echo \'<input name="rateit-\'.$rateit_type.\'-\'.$rateit_id.\'" class="rateit-\'.$rateit_type.\'-\'.$rateit_id.\'" type="radio" value="\'.($i+1).\'"\'.$chk.$dis.\'/>'."\n".
 		'\'; } ?>'."\n".
-		'</p></div>'."\n";
+		'<input type="submit" name="submit" value="'.__('Vote').'"/>'."\n".
+		'</p></form>';
+	}
+
+	public static function rateItFullnote($attr)
+	{		global $core;
+		$f = $core->tpl->getFilters($attr);
+		return '<?php echo \'<span id="rateit-fullnote-\'.$rateit_type.\'-\'.$rateit_id.\'"  class="rateit-fullnote">\'.'.sprintf($f,'$_ctx->rateIt->note."/".$_ctx->rateIt->quotient').'.\'</span>\'; ?>';
+	}
+
+	public static function rateItQuotient($attr)
+	{
+		return self::rateItValue($attr,'quotient');
 	}
 
 	public static function rateItTotal($attr)
