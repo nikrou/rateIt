@@ -298,7 +298,7 @@ if (isset($tab['details']) && isset($_REQUEST['type']) && isset($_REQUEST['id'])
 		echo 
 		'<div class="two-cols">'.
 		'<p class="col checkboxes-helpers"></p>'.
-		'<p class="col right">'.__('Selected categories action:').' '.
+		'<p class="col right">'.__('Selected entries action:').' '.
 		form::combo(array('action'),array(__('delete entry') => 'rateit_del_entry')).
 		'<input type="submit" name="save[details]" value="'.__('ok').'" />'.
 		form::hidden(array('p'),'rateIt').
@@ -318,6 +318,7 @@ if (isset($tab['details']) && isset($_REQUEST['type']) && isset($_REQUEST['id'])
 ** New tab behavior 
 **************/
 
+# --BEHAVIOR-- adminRateItTabs
 $core->callBehavior('adminRateItTabs',$core);
 
 /**************
@@ -334,8 +335,31 @@ if (isset($tab['admin'])) {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
 			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post',true,false);
+			$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
 			$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 			$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
+			$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
+
+			# change rate image
+			if (isset($_POST['s']['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['s']['starsimage'])) {
+
+				$source = dirname(__FILE__).'/default-templates/img/stars/'.$_POST['s']['starsimage'];
+				$dest = dirname(__FILE__).'/default-templates/img/rateit-stars.png';
+
+				if (file_exists($source))
+					file_put_contents($dest,file_get_contents($source));
+			}
+			# Upload rate image
+			if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name']) {
+
+				if (0 != $_FILES['starsuserfile']['error'])
+					throw new Exception(__('Something went wrong while download file'));
+
+				if ($_FILES['starsuserfile']['type'] != 'image/x-png')
+					throw new Exception(__('Image must be in png format').$_FILES['starsuserfile']['type']);
+
+				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],dirname(__FILE__).'/default-templates/img/rateit-stars.png');
+			}
 			$core->blog->triggerBlog();
 			http::redirect($p_url.'&t=admin&done=1');
 		}
@@ -348,14 +372,66 @@ if (isset($tab['admin'])) {
 	for($i=2;$i<21;$i++){ $combo_quotient[$i] = $i; }
 	$combo_digit = array();
 	for($i=0;$i<5;$i++){ $combo_digit[$i] = $i; }
+	$combo_userident = array(__('Ip')=>0,__('Cookie')=>2,__('Both ip and cookie')=>1);
 	# Display
 	echo 
-	'<p>'.__('Plugin admistration options on this blog').'</p>'.
-	'<form method="post" action="'.$p_url.'">'.
+	'<p>'.__('Administration of options of this extension on this blog').'</p>'.
+	'<form method="post" action="'.$p_url.'" enctype="multipart/form-data">'.
+	'<div class="two-cols">'.
+	'<div class="col">'.
+	'<h2>'.__('Extension').'</h2>'.
 	'<p class="field">'.__('Enable plugin').' '.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</p>'.
 	'<p class="field">'.__('Include on entries').' '.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</p>'.
+	'<p class="field">'.__('Identify users by').' '.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</p>'.
+	'<h2>'.__('Note').'</h2>'.
 	'<p class="field">'.__('Note out of').' '.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</p>'.
 	'<p class="field">'.__('Number of digits').' '.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</p>'.
+	'<p class="field">'.__('Message of thanks').' '.form::field(array('s[rateit_msgthanks]'),50,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</p>'.
+	'<p class="form-note">&nbsp;<br />'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
+	'</div>'.
+	'<div class="col">'.
+	'<h2>'.__('Image').'</h2>';
+
+	$stars_theme_path = $core->blog->themes_path.'/'.$core->blog->settings->theme.'/img/rateit-stars.png';
+	$stars_rateit_path = dirname(__FILE__).'/default-templates/img/rateit-stars.png';
+	$stars_rateit_files = files::scandir(dirname(__FILE__).'/default-templates/img/stars');
+	$stars_url = $core->blog->url.'rateit/img/rateit-stars.png';
+
+	if (file_exists($stars_theme_path)) {
+		echo 
+		'<p>'.__('Rating image exists on theme it will be used:').'</p>'.
+		form::hidden(array('s[starsimage]'),'theme').
+		'<table><tr><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>'.
+		'<tr>'.rateit_demo($stars_theme_path,$stars_url).'</tr></table>';
+	} else {
+		echo
+		'<p>'.__('Rating image not exists on theme choose one to use:').'</p>'.
+		'<table><tr><th>&nbsp;</th><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>';
+		if (file_exists($stars_rateit_path)) {
+			echo 
+			'<tr><td>'.form::radio(array('s[starsimage]'),'default',1).'</td>'.
+			rateit_demo($stars_rateit_path,$stars_url).'</tr>';
+		}
+		sort($stars_rateit_files);
+		foreach($stars_rateit_files AS $f) {
+			if (!preg_match('/star-[0-9]+.png/',$f)) continue;
+
+			echo 
+			'<tr class="line"><td>'.form::radio(array('s[starsimage]'),$f).'</td>'.
+			rateit_demo(
+				dirname(__FILE__).'/default-templates/img/stars/'.$f,
+				'index.php?pf=rateIt/default-templates/img/stars/'.$f
+			).'</tr>';
+		}
+		echo 
+		'<tr class="line"><td>'.form::radio(array('s[starsimage]'),'user').'</td>'.
+		'<td colspan="4">'.form::hidden(array('MAX_FILE_SIZE'),30000).'<input type="file" name="starsuserfile" /></td></tr>'.
+		'</table>'.
+		'<p class="form-note">'.__('Please read the README file before uploading image').'</p>';
+	}
+	echo
+	'</div>'.
+	'</div>'.
 	'<p>'.
 	form::hidden(array('p'),'rateIt').
 	form::hidden(array('t'),'admin').
@@ -402,7 +478,7 @@ if (isset($tab['uninstall']) && $core->auth->isSuperAdmin()) {
 		'<form method="post" action="'.$p_url.'">'.
 		'<p>'.
 		'<label class=" classic">'.sprintf(($understand ? $img_green : $img_red),'-').
-		__('You understand that if you delete this plugin, the other plugins that use there table and class will no longer work.').'</label><br />'.
+		__('You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.').'</label><br />'.
 		'<label class=" classic">'.sprintf($img_green,'-').
 		__('Delete plugin files').'</label><br />'.
 		'<label class=" classic">'.sprintf(($delete_table ? $img_green : $img_red),'-').
@@ -431,7 +507,7 @@ if (isset($tab['uninstall']) && $core->auth->isSuperAdmin()) {
 		'<form method="post" action="'.$p_url.'">'.
 		'<p>'.
 		'<label class=" classic">'.form::checkbox(array('s[understand]'),1,$understand).
-		__('You understand that if you delete this plugin, the other plugins that use there table and class will no longer work.').'</label><br />'.
+		__('You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.').'</label><br />'.
 		'<label class=" classic">'.form::checkbox(array('s[delete_table]'),1,$delete_table).
 		__('Delete plugin database table').'</label><br />'.
 		'<label class=" classic">'.form::checkbox(array('s[delete_settings]'),1,$delete_settings).
@@ -484,4 +560,40 @@ under a Creative Commons Attribution 2.5 License<br />
 </div>
  </body>
 </html>';
+
+function rateit_demo($path,$url)
+{
+	$s = getimagesize($path);
+	return
+	'<td><div style="
+		display:block;
+		overflow:hidden;
+		text-indent:-999em;
+		margin: 0px;
+		padding: 1px;
+		background: transparent url('.$url.') no-repeat 0 0;
+		width:'.$s[0].'px;
+		height:'.(floor($s[1] /3)-1).'px;
+	">&nbsp;</div></td>
+	<td><div style="
+		display:block;
+		overflow:hidden;
+		text-indent:-999em;
+		margin: 0px;
+		padding: 1px;
+		background: transparent url('.$url.') no-repeat 0 -'.floor($s[1] /3).'px;
+		width:'.$s[0].'px;
+		height:'.(floor($s[1] /3)-1).'px;
+	">&nbsp;</div></td>
+	<td><div style="
+		display:block;
+		overflow:hidden;
+		text-indent:-999em;
+		margin: 0px;
+		padding: 1px;
+		background: transparent url('.$url.') no-repeat 0 -'.(floor($s[1] /3) *2).'px;
+		width:'.$s[0].'px;
+		height:'.(floor($s[1] /3)-1).'px;
+	">&nbsp;</div></td><td>'.$s[0].'x'.floor($s[1] /3).'</td>';
+}
 ?>

@@ -18,6 +18,7 @@ class rateIt
 	private $quotient;
 	private $digit;
 	private $types;
+	private $ident;
 	public $ip;
 
 	public function __construct(&$core)
@@ -26,8 +27,20 @@ class rateIt
 		$this->table = $core->prefix.'rateit';
 		$this->quotient = $core->blog->settings->rateit_quotient;
 		$this->digit = $core->blog->settings->rateit_digit;
-		$this->types = explode(',',$core->blog->settings->rateit_types);
-		$this->ip = $_SERVER['REMOTE_ADDR'];
+
+		$types = new ArrayObject();
+		$types[] = 'post';
+
+		# --BEHAVIOR-- addRateItType
+		$core->callBehavior('addRateItType',$types);
+
+		$this->types = (array) $types;
+		$this->ident = (integer) $core->blog->settings->rateit_userident;
+
+		if ($this->ident == 2)
+			$this->ip = $core->getNonce();
+		else
+			$this->ip = $_SERVER['REMOTE_ADDR'];
 	}
 
 	public function set($type,$id,$note)
@@ -48,6 +61,11 @@ class rateIt
 
 		$cur->insert();
 		$this->core->con->unlock();
+		$this->core->blog->triggerBlog();
+
+		if ($this->ident > 0)
+			setcookie('rateit-'.$type.'-'.$id,1,(time()+3600*365));
+		
 		return true;
 	}
 	
@@ -104,7 +122,12 @@ class rateIt
 			($id!=null ? 
 			'AND rateit_id=\''.$this->core->con->escape($id).'\' ' : '')
 		);
-		return (boolean) $rs->f(0);
+		$sql = (boolean) $rs->f(0);
+		$cookie = false;
+		if ($this->ident > 0 && $id !== null && $type !== null)
+			$cookie = isset($_COOKIE['rateit-'.$type.'-'.$id]);
+
+		return $sql || $cookie;
 	}
 
 	public function del($type=null,$id=null,$ip=null)
@@ -120,6 +143,7 @@ class rateIt
 			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
 
 		$rs = $this->core->con->select($req);
+		$this->core->blog->triggerBlog();
 	}
 
 	public function trans($note)
@@ -133,7 +157,7 @@ class rateIt
 		$p['columns'][] = 'SUM(RI.rateit_note / RI.rateit_quotient) as rateit_sum';
 		$p['columns'][] = 'MAX(RI.rateit_note / RI.rateit_quotient) as rateit_max';
 		$p['columns'][] = 'MIN(RI.rateit_note / RI.rateit_quotient) as rateit_min';
-		$p['columns'][] = '(SUM(RI.rateit_note / RI.rateit_quotient) / COUNT(RI.rateit_note)) as rateit_note';
+		$p['columns'][] = '(SUM(RI.rateit_note / RI.rateit_quotient) / COUNT(RI.rateit_note)) as rateit_avg';
 		$p['columns'][] = 'COUNT(RI.rateit_note) as rateit_total';
 
 		if (!isset($p['from'])) $p['from'] = '';
@@ -146,21 +170,93 @@ class rateIt
 			unset($p['rateit_type']);
 		}
 
-		if (isset($p['meta_id'])) {
-			$p['from'] .= ', '.$this->core->prefix.'meta META ';
-			$p['sql'] .= 'AND META.post_id = P.post_id ';
-			$p['sql'] .= "AND META.meta_id = '".$this->core->con->escape($p['meta_id'])."' ";
-			
-			if (!empty($p['meta_type'])) {
-				$params['sql'] .= "AND META.meta_type = '".$this->core->con->escape($p['meta_type'])."' ";
-				unset($p['meta_type']);
-			}
-			unset($p['meta_id']);		
-		}
 		if (!$count_only)
 			$p['sql'] .= 'GROUP BY RI.rateit_id ';
 
 		return $this->core->blog->getPosts($p,$count_only);
+	}
+
+	public function getRates($params,$count_only=false)
+	{
+		if ($count_only)
+			$strReq = 'SELECT count(RI.rateit_id) ';
+		else {
+			$strReq =
+			'SELECT '.
+			'SUM(RI.rateit_note / RI.rateit_quotient) as rateit_sum, '.
+			'MAX(RI.rateit_note / RI.rateit_quotient) as rateit_max, '.
+			'MIN(RI.rateit_note / RI.rateit_quotient) as rateit_min, '.
+			'(SUM(RI.rateit_note / RI.rateit_quotient) / COUNT(RI.rateit_note)) as rateit_avg, ';
+
+			if (!empty($params['columns']) && is_array($params['columns'])) 
+				$strReq .= implode(', ',$params['columns']).', ';
+
+			$strReq .= 
+			'COUNT(RI.rateit_note) as rateit_total ';
+		}
+
+		$strReq .=
+		'FROM '.$this->table.' RI ';
+		
+		if (!empty($params['from']))
+			$strReq .= $params['from'].' ';
+
+		$strReq .=
+		" WHERE RI.blog_id = '".$this->core->con->escape($this->core->blog->id)."' ";
+
+		# rate type
+		if (isset($params['rateit_type'])) {
+
+			if (is_array($params['rateit_type']) && !empty($params['rateit_type']))
+				$strReq .= 'AND RI.rateit_type '.$this->core->con->in($params['rateit_type']);
+			elseif ($params['rateit_type'] != '')
+				$strReq .= "AND RI.rateit_type = '".$this->core->con->escape($params['rateit_type'])."' ";
+		} else
+			$strReq .= "AND RI.rateit_type = 'post' ";
+
+		# rate id
+		if (!empty($params['rateit_id'])) {
+
+			if (is_array($params['rateit_id']))
+				array_walk($params['rateit_id'],create_function('&$v,$k','if($v!==null){$v=(integer)$v;}'));
+			else
+				$params['rateit_id'] = array((integer) $params['rateit_id']);
+
+			$strReq .= 'AND RI.rateit_id '.$this->core->con->in($params['rateit_id']);
+		}
+
+		# rate ip
+		if (!empty($params['rateit_ip'])) {
+
+			if (is_array($params['rateit_ip']))
+				array_walk($params['rateit_ip'],create_function('&$v,$k','if($v!==null){$v=(integer)$v;}'));
+			else
+				$params['rateit_ip'] = array((integer) $params['rateit_ip']);
+
+			$strReq .= 'AND RI.rateit_ip '.$this->core->con->in($params['rateit_ip']);
+		}
+
+		if (!empty($params['sql']))
+			$strReq .= $params['sql'].' ';
+
+		if (!$count_only) {
+			$strReq .= 'GROUP BY RI.rateit_id ';
+
+			if (!empty($params['order']))
+				$strReq .= 'ORDER BY '.$this->core->con->escape($params['order']).' ';
+			else
+				$strReq .= 'ORDER BY rateit_time DESC ';
+		}
+
+		if (!$count_only && !empty($params['limit']))
+			$strReq .= $this->core->con->limit($params['limit']);
+
+		$rs = $this->core->con->select($strReq);
+
+		# --BEHAVIOR-- rateitGetRates
+		$this->core->callBehavior('rateitGetRates',$rs);
+
+		return $rs;
 	}
 
 	public function getDetails($type=null,$id=null,$ip=null)

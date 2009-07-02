@@ -34,7 +34,11 @@ class rateItRest
 		if ($type === null || $id === null || $note === null)
 			throw new Exception(__('Rating failed because of missing informations'));
 
-		$types = explode(',',$core->blog->settings->rateit_types);
+		$types = new ArrayObject();
+		$types[] = 'post';
+		$core->callBehavior('addRateItType',$types);
+		$types = (array) $types;
+
 		if (!in_array($type,$types))
 			throw new Exception(__('Rating failed because of a wrong type of entry'));
 

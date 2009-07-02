@@ -28,7 +28,7 @@ class rateItInstall
 		$s = new dbStruct($core->con,$core->prefix);
 		$s->rateit
 			->blog_id ('varchar',32,false)
-			->rateit_id ('bigint',0,false)
+			->rateit_id ('varchar',255,false)
 			->rateit_type('varchar',64,false)
 			->rateit_note ('integer',0,false)
 			->rateit_quotient ('integer',0,false)
@@ -57,7 +57,8 @@ class rateItInstall
 		$core->blog->settings->put('rateit_poststpl',false,'boolean','rateit template on post',$force,$glob);
 		$core->blog->settings->put('rateit_quotient',5,'integer','rateit maximum note',$force,$glob);
 		$core->blog->settings->put('rateit_digit',1,'integer','rateit note digits number',$force,$glob);
-		$core->blog->settings->put('rateit_types','post,cat','string','rateit allowed types ',$force,$glob);
+		$core->blog->settings->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',$force,$glob);
+		$core->blog->settings->put('rateit_userident',0,'integer','rateit use cookie and/or ip',$force,$glob);
 	}
 
 	public static function delSettings(&$core)

@@ -143,7 +143,7 @@ class rateItPostsList extends rateItExtList
 				array(form::checkbox(array('entries[]'),$this->rs->post_id,'','','',!$this->rs->isEditable()),'class="nowrap"'),
 				array('<a href="'.$this->core->getPostAdminURL($this->rs->post_type,$this->rs->post_id).'">'.html::escapeHTML($this->rs->post_title).'</a>','class="maximal"'),
 				# Note
-				array(round($this->rs->rateit_note * $q,$d),'class="nowrap"'),
+				array(round($this->rs->rateit_avg * $q,$d),'class="nowrap"'),
 				# Votes
 				array('<a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=post&amp;id='.$this->rs->post_id.'">'.$this->rs->rateit_total.'</a>','class="nowrap"'),
 				# Higher

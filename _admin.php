@@ -37,7 +37,11 @@ $core->addBehavior('adminPostsActionsCombo',array('rateItAdmin','adminPostsActio
 $core->addBehavior('adminPostsActions',array('rateItAdmin','adminPostsActions'));
 $core->addBehavior('adminPostsActionsContent',array('rateItAdmin','adminPostsActionsContent'));
 
-$core->addBehavior('adminRateItTabs',array('rateItAdmin','adminTabsCat'));
+$core->addBehavior('exportFull',array('rateitBackup','exportFull'));
+$core->addBehavior('exportSingle',array('rateitBackup','exportSingle'));
+$core->addBehavior('importInit',array('rateitBackup','importInit'));
+$core->addBehavior('importSingle',array('rateitBackup','importSingle'));
+$core->addBehavior('importFull',array('rateitBackup','importFull'));
 
 class rateItAdmin
 {
@@ -65,6 +69,7 @@ class rateItAdmin
 				while ($posts->fetch()) {
 					$rateIt->del('post',$posts->post_id);
 				}
+				$core->blog->triggerBlog();
 				http::redirect($redir);
 			}
 			catch (Exception $e) {
@@ -97,80 +102,62 @@ class rateItAdmin
 		'</div></form>'.
 		'</div>';
 	}
-
-	public static function adminTabsCat(&$core)
+}
+# Import/export behaviors for Import/export plugin
+class rateItBackup
+{
+	# limit to post type
+	public static function exportSingle(&$core,&$exp,$blog_id)
 	{
-		try {
-			$rateIt = new rateIt($core);
-			$categories = $core->blog->getCategories(array('post_type'=>'post'));
-		} catch (Exception $e) {
-			$core->error->add($e->getMessage());
-		}
+		$exp->export('rateit',
+			'SELECT RI.blog_id, rateit_id, rateit_type, rateit_note, rateit_quotient, rateit_ip, rateit_time '.
+			'FROM '.$core->prefix.'rateit RI, '.$core->prefix.'post P '.
+			"WHERE P.post_id = rateit_id AND rateit_type='post' ".
+			"AND P.blog_id = '".$blog_id."'"
+		);
+	}
 
-		if (isset($_POST['action']) && $_POST['action'] == 'rateit_cat_empty' && isset($_POST['entries'])) {
-			foreach($_POST['entries'] as $cat_id) {
-				$rateIt->del('cat',$cat_id);
-			}
-		}
+	public static function exportFull(&$core,&$exp)
+	{
+		$exp->exportTable('rateit');
+	}
 
-		$table = '';
-		while ($categories->fetch()) {
-			$rs = $rateIt->get('cat',$categories->cat_id);
-			if (!$rs->total) continue;
-			$table .= 
-			'<tr class="line">'.
-			'<td class="nowrap">'.form::checkbox(array('entries[]'),$categories->cat_id,'','','',false).'</td>'.
-			'<td class="maximal"><a href="plugin.php?p=rateIt&amp;t=post&amp;cat_id='.$categories->cat_id.'">
-				'.html::escapeHTML($categories->cat_title).'</a></td>'.
-			'<td class="nowrap">'.$rs->note.'</td>'.
-			'<td class="nowrap"><a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=cat&amp;id='.$categories->cat_id.'">'.$rs->total.'</a></td>'.
-			'<td class="nowrap">'.$rs->max.'</td>'.
-			'<td class="nowrap">'.$rs->min.'</td>'.
-			'<td class="nowrap">'.$categories->cat_id.'</td>'.
-			'<td class="nowrap">'.$categories->level.'</td>'.
-			'<td class="nowrap">'.$categories->nb_post.'</td>'.
-			'</tr>';
-		}
+	public static function importInit(&$bk,&$core)
+	{
+		$bk->cur_rateit = $core->con->openCursor($core->prefix.'rateit');
+	}
 
-		echo 
-		'<div class="multi-part" id="cat" title="'.__('Categories').'">'.
-		'<p>'.__('This is a list of all the categories having rating').'</p>'.
-		'<form action="plugin.php" method="post" id="form-cats">';
+	# limit to post type
+	public static function importSingle(&$line,&$bk,&$core)
+	{
+		if ($line->__name == 'rateit' && $line->rateit_type == 'post' && isset($bk->old_ids['post'][(integer) $line->rateit_id])) {
+			$line->rateit_id = $bk->old_ids['post'][(integer) $line->rateit_id];
 
-		if ($table=='') {
-			echo '<p class="message">'.__('There is no category rating at this time').'</p>';
-		} else {
-			echo 
-			'<table class="clear"><tr>'.
-			'<th colspan="2">'.__('Title').'</th>'.
-			'<th>'.__('Note').'</th>'.
-			'<th>'.__('Votes').'</th>'.
-			'<th>'.__('Higher').'</th>'.
-			'<th>'.__('Lower').'</th>'.
-			'<th>'.__('Id').'</th>'.
-			'<th>'.__('Level').'</th>'.
-			'<th>'.__('Entries').'</th>'.
-			'</tr>'.
-			$table.
-			'</table>';
+			$bk->cur_rateit->clean();
+			$bk->cur_rateit->blog_id   = (string) $line->blog_id;
+			$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;
+			$bk->cur_rateit->rateit_type   = (string) $line->rateit_type;
+			$bk->cur_rateit->rateit_note   = (integer) $line->rateit_note;
+			$bk->cur_rateit->rateit_quotient   = (integer) $line->rateit_quotient;
+			$bk->cur_rateit->rateit_ip   = (string) $line->rateit_ip;
+			$bk->cur_rateit->rateit_time   = (string) $line->rateit_time;
+			$bk->cur_rateit->insert();
 		}
+	}
 
-		if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
-			echo 
-			'<div class="two-cols">'.
-			'<p class="col checkboxes-helpers"></p>'.
-			'<p class="col right">'.__('Selected categories action:').' '.
-			form::combo(array('action'),array(__('delete rating') => 'rateit_cat_empty')).
-			'<input type="submit" name="save[cat]" value="'.__('ok').'" />'.
-			form::hidden(array('p'),'rateIt').
-			form::hidden(array('t'),'cat').
-			$core->formNonce().
-			'</p>'.
-			'</div>';
+	public static function importFull(&$line,&$bk,&$core)
+	{
+		if ($line->__name == 'rateit') {
+			$bk->cur_rateit->clean();
+			$bk->cur_rateit->blog_id   = (string) $line->blog_id;
+			$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;
+			$bk->cur_rateit->rateit_type   = (string) $line->rateit_type;
+			$bk->cur_rateit->rateit_note   = (integer) $line->rateit_note;
+			$bk->cur_rateit->rateit_quotient   = (integer) $line->rateit_quotient;
+			$bk->cur_rateit->rateit_ip   = (string) $line->rateit_ip;
+			$bk->cur_rateit->rateit_time   = (string) $line->rateit_time;
+			$bk->cur_rateit->insert();
 		}
-		echo 
-		'</form>'.
-		'</div>';
 	}
 }
 ?>

@@ -128,6 +128,9 @@ class rateItPublic extends dcUrlHandlers
 				http::redirect($core->blog->url.'post/'.$post->post_url.($voted ? '#rateit' : ''));
 			}
 		}
+
+		# --BEHAVIOR-- templateRateItRedirect
+		$core->callBehavior('templateRateItRedirect',$voted,$type,$id,$note);
 	}
 
 	public static function file_get_contents($args)
@@ -174,24 +177,64 @@ class rateItPublic extends dcUrlHandlers
 		exit;
 	}
 
+	private static function get_image_infos(&$core)
+	{
+		$ft = $core->blog->themes_path.$core->blog->settings->theme.'/img/rateit-stars.png';
+		$fp = dirname(__FILE__).'/default-templates/img/rateit-stars.png';
+		if (file_exists($ft)){
+			$i = getimagesize($ft);
+			return array('w'=>$i[0],'h'=>floor($i[1] /3));
+		} elseif (file_exists($fp)){
+			$i = getimagesize($fp);
+			return array('w'=>$i[0],'h'=>floor($i[1] /3));
+		} else {
+			return 16;
+		}
+	}
+
 	public static function publicHeadContent(&$core)
 	{
+		$blocs = array('rateit','rateitwidget');
+
+		# --BEHAVIOR-- publicRatingBlocsRateit
+		$core->callBehavior('publicRatingBlocsRateit',$blocs);
+
+		foreach($blocs AS $k => $v) {
+			$blocs[$k] = "'".html::escapeJS($v)."'";
+		}
+		$blocs = implode(',',$blocs);
+
+		$s = self::get_image_infos($core);
 		echo "\n".
 		'<script type="text/javascript" src="'.$core->blog->url.'rateit/js/jquery.rating.pack.js"></script>'."\n".
-		"<style type=\"text/css\">\n@import url(".$core->blog->url."rateit/js/jquery.rating.css);\n</style>\n".
+		'<!-- Code CSS de jquery-rating -->'.
+		'<style type="text/css">'.
+		'div.rating-cancel,div.star-rating{float:left;width:'.($s['w']+1).'px;height:'.$s['h'].'px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden} '.
+		'div.rating-cancel,div.rating-cancel a{background:url('.$core->blog->url.'rateit/img/delete.png) no-repeat 0 -16px} '.
+		'div.star-rating,div.star-rating a{background:url('.$core->blog->url.'rateit/img/rateit-stars.png) no-repeat 0 0px} '.
+		'div.rating-cancel a,div.star-rating a{display:block;width:'.$s.'px;height:100%;background-position:0 0px;border:0} '.
+		'div.star-rating-on a{background-position:0 -'.$s['h'].'px!important} '.
+		'div.star-rating-hover a{background-position:0 -'.($s['h']*2).'px} '.
+		'div.star-rating-readonly a{cursor:default !important} '.
+		'div.star-rating{background:transparent!important;overflow:hidden!important} '.
+		'</style>'.
 		'<script type="text/javascript" src="'.$core->blog->url.'rateit/js/rateit.js"></script>'."\n".
 		"<style type=\"text/css\">\n@import url(".$core->blog->url."rateit/rateit.css);\n</style>\n".
 		'<script type="text/javascript">'."\n".
 		"//<![CDATA[\n".
+		"rateIt.prototype.blocs = [".$blocs."];\n".
+		"rateIt.prototype.blog_uid = '".html::escapeJS($core->blog->uid)."';\n".
+		"rateIt.prototype.enable_cookie = '".($core->blog->settings->rateit_userident > 0 ? '1' : '0')."';\n".
+		"rateIt.prototype.image_size = '".$s['h']."';\n".
 		"rateIt.prototype.service_url = '".html::escapeJS($core->blog->url.'rateitservice/')."';\n".
-		"rateIt.prototype.blocs = ['rateit','rateitwidget'];\n".
+		"rateIt.prototype.msg_thanks = '".html::escapeJS($core->blog->settings->rateit_msgthanks)."';\n".
 		"\n//]]>\n".
 		"</script>\n";
 	}
 
-	public static function publicEntryAfterContent($core,$_ctx)
+	public static function publicEntryAfterContent($core,$_ctx,$force=false)
 	{
-		if (!$core->blog->settings->rateit_poststpl) return;
+		if (!$core->blog->settings->rateit_poststpl && !$force) return;
 
 		$f = 'tpl/rateit.html';
 		$d = self::dirname($f);
@@ -204,10 +247,21 @@ class rateItPublic extends dcUrlHandlers
 
 	public static function rateIt($attr,$content)
 	{
-		$res = 
+		return 
 		'<?php'."\n".
-		'$rateit_type = !$_ctx->exists("posts") ? "cat" : "post";'."\n".
-		'$rateit_id = !$_ctx->exists("posts") ? $_ctx->categories->cat_id : $_ctx->posts->post_id;'."\n".
+		'$rateit_params = new ArrayObject();'."\n".
+		'$rateit_params->type = "";'."\n".
+		'$rateit_params->id = 0;'."\n".
+		'if ($_ctx->exists("posts")) {'."\n".
+		'	$rateit_params->type = "post";'."\n".
+		'	$rateit_params->id = $_ctx->posts->post_id;'."\n".
+		'}'."\n".
+
+		# --BEHAVIOR-- templateRateIt
+		'$core->callBehavior("templateRateIt",$rateit_params);'."\n".
+
+		'$rateit_type = $rateit_params->type ;'."\n".
+		'$rateit_id = $rateit_params->id ;'."\n".
 		'$rateIt = new rateIt($core);'."\n".
 		'$rateit_voted= $rateIt->voted($rateit_type,$rateit_id);'."\n".
 		'$_ctx->rateIt = $rateIt->get($rateit_type,$rateit_id);'."\n".
@@ -216,8 +270,6 @@ class rateItPublic extends dcUrlHandlers
 		'unset($rateit_type,$rateit_id,$rateit_voted);'."\n".
 		'$_ctx->rateIt = null;'."\n".
 		'?>';
-	
-		return $res;
 	}
 
 	public static function rateItIf($attr,$content)
@@ -241,10 +293,16 @@ class rateItPublic extends dcUrlHandlers
 		global $core,$_ctx;
 		$f = $core->tpl->getFilters($attr);
 
-		if (!$_ctx->exists("posts"))
-			return '<?php echo '.sprintf($f,"__('Vote for this category')").'; ?>';
-		else
-			return '<?php echo '.sprintf($f,"__('Vote for this enrty')").'; ?>';
+		$title = '';
+		if ($_ctx->exists("posts"))
+			$title = __('Rate this entry');
+
+		# --BEHAVIOR-- templateRateItTitle
+		$call_title = $core->callBehavior('templateRateItTitle',$title);
+		if (!empty($call_title))
+			$title = $call_title;
+
+		return '<?php echo '.sprintf($f,"'$title'").'; ?>';
 	}
 
 	public static function rateItLinker($attr)
@@ -253,7 +311,7 @@ class rateItPublic extends dcUrlHandlers
 		$f = $core->tpl->getFilters($attr);
 		return 
 		'<?php '."\n".
-		'echo \'<form class="rateit-linker" id="raiteit-linker-\'.$rateit_type.\'-\'.$rateit_id.\'" action="'.$core->blog->url.'rateitnow/\'.$rateit_type.\'/\'.$rateit_id.\'/" method="post"><p>\';'."\n".
+		'echo \'<form class="rateit-linker" id="rateit-linker-\'.$rateit_type.\'-\'.$rateit_id.\'" action="'.$core->blog->url.'rateitnow/\'.$rateit_type.\'/\'.$rateit_id.\'/" method="post"><p>\';'."\n".
 		'for($i=0;$i<$_ctx->rateIt->quotient;$i++){'."\n".
 		'	$dis = $rateit_voted ?'."\n".
 		'		\' disabled="disabled"\' : \'\';'."\n".

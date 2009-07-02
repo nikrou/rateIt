@@ -2,30 +2,65 @@
  clear:both;
 }
 .rateit h3 {
-	border-width: 1px 0;
-	border-style: solid;
-	border-color: #bfbfbf;
-	background: #fbfbfb;
-	padding: 5px;
-	margin: 20px 0 8px 0;
-	font-size: 1.2em;
+ border-width: 1px 0;
+ border-style: solid;
+ border-color: #bfbfbf;
+ background: #fbfbfb;
+ padding: 5px;
+ margin: 20px 0 8px 0;
+ font-size: 1.2em;
 }
 .rateit-fullnote{
-  float:left;
-  margin-right:10px;
-  font-size: 1.2em;
-  font-weight: bold;
+ float:left;
+ margin-right:10px;
+ font-size: 1.2em;
+ font-weight: bold;
+}
+.rateit-linker *,#comments .rateit-linker * {
+ margin:0px;
+ padding:0px;
 }
 .rateit-linker, .rateitwidget-linker {
-  float:left;
+ float:left;
+ font-style: italic;
 }
 .rateit ul, .rateitwidget ul {
-  clear:both;
+ clear:both;
 }
 .rateit li {
-	display: inline;
-    white-space: nowrap;
-    list-style: none;
-    padding-left: 12px;
-    background: transparent url(img/star_little.png) no-repeat 0 0;
+ display: inline;
+ white-space: nowrap;
+ list-style: none;
+ padding-left: 12px;
+ background: transparent url(img/star_little.png) no-repeat 0 0;
+}
+.rateit-rank {
+ font-weight: bold;
+ font-size: 1.2em;
+}
+#comments dt {
+ clear:both;
+}
+#comments .rateit {
+ display:block;
+ position:relative;
+ bottom:0;
+ right:0;
+ margin:0px;
+ padding:0px;
+}
+#comments .rateit h3{
+ border:none;
+ margin:0px;
+ padding:0px;
+ background: transparent;
+ font-size: 1em;
+}
+#comments .rateit-fullnote,#comments .rateit ul{
+ display:none;
+}
+#comments .rateit-linker{
+ float: none;
+ margin:0px;
+ padding:0px;
 }
