@@ -151,29 +151,52 @@ class rateIt
 		return round($note * $this->quotient,$this->digit);
 	}
 
-	public function getPostsByRate($p=array(),$count_only=false)
+	public function getPostsByRate($params=array(),$count_only=false)
 	{
-		if (!isset($p['columns'])) $p['columns'] = array();
-		$p['columns'][] = 'SUM(RI.rateit_note / RI.rateit_quotient) as rateit_sum';
-		$p['columns'][] = 'MAX(RI.rateit_note / RI.rateit_quotient) as rateit_max';
-		$p['columns'][] = 'MIN(RI.rateit_note / RI.rateit_quotient) as rateit_min';
-		$p['columns'][] = '(SUM(RI.rateit_note / RI.rateit_quotient) / COUNT(RI.rateit_note)) as rateit_avg';
-		$p['columns'][] = 'COUNT(RI.rateit_note) as rateit_total';
+		$params['columns'][] = 'COUNT(rateit_id) as rateit_count';
+	
+		$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as char)=rateit_id ';
+		
+		if (!isset($params['sql'])) $params['sql'] = '';
 
-		if (!isset($p['from'])) $p['from'] = '';
-			$p['from'] .= ' LEFT OUTER JOIN '.$this->table.' RI ON P.post_id = RI.rateit_id ';
-
-		if (!isset($p['sql'])) $p['sql'] = '';
-
-		if (!empty($p['rateit_type'])) {
-			$p['sql'] .= "AND RI.rateit_type = '".$this->core->con->escape($p['rateit_type'])."' ";
-			unset($p['rateit_type']);
+		if (!empty($params['rateit_type'])) {
+			$params['sql'] .= "AND rateit_type = '".$this->core->con->escape($params['rateit_type'])."' ";
+			unset($params['rateit_type']);
 		}
 
-		if (!$count_only)
-			$p['sql'] .= 'GROUP BY RI.rateit_id ';
+		$params['sql'] .= 'GROUP BY rateit_id, rateit_type ';
+		if (!$count_only) {
 
-		return $this->core->blog->getPosts($p,$count_only);
+			if (!empty($params['no_content'])) {
+				$c_req = '';
+			} else {
+				$c_req =
+				'post_excerpt, post_excerpt_xhtml, '.
+				'post_content, post_content_xhtml, post_notes, ';
+			}
+
+			if (!empty($params['columns']) && is_array($params['columns'])) {
+				$c = $params['columns'];
+				$cols = array();
+				foreach($c AS $k => $v) {
+					if (!preg_match('/(\sas\s)/',$v)) $cols[] = $v;
+				}
+				if (!empty($cols)) 
+					$c_req .= implode(', ',$cols).', ';
+			}
+
+			$params['sql'] .= ', '.
+			'P.post_id, P.blog_id, P.user_id, P.cat_id, post_dt, '.
+			'post_tz, post_creadt, post_upddt, post_format, post_password, '.
+			'post_url, post_lang, post_title, '.$c_req.
+			'post_type, post_meta, post_status, post_selected, post_position, '.
+			'post_open_comment, post_open_tb, nb_comment, nb_trackback, '.
+			'U.user_name, U.user_firstname, U.user_displayname, U.user_email, '.
+			'U.user_url, '.
+			'C.cat_title, C.cat_url, C.cat_desc ';
+		}
+
+		return $this->core->blog->getPosts($params,$count_only);
 	}
 
 	public function getRates($params,$count_only=false)
@@ -182,7 +205,7 @@ class rateIt
 			$strReq = 'SELECT count(RI.rateit_id) ';
 		else {
 			$strReq =
-			'SELECT '.
+			'SELECT DISTINCT '.
 			'SUM(RI.rateit_note / RI.rateit_quotient) as rateit_sum, '.
 			'MAX(RI.rateit_note / RI.rateit_quotient) as rateit_max, '.
 			'MIN(RI.rateit_note / RI.rateit_quotient) as rateit_min, '.
@@ -192,7 +215,7 @@ class rateIt
 				$strReq .= implode(', ',$params['columns']).', ';
 
 			$strReq .= 
-			'COUNT(RI.rateit_note) as rateit_total ';
+			'COUNT(RI.rateit_id) as rateit_total ';
 		}
 
 		$strReq .=
@@ -241,6 +264,8 @@ class rateIt
 
 		if (!$count_only) {
 			$strReq .= 'GROUP BY RI.rateit_id ';
+			if (!empty($params['groups']) && is_array($params['groups'])) 
+				$strReq .= ', '.implode(', ',$params['groups']).' ';
 
 			if (!empty($params['order']))
 				$strReq .= 'ORDER BY '.$this->core->con->escape($params['order']).' ';

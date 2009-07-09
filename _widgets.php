@@ -135,8 +135,8 @@ class rateItWidget
 		
 		$w->rateitrank->setting('limit',__('Length:'),3,'combo',array(
 			1=>1,2=>2,3=>3,4=>4,5=>5,10=>10,15=>15,20=>20));
-		$w->rateitrank->setting('sortby',__('Order by:'),'rateit_note','combo',array(
-			__('Note') => 'rateit_note',
+		$w->rateitrank->setting('sortby',__('Order by:'),'rateit_avg','combo',array(
+			__('Note') => 'rateit_avg',
 			__('Votes') => 'rateit_total'));
 		$w->rateitrank->setting('sort',__('Sort:'),'desc','combo',array(
 			__('Ascending') => 'asc',
@@ -155,7 +155,7 @@ class rateItWidget
 		if ($w->homeonly && $core->url->type != 'default') return;
 
 		$p = array('from'=>'','sql'=>'','columns'=>array());
-		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_note','rateit_total'))) ? 
+		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total'))) ? 
 			$w->sortby.' ' : 'rateit_total ';
 
 		$p['order'] .= $w->sort == 'desc' ? 'desc' : 'asc';
@@ -165,10 +165,12 @@ class rateItWidget
 		$p['rateit_type'] = $w->type;
 
 		if ($w->type == 'post') {
-			$p['columns'][] = "CONCAT('".$core->blog->url.$core->getPostPublicUrl('post','')."',post_url) AS url";
-			$p['columns'][] = 'post_title AS title';
-			$p['from'] .= ' LEFT JOIN '.$core->prefix.'post P ON P.post_id = RI.rateit_id ';
-			$p['sql'] .= ' AND post_status = 1 AND post_password IS NULL ';
+			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
+			$p['columns'][] = 'P.post_title AS title';
+			$p['groups'][] = 'P.post_url';
+			$p['groups'][] = 'P.post_title';
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
+			$p['sql'] .= ' AND P.post_status = 1 AND P.post_password IS NULL ';
 		}
 		$w->sql = $p;
 

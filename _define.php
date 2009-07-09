@@ -12,13 +12,13 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')) return;
- 
+
 $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your posts",
 	/* Author */			"JC Denis",
-	/* Version */			'0.4',
+	/* Version */			'0.5',
 	/* Permissions */		'admin'
 );
-	/* date */		#20090703
+	/* date */		#20090709
 ?>

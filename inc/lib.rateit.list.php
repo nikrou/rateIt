@@ -40,7 +40,9 @@ class rateItExtList
 		$this->headcells = '';
 		$this->lines = '';
 		$this->cells = '';
-		
+
+		$this->rateit = new rateIt($core);
+
 		$this->init();
 	}
 
@@ -90,12 +92,17 @@ class rateItExtList
 # Display admin posts list class
 class rateItPostsList extends rateItExtList
 {
+	protected $core;
+	protected $rs;
+	protected $rs_count;
+	protected $base_url;
+
 	public function init()
 	{
 		self::headline(array(
 			__('Title') => 'colspan="2"',
-			__('Note') => '',
 			__('Votes') => '',
+			__('Note') => '',
 			__('Higher') => '',
 			__('Lower') => '',
 			__('Published on') => '',
@@ -136,20 +143,22 @@ class rateItPostsList extends rateItExtList
 		
 		$q = $this->core->blog->settings->rateit_quotient;
 		$d = $this->core->blog->settings->rateit_digit;
+		
+		$r = $this->rateit->get('post',$this->rs->post_id);
 
 		self::line(
 			array(
 				# Title
 				array(form::checkbox(array('entries[]'),$this->rs->post_id,'','','',!$this->rs->isEditable()),'class="nowrap"'),
 				array('<a href="'.$this->core->getPostAdminURL($this->rs->post_type,$this->rs->post_id).'">'.html::escapeHTML($this->rs->post_title).'</a>','class="maximal"'),
-				# Note
-				array(round($this->rs->rateit_avg * $q,$d),'class="nowrap"'),
 				# Votes
-				array('<a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=post&amp;id='.$this->rs->post_id.'">'.$this->rs->rateit_total.'</a>','class="nowrap"'),
+				array('<a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=post&amp;id='.$this->rs->post_id.'">'.$r->total.'</a>','class="nowrap"'),
+				# Note
+				array($r->note,'class="nowrap"'),
 				# Higher
-				array(round($this->rs->rateit_max * $q,$d),'class="nowrap"'),
+				array($r->max,'class="nowrap"'),
 				# Lower
-				array(round($this->rs->rateit_min * $q,$d),'class="nowrap"'),
+				array($r->min,'class="nowrap"'),
 				# Post date
 				array(dt::dt2str(__('%Y-%m-%d %H:%M'),$this->rs->post_dt),'class="nowrap"'),
 				# Category

@@ -1,4 +1,4 @@
-rateIt 0.4 (2009/06/27) plugin for Dotclear 2
+rateIt 0.5 (2009/07/09) plugin for Dotclear 2
 
 Préambule:
 ==========
@@ -40,7 +40,7 @@ http://www.gnu.org/licenses/gpl.html
 II. Support:
 ============
 
-http://blog.jcdenis.com/?q=dotclear+plugin+rateIt
+http://dotclear.jcdenis.com/
 http://forum.dotclear.net/viewtopic.php?id=39801
 http://lab.dotclear.org/wiki/plugin/rateIt
 
@@ -55,8 +55,10 @@ Pour information, le plugin rateIt créé la table "rateit".
 IV. Désintallation:
 ===================
 
-Une procédure complète est disponible à partir du gestionnaire d'extension 
+Une procédure est disponible à partir du gestionnaire d'extension 
 ou depuis l'onglet "désinstallation" de l'extension "RateIt".
+Si la désintallation est impossible par cette procédure, 
+il faut supprimer les fichiers et la table rateit manuellement.
 
 
 V. Onglet "Administration":

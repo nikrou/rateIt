@@ -95,10 +95,7 @@ __('not selected') => '0'
 
 $sortby_combo = array(
 __('Date') => 'post_dt',
-__('Votes') => 'rateit_total',
-__('Note') => 'rateit_note',
-__('Higher') => 'rateit_max',
-__('Lower') => 'rateit_min',
+__('Votes') => 'rateit_count',
 __('Title') => 'post_title',
 __('Category') => 'cat_title',
 __('Author') => 'user_id',
@@ -117,7 +114,7 @@ $params = array();
 $params['limit'] = array((($page-1)*$nb_per_page),$nb_per_page);
 $params['no_content'] = true;
 $params['rateit_type'] = 'post';
-$params['post_type'] = '';
+$params['post_type'] = 'post';
 
 /** Filters **/
 
@@ -532,8 +529,8 @@ echo '
 <ul><li>rateIt '.$core->plugins->moduleInfo('rateIt','version').'</li></ul>
 <h3>'.__('Support:').'</h3>
 <ul>
-<li><a href="http://blog.jcdenis.com/?q=dotclear+plugin+rateIt">Author\'s blog</a></li>
-<li><a href="http://forum.dotclear.net/index.php">Dotclear forum</a></li>
+<li><a href="http://dotclear.jcdenis.com">Author\'s blog</a></li>
+<li><a href="http://forum.dotclear.net/viewtopic.php?id=39801">Dotclear forum</a></li>
 <li><a href="http://lab.dotclear.org/wiki/plugin/rateIt">Dotclear lab</a></li>
 </ul>
 <h3>'.__('Copyrights:').'</h3>
@@ -556,6 +553,11 @@ under a Creative Commons Attribution 2.5 License<br />
 <li>Traduced with Dotclear plugin Translater,</li>
 <li>Packaged with Dotclear plugin Packager.</li>
 <li>Used jQuery Star Rating Plugin v3.12 by <a href="http://www.fyneworks.com/jquery/star-rating/">Fyneworks</a></li>
+</ul>
+<h3>'.__('Special thanks to').'</h3>
+<ul>
+<li>BG - <a href="http://bg-web.fr/dotclear/">http://bg-web.fr/dotclear/</a></li>
+<li>jmh2o - <a href="http://www.levertpays.be/">http://www.levertpays.be/</a></li>
 </ul>
 </div>
  </body>

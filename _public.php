@@ -89,11 +89,11 @@ class rateItPublic extends dcUrlHandlers
 	{
 		return '';
 	}
-	private static function dirname(&$f)
+	private static function path($f)
 	{
-		$d = array_pop(explode(PATH_SEPARATOR, DC_PLUGINS_ROOT.'/rateIt/default-templates'));
-		$f = $d.'/'.$f;
-		return dirname($f);
+		$paths = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT.'/rateIt/default-templates');
+		$d = array_pop($paths);
+		return $d.'/'.$f;
 	}
 
 	public static function rateitnow($args)
@@ -153,7 +153,8 @@ class rateItPublic extends dcUrlHandlers
 			exit;
 		}
 
-		$path = self::dirname($f);
+		$f = self::path($f);
+		$path = dirname($f);
 		if (!is_dir($path)) {
 			self::p404();
 			exit;
@@ -237,7 +238,8 @@ class rateItPublic extends dcUrlHandlers
 		if (!$core->blog->settings->rateit_poststpl && !$force) return;
 
 		$f = 'tpl/rateit.html';
-		$d = self::dirname($f);
+		$f = self::path($f);
+		$d = dirname($f);
 		$core->tpl->setPath($core->tpl->getPath(),$d);
 
 		if ('' != ($fc = $core->tpl->getData('rateit.html'))) {
