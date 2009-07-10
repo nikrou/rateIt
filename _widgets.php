@@ -53,7 +53,9 @@ class rateItWidget
 
 		if (!$core->blog->settings->rateit_active) return;
 
-		if ($w->enable_post && 'post.html' == $_ctx->current_tpl) {
+		if ($w->enable_post && 'post.html' == $_ctx->current_tpl 
+		&& (!$core->blog->settings->rateit_categorylimitposts
+		 || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id)) {
 			$w->type = 'post';
 			$w->id = $_ctx->posts->post_id;
 			$w->title = $w->title_post;
@@ -170,7 +172,7 @@ class rateItWidget
 			$p['groups'][] = 'P.post_url';
 			$p['groups'][] = 'P.post_title';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
-			$p['sql'] .= ' AND P.post_status = 1 AND P.post_password IS NULL ';
+			$p['sql'] .= " AND P.post_type='post' AND P.post_status = 1 AND P.post_password IS NULL ";
 		}
 		$w->sql = $p;
 

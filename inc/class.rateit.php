@@ -53,7 +53,7 @@ class rateIt
 
 		$cur->blog_id = $this->core->blog->id;
 		$cur->rateit_type = (string) $type;
-		$cur->rateit_id = (integer) $id;
+		$cur->rateit_id = (string) $id;
 		$cur->rateit_ip = (string) $this->ip;
 		$cur->rateit_note = $note;
 		$cur->rateit_quotient = $this->quotient;
@@ -154,14 +154,19 @@ class rateIt
 	public function getPostsByRate($params=array(),$count_only=false)
 	{
 		$params['columns'][] = 'COUNT(rateit_id) as rateit_count';
-	
+
 		$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as char)=rateit_id ';
-		
+
 		if (!isset($params['sql'])) $params['sql'] = '';
 
 		if (!empty($params['rateit_type'])) {
 			$params['sql'] .= "AND rateit_type = '".$this->core->con->escape($params['rateit_type'])."' ";
 			unset($params['rateit_type']);
+		}
+
+		if (!empty($params['post_type'])) {
+			$params['sql'] .= "AND post_type = '".$this->core->con->escape($params['post_type'])."' ";
+			unset($params['post_type']);
 		}
 
 		$params['sql'] .= 'GROUP BY rateit_id, rateit_type ';

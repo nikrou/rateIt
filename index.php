@@ -166,6 +166,21 @@ dcPage::jsPageTabs($request_tab).
 
 if (isset($tab['post'])) {
 
+	if (!empty($_POST['save']['post']) && isset($_POST['s'])) {
+		try {
+			$core->blog->settings->setNamespace('rateit');
+			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post on post page',true,false);
+			$core->blog->settings->put('rateit_homepoststpl',$_POST['s']['rateit_homepoststpl'],'boolean','rateit template on post on home page',true,false);
+			$core->blog->settings->put('rateit_categorypoststpl',$_POST['s']['rateit_categorypoststpl'],'boolean','rateit template on post on category page',true,false);
+			$core->blog->settings->put('rateit_categorylimitposts',$_POST['s']['rateit_categorylimitposts'],'integer','rateit limit post vote to one category',true,false);
+			$core->blog->triggerBlog();
+			http::redirect($p_url.'&t=post&done=1');
+		}
+		catch (Exception $e) {
+			$core->error->add($e->getMessage());
+		}
+	}
+
 	$pager_base_url = $p_url.
 	'&amp;t=post'.
 	'&amp;cat_id='.$cat_id.
@@ -187,6 +202,23 @@ if (isset($tab['post'])) {
 
 	echo 
 	'<div class="multi-part" id="post" title="'.$tab['post'].'">'.
+	'<h2>'.__('Options').'</h2>'.
+	'<form method="post" action="'.$p_url.'">'.
+	'<table>'.
+	'<tr><td>'.__('Include on entries pages').'*</td><td>'.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</td></tr>'.
+	'<tr><td>'.__('Include on home page').'*</td><td>'.form::combo(array('s[rateit_homepoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_homepoststpl).'</td></tr>'.
+	'<tr><td>'.__('Include on categories page').'*</td><td>'.form::combo(array('s[rateit_categorypoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorypoststpl).'</td></tr>'.
+	'<tr><td>'.__('Limit to one category').'</td><td>'.form::combo(array('s[rateit_categorylimitposts]'),$categories_combo,$core->blog->settings->rateit_categorylimitposts).'</td></tr>'.
+	'</table>'.
+	'<p>'.
+	form::hidden(array('p'),'rateIt').
+	form::hidden(array('t'),'post').
+	$core->formNonce().
+	'<input type="submit" name="save[post]" value="'.__('Save').'" /></p>'.
+	'</form>'.
+	'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>'.
+
+	'<h2>'.__('Entries').'</h2>'.
 	'<p>'.__('This is the list of all entries having rating').'</p>';
 	if (!$show_filters) { 
 		echo dcPage::jsLoad('js/filter-controls.js').'<p><a id="filter-control" class="form-control" href="#">'.__('Filters').'</a></p>';
@@ -331,7 +363,6 @@ if (isset($tab['admin'])) {
 		try {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
-			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post',true,false);
 			$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
 			$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 			$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
@@ -376,15 +407,17 @@ if (isset($tab['admin'])) {
 	'<form method="post" action="'.$p_url.'" enctype="multipart/form-data">'.
 	'<div class="two-cols">'.
 	'<div class="col">'.
-	'<h2>'.__('Extension').'</h2>'.
-	'<p class="field">'.__('Enable plugin').' '.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</p>'.
-	'<p class="field">'.__('Include on entries').' '.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</p>'.
-	'<p class="field">'.__('Identify users by').' '.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</p>'.
-	'<h2>'.__('Note').'</h2>'.
-	'<p class="field">'.__('Note out of').' '.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</p>'.
-	'<p class="field">'.__('Number of digits').' '.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</p>'.
-	'<p class="field">'.__('Message of thanks').' '.form::field(array('s[rateit_msgthanks]'),50,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</p>'.
-	'<p class="form-note">&nbsp;<br />'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
+	'<h2>'.__('Options').'</h2>'.
+	'<table>'.
+	'<tr><th colspan="2">'.__('Extension').'</th></tr>'.
+	'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</td></tr>'.
+	'<tr><td>'.__('Identify users by').'</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</td></tr>'.
+	'<tr><th colspan="2">'.__('Note').'</th></tr>'.
+	'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
+	'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
+	'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),50,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
+	'</table>'.
+	'<p class="form-note">*'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
 	'</div>'.
 	'<div class="col">'.
 	'<h2>'.__('Image').'</h2>';

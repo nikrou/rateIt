@@ -1,11 +1,11 @@
 <?php
 // Language: français 
-// Module: rateIt - 0.4
-// Date: 2009-07-01 01:48:21 
+// Module: rateIt - 0.5
+// Date: 2009-07-10 09:17:40 
 // Author: JC Denis, http://blog.jcdenis.com
 // Translated with dcTranslater - 0.2.4 
 
-#index.php:163
+#index.php:160
 $GLOBALS['__l10n']['Rate it'] = 'Évaluer ça';
 
 #index.php:56
@@ -17,7 +17,7 @@ $GLOBALS['__l10n']['Do you really want to delete all votes for these entries?'] 
 #_widgets.php:30
 $GLOBALS['__l10n']['Rate this entry'] = 'Évaluer ce billet';
 
-#_widgets.php:95
+#_widgets.php:97
 $GLOBALS['__l10n']['Vote'] = 'Vote';
 
 #_widgets.php:25
@@ -53,28 +53,28 @@ $GLOBALS['__l10n']['Show the highest rate'] = 'Afficher la note la plus haute';
 #_widgets.php:43
 $GLOBALS['__l10n']['Show the lowest rate'] = 'Afficher la note la plus basse';
 
-#_widgets.php:102
+#_widgets.php:104
 $GLOBALS['__l10n']['Note:'] = 'Note :';
 
-#_widgets.php:104
+#_widgets.php:106
 $GLOBALS['__l10n']['Votes:'] = 'Votes :';
 
-#_widgets.php:106
+#_widgets.php:108
 $GLOBALS['__l10n']['Higher:'] = 'Plus haute :';
 
-#_widgets.php:108
+#_widgets.php:110
 $GLOBALS['__l10n']['Lower:'] = 'Plus basse :';
 
-#_widgets.php:117
+#_widgets.php:119
 $GLOBALS['__l10n']['Top rating'] = 'Top évaluation';
 
-#_widgets.php:120
+#_widgets.php:122
 $GLOBALS['__l10n']['Top rated entries'] = 'Billets les mieux notés';
 
-#_widgets.php:136
+#_widgets.php:138
 $GLOBALS['__l10n']['Length:'] = 'Longueur :';
 
-#index.php:386
+#index.php:414
 $GLOBALS['__l10n']['Note'] = 'Note';
 
 #index.php:98
@@ -92,13 +92,13 @@ $GLOBALS['__l10n']['Rating failed because of a wrong type of entry'] = 'Échec d
 #inc/class.rateit.rest.php:48
 $GLOBALS['__l10n']['You have already voted'] = 'Vous avez déjà voté';
 
-#index.php:100
+#inc/lib.rateit.list.php:106
 $GLOBALS['__l10n']['Higher'] = 'Haute';
 
-#index.php:101
+#inc/lib.rateit.list.php:107
 $GLOBALS['__l10n']['Lower'] = 'Basse';
 
-#inc/lib.rateit.list.php:148
+#inc/lib.rateit.list.php:155
 $GLOBALS['__l10n']['Show rating details'] = 'Voir le détail des votes';
 
 #index.php:18
@@ -110,121 +110,136 @@ $GLOBALS['__l10n']['About'] = 'À propos';
 #index.php:28
 $GLOBALS['__l10n']['Administration'] = 'Administration';
 
-#index.php:519
+#index.php:547
 $GLOBALS['__l10n']['Uninstall'] = 'Désinstaller';
 
-#index.php:193
+#index.php:208
+$GLOBALS['__l10n']['Include on entries pages'] = 'Inclure dans les pages des billets';
+
+#index.php:209
+$GLOBALS['__l10n']['Include on home page'] = 'Inclure sur la page d\'accueil';
+
+#index.php:210
+$GLOBALS['__l10n']['Include on categories page'] = 'Inclure sur la page des catégories';
+
+#index.php:212
+$GLOBALS['__l10n']['Limit to one category'] = 'Limiter à une catégorie';
+
+#index.php:220
+$GLOBALS['__l10n']['To use this option you must have behavior "publicEntryAfterContent" in your theme'] = 'Pour utiliser cette option vous devez avoir le behavior "publiEntreyAfterContent" dans votre thème';
+
+#index.php:223
 $GLOBALS['__l10n']['This is the list of all entries having rating'] = 'Ceci est la liste des billets aillant des votes';
 
-#index.php:279
+#index.php:309
 $GLOBALS['__l10n']['This is detailed list for rating of type "%s" and id "%s"'] = 'Ceci est la liste détaillée des votes de type %s et d\'id %s';
 
-#index.php:283
+#index.php:313
 $GLOBALS['__l10n']['There is no rating for this request at this time'] = 'Il n\'y a pas de vote pour cette requête';
 
-#index.php:289
+#index.php:319
 $GLOBALS['__l10n']['Quotient'] = 'Quotient';
 
-#index.php:375
+#index.php:404
 $GLOBALS['__l10n']['Ip'] = 'Ip';
 
-#index.php:292
+#index.php:322
 $GLOBALS['__l10n']['Id'] = 'Id';
 
-#index.php:302
+#index.php:332
 $GLOBALS['__l10n']['delete entry'] = 'effacer cette entrée';
 
-#index.php:356
+#index.php:385
 $GLOBALS['__l10n']['Something went wrong while download file'] = 'Une erreur est survenue lors de téléchargement de l\'image';
 
-#index.php:359
+#index.php:388
 $GLOBALS['__l10n']['Image must be in png format'] = 'L\'image doit être au format png';
 
-#index.php:375
+#index.php:404
 $GLOBALS['__l10n']['Both ip and cookie'] = 'Ip et cookie';
 
-#index.php:378
+#index.php:407
 $GLOBALS['__l10n']['Administration of options of this extension on this blog'] = 'Administration de l\'extension sur ce blog';
 
-#index.php:383
+#index.php:412
 $GLOBALS['__l10n']['Enable plugin'] = 'Activer l\'extension';
 
-#index.php:384
-$GLOBALS['__l10n']['Include on entries'] = 'Inclure dans les billets';
-
-#index.php:385
+#index.php:413
 $GLOBALS['__l10n']['Identify users by'] = 'Identifier l\'utilisateur par';
 
-#index.php:387
+#index.php:415
 $GLOBALS['__l10n']['Note out of'] = 'Note sur';
 
-#index.php:388
+#index.php:416
 $GLOBALS['__l10n']['Number of digits'] = 'Nombre de décimales';
 
-#index.php:389
+#index.php:417
 $GLOBALS['__l10n']['Message of thanks'] = 'Message de remerciement';
 
-#index.php:390
+#index.php:418
 $GLOBALS['__l10n']['This message replaces stars, leave it empty to not replace stars'] = 'Ce message remplace les images, laisser ce champ vide pour ne pas modifier l\'image';
 
-#index.php:393
+#index.php:421
 $GLOBALS['__l10n']['Image'] = 'Image';
 
-#index.php:402
+#index.php:430
 $GLOBALS['__l10n']['Rating image exists on theme it will be used:'] = 'L\'image d\'évaluation existe dans le thème, elle sera utilisée';
 
-#index.php:409
+#index.php:437
 $GLOBALS['__l10n']['negative'] = 'négatif';
 
-#index.php:409
+#index.php:437
 $GLOBALS['__l10n']['positive'] = 'positif';
 
-#index.php:409
+#index.php:437
 $GLOBALS['__l10n']['hover'] = 'survole';
 
-#index.php:409
+#index.php:437
 $GLOBALS['__l10n']['size'] = 'taille';
 
-#index.php:408
+#index.php:436
 $GLOBALS['__l10n']['Rating image not exists on theme choose one to use:'] = 'L\'image de vote n\'existe pas dans le thème, en choisir une:';
 
-#index.php:430
+#index.php:458
 $GLOBALS['__l10n']['Please read the README file before uploading image'] = 'Merci de lire le ficher README avant de télécharger une image';
 
-#index.php:503
+#index.php:531
 $GLOBALS['__l10n']['You must check warning in order to delete plugin.'] = 'Vous devez vérifier la mise en garde en vue de supprimer l\'extension';
 
-#index.php:506
+#index.php:534
 $GLOBALS['__l10n']['In order to properly uninstall this plugin, you must specify the actions to perform'] = 'Dans le but de désintaller proprement l\'extension, vous devez spécifier les actions à effectuer';
 
-#index.php:510
+#index.php:538
 $GLOBALS['__l10n']['You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.'] = 'Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces tables et classes ne fonctionneront plus.';
 
-#index.php:483
+#index.php:511
 $GLOBALS['__l10n']['Delete plugin files'] = 'Supprimer les fichiers de l\'extension';
 
-#index.php:512
+#index.php:540
 $GLOBALS['__l10n']['Delete plugin database table'] = 'Supprimer la table de l\'extension dans la base de donnée';
 
-#index.php:514
+#index.php:542
 $GLOBALS['__l10n']['Delete plugin settings'] = 'Supprimer les paramètres de l\'extension';
 
-#index.php:531
+#index.php:559
 $GLOBALS['__l10n']['Version:'] = 'Version :';
 
-#index.php:533
+#index.php:561
 $GLOBALS['__l10n']['Support:'] = 'Support :';
 
-#index.php:539
+#index.php:567
 $GLOBALS['__l10n']['Copyrights:'] = 'Droits :';
 
-#index.php:541
+#index.php:569
 $GLOBALS['__l10n']['Files'] = 'Fichiers';
 
-#index.php:547
+#index.php:575
 $GLOBALS['__l10n']['Images'] = 'Images';
 
-#index.php:554
+#index.php:582
 $GLOBALS['__l10n']['Tools'] = 'Outils';
+
+#index.php:588
+$GLOBALS['__l10n']['Special thanks to'] = 'Remerciement à';
 
 ?>

@@ -235,16 +235,25 @@ class rateItPublic extends dcUrlHandlers
 
 	public static function publicEntryAfterContent($core,$_ctx,$force=false)
 	{
-		if (!$core->blog->settings->rateit_poststpl && !$force) return;
+		if ($force // for external addons
+		// for posts
+		|| ($_ctx->exists('posts') && $_ctx->posts->post_type == 'post'
+		    && ($core->blog->settings->rateit_poststpl && 'post.html' == $_ctx->current_tpl 
+		     || $core->blog->settings->rateit_homepoststpl && 'home.html' == $_ctx->current_tpl
+		     || $core->blog->settings->rateit_categorypoststpl && 'category.html' == $_ctx->current_tpl)
+		    && (!$core->blog->settings->rateit_categorylimitposts
+		     || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id))) {
 
-		$f = 'tpl/rateit.html';
-		$f = self::path($f);
-		$d = dirname($f);
-		$core->tpl->setPath($core->tpl->getPath(),$d);
+			$f = 'tpl/rateit.html';
+			$f = self::path($f);
+			$d = dirname($f);
+			$core->tpl->setPath($core->tpl->getPath(),$d);
 
-		if ('' != ($fc = $core->tpl->getData('rateit.html'))) {
-			echo $fc;
-		}
+			if ('' != ($fc = $core->tpl->getData('rateit.html'))) {
+				echo $fc;
+			}
+		} else
+			return;
 	}
 
 	public static function rateIt($attr,$content)
@@ -254,7 +263,7 @@ class rateItPublic extends dcUrlHandlers
 		'$rateit_params = new ArrayObject();'."\n".
 		'$rateit_params->type = "";'."\n".
 		'$rateit_params->id = 0;'."\n".
-		'if ($_ctx->exists("posts")) {'."\n".
+		'if ($_ctx->exists("posts") && $_ctx->posts->post_type == "post") {'."\n".
 		'	$rateit_params->type = "post";'."\n".
 		'	$rateit_params->id = $_ctx->posts->post_id;'."\n".
 		'}'."\n".
@@ -296,7 +305,7 @@ class rateItPublic extends dcUrlHandlers
 		$f = $core->tpl->getFilters($attr);
 
 		$title = '';
-		if ($_ctx->exists("posts"))
+		if ($_ctx->exists('posts') && $_ctx->posts->post_type == 'post')
 			$title = __('Rate this entry');
 
 		# --BEHAVIOR-- templateRateItTitle
