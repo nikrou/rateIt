@@ -1,6 +1,6 @@
 # Language: français
-# Module: rateIt - 0.5
-# Date: 2009-07-10 09:17:41
+# Module: rateIt - 0.7
+# Date: 2009-07-14 03:45:09
 # Author: JC Denis, http://blog.jcdenis.com
 # Translated with dcTranslater - 0.2.4
 
@@ -99,7 +99,7 @@ msgstr "Billets les mieux notés"
 msgid "Length:"
 msgstr "Longueur :"
 
-#: index.php:414
+#: index.php:423
 msgid "Note"
 msgstr "Note"
 
@@ -147,7 +147,7 @@ msgstr "À propos"
 msgid "Administration"
 msgstr "Administration"
 
-#: index.php:547
+#: index.php:565
 msgid "Uninstall"
 msgstr "Désinstaller"
 
@@ -163,163 +163,179 @@ msgstr "Inclure sur la page d'accueil"
 msgid "Include on categories page"
 msgstr "Inclure sur la page des catégories"
 
-#: index.php:212
+#: index.php:211
 msgid "Limit to one category"
 msgstr "Limiter à une catégorie"
 
-#: index.php:220
+#: index.php:219
 msgid "To use this option you must have behavior "publicEntryAfterContent" in your theme"
 msgstr "Pour utiliser cette option vous devez avoir le behavior \"publiEntreyAfterContent\" dans votre thème"
 
-#: index.php:223
+#: index.php:222
 msgid "This is the list of all entries having rating"
 msgstr "Ceci est la liste des billets aillant des votes"
 
-#: index.php:309
+#: index.php:308
 msgid "This is detailed list for rating of type "%s" and id "%s""
 msgstr "Ceci est la liste détaillée des votes de type %s et d'id %s"
 
-#: index.php:313
+#: index.php:312
 msgid "There is no rating for this request at this time"
 msgstr "Il n'y a pas de vote pour cette requête"
 
-#: index.php:319
+#: index.php:318
 msgid "Quotient"
 msgstr "Quotient"
 
-#: index.php:404
+#: index.php:411
 msgid "Ip"
 msgstr "Ip"
 
-#: index.php:322
+#: index.php:321
 msgid "Id"
 msgstr "Id"
 
-#: index.php:332
+#: index.php:331
 msgid "delete entry"
 msgstr "effacer cette entrée"
 
-#: index.php:385
+#: index.php:392
 msgid "Something went wrong while download file"
 msgstr "Une erreur est survenue lors de téléchargement de l'image"
 
-#: index.php:388
+#: index.php:395
 msgid "Image must be in png format"
 msgstr "L'image doit être au format png"
 
-#: index.php:404
+#: index.php:411
 msgid "Both ip and cookie"
 msgstr "Ip et cookie"
 
-#: index.php:407
+#: index.php:414
 msgid "Administration of options of this extension on this blog"
 msgstr "Administration de l'extension sur ce blog"
 
-#: index.php:412
+#: index.php:421
 msgid "Enable plugin"
 msgstr "Activer l'extension"
 
-#: index.php:413
+#: index.php:422
 msgid "Identify users by"
 msgstr "Identifier l'utilisateur par"
 
-#: index.php:415
+#: index.php:424
 msgid "Note out of"
 msgstr "Note sur"
 
-#: index.php:416
+#: index.php:425
 msgid "Number of digits"
 msgstr "Nombre de décimales"
 
-#: index.php:417
+#: index.php:426
 msgid "Message of thanks"
 msgstr "Message de remerciement"
 
-#: index.php:418
-msgid "This message replaces stars, leave it empty to not replace stars"
-msgstr "Ce message remplace les images, laisser ce champ vide pour ne pas modifier l'image"
+#: index.php:427
+msgid "URL prefix"
+msgstr "Prefix des liens"
 
-#: index.php:421
-msgid "Image"
-msgstr "Image"
-
-#: index.php:430
-msgid "Rating image exists on theme it will be used:"
-msgstr "L'image d'évaluation existe dans le thème, elle sera utilisée"
-
-#: index.php:437
-msgid "negative"
-msgstr "négatif"
-
-#: index.php:437
-msgid "positive"
-msgstr "positif"
-
-#: index.php:437
-msgid "hover"
-msgstr "survole"
-
-#: index.php:437
-msgid "size"
-msgstr "taille"
-
-#: index.php:436
-msgid "Rating image not exists on theme choose one to use:"
-msgstr "L'image de vote n'existe pas dans le thème, en choisir une:"
-
-#: index.php:458
-msgid "Please read the README file before uploading image"
-msgstr "Merci de lire le ficher README avant de télécharger une image"
-
-#: index.php:531
-msgid "You must check warning in order to delete plugin."
-msgstr "Vous devez vérifier la mise en garde en vue de supprimer l'extension"
-
-#: index.php:534
-msgid "In order to properly uninstall this plugin, you must specify the actions to perform"
-msgstr "Dans le but de désintaller proprement l'extension, vous devez spécifier les actions à effectuer"
-
-#: index.php:538
-msgid "You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work."
-msgstr "Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces tables et classes ne fonctionneront plus."
-
-#: index.php:511
-msgid "Delete plugin files"
-msgstr "Supprimer les fichiers de l'extension"
-
-#: index.php:540
-msgid "Delete plugin database table"
-msgstr "Supprimer la table de l'extension dans la base de donnée"
-
-#: index.php:542
-msgid "Delete plugin settings"
-msgstr "Supprimer les paramètres de l'extension"
-
-#: index.php:559
-msgid "Version:"
-msgstr "Version :"
-
-#: index.php:561
-msgid "Support:"
-msgstr "Support :"
-
-#: index.php:567
-msgid "Copyrights:"
-msgstr "Droits :"
-
-#: index.php:569
+#: index.php:587
 msgid "Files"
 msgstr "Fichiers"
 
-#: index.php:575
+#: index.php:429
+msgid "Post form"
+msgstr "Envoie du formulaire"
+
+#: index.php:430
+msgid "Rest service"
+msgstr "Service Rest"
+
+#: index.php:432
+msgid "This message replaces stars, leave it empty to not replace stars"
+msgstr "Ce message remplace les images, laisser ce champ vide pour ne pas modifier l'image"
+
+#: index.php:433
+msgid "Change these prefixes only if you have any conflicts with other links."
+msgstr "Modifier ces prefixes seulement si vous avez des conflits avec d'autres liens"
+
+#: index.php:436
+msgid "Image"
+msgstr "Image"
+
+#: index.php:443
+msgid "Rating image exists on theme it will be used:"
+msgstr "L'image d'évaluation existe dans le thème, elle sera utilisée"
+
+#: index.php:450
+msgid "negative"
+msgstr "négatif"
+
+#: index.php:450
+msgid "positive"
+msgstr "positif"
+
+#: index.php:450
+msgid "hover"
+msgstr "survole"
+
+#: index.php:450
+msgid "size"
+msgstr "taille"
+
+#: index.php:449
+msgid "Rating image not exists on theme choose one to use:"
+msgstr "L'image de vote n'existe pas dans le thème, en choisir une:"
+
+#: index.php:476
+msgid "Please read the README file before uploading image"
+msgstr "Merci de lire le ficher README avant de télécharger une image"
+
+#: index.php:549
+msgid "You must check warning in order to delete plugin."
+msgstr "Vous devez vérifier la mise en garde en vue de supprimer l'extension"
+
+#: index.php:552
+msgid "In order to properly uninstall this plugin, you must specify the actions to perform"
+msgstr "Dans le but de désintaller proprement l'extension, vous devez spécifier les actions à effectuer"
+
+#: index.php:556
+msgid "You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work."
+msgstr "Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces tables et classes ne fonctionneront plus."
+
+#: index.php:529
+msgid "Delete plugin files"
+msgstr "Supprimer les fichiers de l'extension"
+
+#: index.php:558
+msgid "Delete plugin database table"
+msgstr "Supprimer la table de l'extension dans la base de donnée"
+
+#: index.php:560
+msgid "Delete plugin settings"
+msgstr "Supprimer les paramètres de l'extension"
+
+#: index.php:577
+msgid "Version:"
+msgstr "Version :"
+
+#: index.php:579
+msgid "Support:"
+msgstr "Support :"
+
+#: index.php:585
+msgid "Copyrights:"
+msgstr "Droits :"
+
+#: index.php:593
 msgid "Images"
 msgstr "Images"
 
-#: index.php:582
+#: index.php:600
 msgid "Tools"
 msgstr "Outils"
 
-#: index.php:588
+#: index.php:606
 msgid "Special thanks to"
 msgstr "Remerciement à"
 

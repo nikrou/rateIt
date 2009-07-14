@@ -363,19 +363,27 @@ if (isset($tab['admin'])) {
 		try {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
+			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post',true,false);
 			$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
 			$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 			$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
 			$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
+			$core->blog->settings->put('rateit_url_prefix',$_POST['s']['rateit_url_prefix'],'string','rateit prefix url for files',true,false);
+			$core->blog->settings->put('rateit_post_prefix',$_POST['s']['rateit_post_prefix'],'string','rateit prefix url for post form',true,false);
+			$core->blog->settings->put('rateit_rest_prefix',$_POST['s']['rateit_rest_prefix'],'string','rateit prefix url for rest service',true,false);
 
-			# change rate image
+			# Create public folder for blog stars image
+			$dest_path = DC_ROOT.'/'.$core->blog->settings->public_path.'/rateit';
+			if (!is_dir($dest_path))
+				files::makeDir($dest_path,true);
+
+			# Change rate image
 			if (isset($_POST['s']['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['s']['starsimage'])) {
 
 				$source = dirname(__FILE__).'/default-templates/img/stars/'.$_POST['s']['starsimage'];
-				$dest = dirname(__FILE__).'/default-templates/img/rateit-stars.png';
 
 				if (file_exists($source))
-					file_put_contents($dest,file_get_contents($source));
+					file_put_contents($dest_path.'/rateit-stars.png',file_get_contents($source));
 			}
 			# Upload rate image
 			if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name']) {
@@ -386,7 +394,7 @@ if (isset($tab['admin'])) {
 				if ($_FILES['starsuserfile']['type'] != 'image/x-png')
 					throw new Exception(__('Image must be in png format').$_FILES['starsuserfile']['type']);
 
-				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],dirname(__FILE__).'/default-templates/img/rateit-stars.png');
+				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],$dest_path.'/rateit-stars.png');
 			}
 			$core->blog->triggerBlog();
 			http::redirect($p_url.'&t=admin&done=1');
@@ -416,31 +424,39 @@ if (isset($tab['admin'])) {
 	'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
 	'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
 	'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),50,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
+	'<tr><th colspan="2">'.__('URL prefix').'</th></tr>'.
+	'<tr><td>'.__('Files').'**</td><td>'.form::field(array('s[rateit_url_prefix]'),50,50,RATEIT_URL_PREFIX).'</td></tr>'.
+	'<tr><td>'.__('Post form').'**</td><td>'.form::field(array('s[rateit_post_prefix]'),50,50,RATEIT_POST_PREFIX).'</td></tr>'.
+	'<tr><td>'.__('Rest service').'**</td><td>'.form::field(array('s[rateit_rest_prefix]'),50,50,RATEIT_REST_PREFIX).'</td></tr>'.
 	'</table>'.
 	'<p class="form-note">*'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
+	'<p class="form-note">**'.__('Change these prefixes only if you have any conflicts with other links.').'</p>'.
 	'</div>'.
 	'<div class="col">'.
 	'<h2>'.__('Image').'</h2>';
 
-	$stars_theme_path = $core->blog->themes_path.'/'.$core->blog->settings->theme.'/img/rateit-stars.png';
-	$stars_rateit_path = dirname(__FILE__).'/default-templates/img/rateit-stars.png';
 	$stars_rateit_files = files::scandir(dirname(__FILE__).'/default-templates/img/stars');
-	$stars_url = $core->blog->url.'rateit/img/rateit-stars.png';
+	$stars = rateItStars::getArray($core);
 
-	if (file_exists($stars_theme_path)) {
+	if (file_exists($stars['theme']['dir'])) {
 		echo 
 		'<p>'.__('Rating image exists on theme it will be used:').'</p>'.
 		form::hidden(array('s[starsimage]'),'theme').
 		'<table><tr><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>'.
-		'<tr>'.rateit_demo($stars_theme_path,$stars_url).'</tr></table>';
+		'<tr>'.rateit_demo($stars['theme']).'</tr></table>';
 	} else {
-		echo
+		echo 
 		'<p>'.__('Rating image not exists on theme choose one to use:').'</p>'.
 		'<table><tr><th>&nbsp;</th><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>';
-		if (file_exists($stars_rateit_path)) {
+		if (file_exists($stars['public']['dir'])) {
 			echo 
 			'<tr><td>'.form::radio(array('s[starsimage]'),'default',1).'</td>'.
-			rateit_demo($stars_rateit_path,$stars_url).'</tr>';
+			rateit_demo($stars['public']).'</tr>';
+		}
+		elseif (file_exists($stars['rateit']['dir'])) {
+			echo 
+			'<tr><td>'.form::radio(array('s[starsimage]'),'default',1).'</td>'.
+			rateit_demo($stars['rateit']).'</tr>';
 		}
 		sort($stars_rateit_files);
 		foreach($stars_rateit_files AS $f) {
@@ -448,9 +464,9 @@ if (isset($tab['admin'])) {
 
 			echo 
 			'<tr class="line"><td>'.form::radio(array('s[starsimage]'),$f).'</td>'.
-			rateit_demo(
-				dirname(__FILE__).'/default-templates/img/stars/'.$f,
-				'index.php?pf=rateIt/default-templates/img/stars/'.$f
+			rateit_demo(array(
+				'dir'=>dirname(__FILE__).'/default-templates/img/stars/'.$f,
+				'url'=>'index.php?pf=rateIt/default-templates/img/stars/'.$f)
 			).'</tr>';
 		}
 		echo 
@@ -562,7 +578,7 @@ echo '
 <ul><li>rateIt '.$core->plugins->moduleInfo('rateIt','version').'</li></ul>
 <h3>'.__('Support:').'</h3>
 <ul>
-<li><a href="http://dotclear.jcdenis.com">Author\'s blog</a></li>
+<li><a href="http://dotclear.jcdenis.com/">Author\'s blog</a></li>
 <li><a href="http://forum.dotclear.net/viewtopic.php?id=39801">Dotclear forum</a></li>
 <li><a href="http://lab.dotclear.org/wiki/plugin/rateIt">Dotclear lab</a></li>
 </ul>
@@ -596,9 +612,9 @@ under a Creative Commons Attribution 2.5 License<br />
  </body>
 </html>';
 
-function rateit_demo($path,$url)
+function rateit_demo($star)
 {
-	$s = getimagesize($path);
+	$s = getimagesize($star['dir']);
 	return
 	'<td><div style="
 		display:block;
@@ -606,7 +622,7 @@ function rateit_demo($path,$url)
 		text-indent:-999em;
 		margin: 0px;
 		padding: 1px;
-		background: transparent url('.$url.') no-repeat 0 0;
+		background: transparent url('.$star['url'].') no-repeat 0 0;
 		width:'.$s[0].'px;
 		height:'.(floor($s[1] /3)-1).'px;
 	">&nbsp;</div></td>
@@ -616,7 +632,7 @@ function rateit_demo($path,$url)
 		text-indent:-999em;
 		margin: 0px;
 		padding: 1px;
-		background: transparent url('.$url.') no-repeat 0 -'.floor($s[1] /3).'px;
+		background: transparent url('.$star['url'].') no-repeat 0 -'.floor($s[1] /3).'px;
 		width:'.$s[0].'px;
 		height:'.(floor($s[1] /3)-1).'px;
 	">&nbsp;</div></td>
@@ -626,7 +642,7 @@ function rateit_demo($path,$url)
 		text-indent:-999em;
 		margin: 0px;
 		padding: 1px;
-		background: transparent url('.$url.') no-repeat 0 -'.(floor($s[1] /3) *2).'px;
+		background: transparent url('.$star['url'].') no-repeat 0 -'.(floor($s[1] /3) *2).'px;
 		width:'.$s[0].'px;
 		height:'.(floor($s[1] /3)-1).'px;
 	">&nbsp;</div></td><td>'.$s[0].'x'.floor($s[1] /3).'</td>';

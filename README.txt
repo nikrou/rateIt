@@ -72,11 +72,6 @@ Permet d'activer ou non l'extension sur un blog.
 Avec une configuration d'origine, la désactivation de l'extension 
 masquera toutes les balise en rapport avec le plugin coté publique.
 
-"Inclure dans les billets":
-Permet d'inclure l'outil de vote directement à la fin d'un billet sans modifier les templates.
-La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit être présente 
-dans le thème utilisé pour que cete option fonctionne.
-
 "Identifier l'utilisateur par"
 Methode de gestion des votes, soit par Ip, soit par cookie, soit les deux.
 Chaque méthode a ses avantages et ses inconvénients.
@@ -106,6 +101,11 @@ et avec trois parties égales en hauteur:
 - une partie basse représentant le survole par la souris.
 La largeur et la hauteur sont à votre convenance.
 
+L'ordre de recherche de l'image est:
+1) dans le theme utilisé par le blog, fichier: /img/rateit-stars.png
+2) dans le repertoire public du blog, fichier: /rateit/rateit-stars.png
+3) dans le repertoire de l'extention, fichier: /default-template/img/rateit-stars.png
+
 
 VI. Onglet "Désintallation":
 ============================
@@ -123,7 +123,24 @@ La version, Les droits, des liens vers le support...
 VIII. Onlget "Billets":
 ======================
 
-...
+
+VIII.1 Options:
+---------------
+
+"Inclure dans les pages des billets":
+Utilisé pour le template post.html.
+Permet d'inclure l'outil de vote directement à la fin d'un billet sans modifier les templates.
+La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit être présente 
+dans le thème utilisé pour que cete option fonctionne.
+
+"Inclure sur la page d'accueil":
+Utilisé pour le template home.html.Idem que ci-dessus.
+
+"Inclure sur la page des catégories":
+Utilisé pour le template category.html. Idem que ci-dessus.
+
+"Limiter à une catégorie":
+Permet de limiter les votes à une seule catégorie.
 
 
 IX. Autres onlgets:

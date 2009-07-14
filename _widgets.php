@@ -195,7 +195,7 @@ class rateItWidget
 		$d = $core->blog->settings->rateit_digit;
 
 		$res =
-		'<div class="rateitpostsrank">'.
+		'<div class="rateitpostsrank rateittype'.$w->type.'">'.
 		($w->title ? '<h2>'.html::escapeHTML($w->title).'</h2>' : '').
 		'<ul>';
 		$i=0;
