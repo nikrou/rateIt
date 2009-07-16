@@ -54,11 +54,19 @@ class rateItInstall
 	{
 		$core->blog->settings->setNameSpace('rateit');
 		$core->blog->settings->put('rateit_active',false,'boolean','rateit plugin enabled',$force,$glob);
-		$core->blog->settings->put('rateit_poststpl',false,'boolean','rateit template on post',$force,$glob);
 		$core->blog->settings->put('rateit_quotient',5,'integer','rateit maximum note',$force,$glob);
 		$core->blog->settings->put('rateit_digit',1,'integer','rateit note digits number',$force,$glob);
 		$core->blog->settings->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',$force,$glob);
 		$core->blog->settings->put('rateit_userident',0,'integer','rateit use cookie and/or ip',$force,$glob);
+		$core->blog->settings->put('rateit_dispubjs',0,'boolean','disable rateit public javascript',$force,$glob);
+		$core->blog->settings->put('rateit_module_prefix','rateit','string','rateit prefix url for files',$force,$glob);
+		$core->blog->settings->put('rateit_post_prefix','rateitpost','string','rateit prefix url for post form',$force,$glob);
+		$core->blog->settings->put('rateit_rest_prefix','rateitservice','string','rateit prefix url for rest service',$force,$glob);
+
+		$core->blog->settings->put('rateit_poststpl',0,'boolean','rateit template on post on post page',$force,$glob);
+		$core->blog->settings->put('rateit_homepoststpl',0,'boolean','rateit template on post on home page',$force,$glob);
+		$core->blog->settings->put('rateit_categorypoststpl',0,'boolean','rateit template on post on category page',$force,$glob);
+		$core->blog->settings->put('rateit_categorylimitposts',0,'integer','rateit limit post vote to one category',$force,$glob);
 	}
 
 	public static function delSettings(&$core)

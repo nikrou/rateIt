@@ -1,14 +1,14 @@
 <?php
 // Language: français 
-// Module: rateIt - 0.7
-// Date: 2009-07-14 03:45:09 
+// Module: rateIt - 0.7.1
+// Date: 2009-07-16 00:21:50 
 // Author: JC Denis, http://blog.jcdenis.com
 // Translated with dcTranslater - 0.2.4 
 
-#index.php:160
+#index.php:622
 $GLOBALS['__l10n']['Rate it'] = 'Évaluer ça';
 
-#index.php:56
+#index.php:46
 $GLOBALS['__l10n']['delete rating'] = 'Effacer les votes';
 
 #_admin.php:89
@@ -74,10 +74,10 @@ $GLOBALS['__l10n']['Top rated entries'] = 'Billets les mieux notés';
 #_widgets.php:138
 $GLOBALS['__l10n']['Length:'] = 'Longueur :';
 
-#index.php:423
+#index.php:430
 $GLOBALS['__l10n']['Note'] = 'Note';
 
-#index.php:98
+#index.php:88
 $GLOBALS['__l10n']['Votes'] = 'Votes';
 
 #inc/class.rateit.rest.php:32
@@ -104,154 +104,163 @@ $GLOBALS['__l10n']['Show rating details'] = 'Voir le détail des votes';
 #index.php:18
 $GLOBALS['__l10n']['Configuration saved'] = 'Configuration enregistrée';
 
-#index.php:22
-$GLOBALS['__l10n']['About'] = 'À propos';
-
-#index.php:28
-$GLOBALS['__l10n']['Administration'] = 'Administration';
-
-#index.php:565
-$GLOBALS['__l10n']['Uninstall'] = 'Désinstaller';
-
 #index.php:208
+$GLOBALS['__l10n']['Settings for entries'] = 'Paramètres pour les billets';
+
+#index.php:212
 $GLOBALS['__l10n']['Include on entries pages'] = 'Inclure dans les pages des billets';
 
-#index.php:209
+#index.php:213
 $GLOBALS['__l10n']['Include on home page'] = 'Inclure sur la page d\'accueil';
 
-#index.php:210
+#index.php:214
 $GLOBALS['__l10n']['Include on categories page'] = 'Inclure sur la page des catégories';
 
-#index.php:211
+#index.php:215
 $GLOBALS['__l10n']['Limit to one category'] = 'Limiter à une catégorie';
 
-#index.php:219
+#index.php:223
 $GLOBALS['__l10n']['To use this option you must have behavior "publicEntryAfterContent" in your theme'] = 'Pour utiliser cette option vous devez avoir le behavior "publiEntreyAfterContent" dans votre thème';
 
-#index.php:222
+#index.php:228
+$GLOBALS['__l10n']['List of entries'] = 'Liste des billets';
+
+#index.php:230
 $GLOBALS['__l10n']['This is the list of all entries having rating'] = 'Ceci est la liste des billets aillant des votes';
 
-#index.php:308
+#index.php:316
 $GLOBALS['__l10n']['This is detailed list for rating of type "%s" and id "%s"'] = 'Ceci est la liste détaillée des votes de type %s et d\'id %s';
 
-#index.php:312
+#index.php:320
 $GLOBALS['__l10n']['There is no rating for this request at this time'] = 'Il n\'y a pas de vote pour cette requête';
 
-#index.php:318
+#index.php:326
 $GLOBALS['__l10n']['Quotient'] = 'Quotient';
 
-#index.php:411
+#index.php:417
 $GLOBALS['__l10n']['Ip'] = 'Ip';
 
-#index.php:321
+#index.php:329
 $GLOBALS['__l10n']['Id'] = 'Id';
 
-#index.php:331
+#index.php:339
 $GLOBALS['__l10n']['delete entry'] = 'effacer cette entrée';
 
-#index.php:392
+#index.php:367
+$GLOBALS['__l10n']['Settings'] = 'Paramètres';
+
+#index.php:398
 $GLOBALS['__l10n']['Something went wrong while download file'] = 'Une erreur est survenue lors de téléchargement de l\'image';
 
-#index.php:395
+#index.php:401
 $GLOBALS['__l10n']['Image must be in png format'] = 'L\'image doit être au format png';
 
-#index.php:411
+#index.php:417
 $GLOBALS['__l10n']['Both ip and cookie'] = 'Ip et cookie';
 
-#index.php:414
+#index.php:420
 $GLOBALS['__l10n']['Administration of options of this extension on this blog'] = 'Administration de l\'extension sur ce blog';
 
-#index.php:421
+#index.php:427
 $GLOBALS['__l10n']['Enable plugin'] = 'Activer l\'extension';
 
-#index.php:422
-$GLOBALS['__l10n']['Identify users by'] = 'Identifier l\'utilisateur par';
-
-#index.php:424
-$GLOBALS['__l10n']['Note out of'] = 'Note sur';
-
-#index.php:425
-$GLOBALS['__l10n']['Number of digits'] = 'Nombre de décimales';
-
-#index.php:426
-$GLOBALS['__l10n']['Message of thanks'] = 'Message de remerciement';
-
-#index.php:427
-$GLOBALS['__l10n']['URL prefix'] = 'Prefix des liens';
-
-#index.php:587
-$GLOBALS['__l10n']['Files'] = 'Fichiers';
+#index.php:428
+$GLOBALS['__l10n']['Disable public javascript'] = 'Désactiver le javascript publique';
 
 #index.php:429
-$GLOBALS['__l10n']['Post form'] = 'Envoie du formulaire';
+$GLOBALS['__l10n']['Identify users by'] = 'Identifier l\'utilisateur par';
 
-#index.php:430
-$GLOBALS['__l10n']['Rest service'] = 'Service Rest';
+#index.php:431
+$GLOBALS['__l10n']['Note out of'] = 'Note sur';
 
 #index.php:432
-$GLOBALS['__l10n']['This message replaces stars, leave it empty to not replace stars'] = 'Ce message remplace les images, laisser ce champ vide pour ne pas modifier l\'image';
+$GLOBALS['__l10n']['Number of digits'] = 'Nombre de décimales';
 
 #index.php:433
-$GLOBALS['__l10n']['Change these prefixes only if you have any conflicts with other links.'] = 'Modifier ces prefixes seulement si vous avez des conflits avec d\'autres liens';
+$GLOBALS['__l10n']['Message of thanks'] = 'Message de remerciement';
+
+#index.php:434
+$GLOBALS['__l10n']['URL prefix'] = 'Prefix des liens';
+
+#index.php:594
+$GLOBALS['__l10n']['Files'] = 'Fichiers';
 
 #index.php:436
-$GLOBALS['__l10n']['Image'] = 'Image';
+$GLOBALS['__l10n']['Post form'] = 'Envoie du formulaire';
+
+#index.php:437
+$GLOBALS['__l10n']['Rest service'] = 'Service Rest';
+
+#index.php:439
+$GLOBALS['__l10n']['This message replaces stars, leave it empty to not replace stars'] = 'Ce message remplace les images, laisser ce champ vide pour ne pas modifier l\'image';
+
+#index.php:440
+$GLOBALS['__l10n']['Change these prefixes only if you have any conflicts with other links.'] = 'Modifier ces prefixes seulement si vous avez des conflits avec d\'autres liens';
 
 #index.php:443
+$GLOBALS['__l10n']['Image'] = 'Image';
+
+#index.php:450
 $GLOBALS['__l10n']['Rating image exists on theme it will be used:'] = 'L\'image d\'évaluation existe dans le thème, elle sera utilisée';
 
-#index.php:450
+#index.php:457
 $GLOBALS['__l10n']['negative'] = 'négatif';
 
-#index.php:450
+#index.php:457
 $GLOBALS['__l10n']['positive'] = 'positif';
 
-#index.php:450
+#index.php:457
 $GLOBALS['__l10n']['hover'] = 'survole';
 
-#index.php:450
+#index.php:457
 $GLOBALS['__l10n']['size'] = 'taille';
 
-#index.php:449
+#index.php:456
 $GLOBALS['__l10n']['Rating image not exists on theme choose one to use:'] = 'L\'image de vote n\'existe pas dans le thème, en choisir une:';
 
-#index.php:476
+#index.php:483
 $GLOBALS['__l10n']['Please read the README file before uploading image'] = 'Merci de lire le ficher README avant de télécharger une image';
 
-#index.php:549
-$GLOBALS['__l10n']['You must check warning in order to delete plugin.'] = 'Vous devez vérifier la mise en garde en vue de supprimer l\'extension';
-
-#index.php:552
-$GLOBALS['__l10n']['In order to properly uninstall this plugin, you must specify the actions to perform'] = 'Dans le but de désintaller proprement l\'extension, vous devez spécifier les actions à effectuer';
+#index.php:572
+$GLOBALS['__l10n']['Uninstall'] = 'Désinstaller';
 
 #index.php:556
+$GLOBALS['__l10n']['You must check warning in order to delete plugin.'] = 'Vous devez vérifier la mise en garde en vue de supprimer l\'extension';
+
+#index.php:559
+$GLOBALS['__l10n']['In order to properly uninstall this plugin, you must specify the actions to perform'] = 'Dans le but de désintaller proprement l\'extension, vous devez spécifier les actions à effectuer';
+
+#index.php:563
 $GLOBALS['__l10n']['You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.'] = 'Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces tables et classes ne fonctionneront plus.';
 
-#index.php:529
+#index.php:536
 $GLOBALS['__l10n']['Delete plugin files'] = 'Supprimer les fichiers de l\'extension';
 
-#index.php:558
+#index.php:565
 $GLOBALS['__l10n']['Delete plugin database table'] = 'Supprimer la table de l\'extension dans la base de donnée';
 
-#index.php:560
+#index.php:567
 $GLOBALS['__l10n']['Delete plugin settings'] = 'Supprimer les paramètres de l\'extension';
 
-#index.php:577
+#index.php:583
+$GLOBALS['__l10n']['About'] = 'À propos';
+
+#index.php:584
 $GLOBALS['__l10n']['Version:'] = 'Version :';
 
-#index.php:579
+#index.php:586
 $GLOBALS['__l10n']['Support:'] = 'Support :';
 
-#index.php:585
+#index.php:592
 $GLOBALS['__l10n']['Copyrights:'] = 'Droits :';
 
-#index.php:593
+#index.php:600
 $GLOBALS['__l10n']['Images'] = 'Images';
 
-#index.php:600
+#index.php:607
 $GLOBALS['__l10n']['Tools'] = 'Outils';
 
-#index.php:606
+#index.php:613
 $GLOBALS['__l10n']['Special thanks to'] = 'Remerciement à';
 
 ?>

@@ -19,16 +19,6 @@ $msg = isset($_REQUEST['done']) ? __('Configuration saved') : '';
 $img_green = '<img alt="" src="images/check-on.png" />';
 $img_red = '<img alt="" src="images/check-off.png" />';
 
-$tab = array('about' => __('About'));
-if ($core->auth->check('usage,contentadmin',$core->blog->id))  {
-	$tab['post'] = __('Entries');
-	$tab['details'] = __('Details');
-}
-if ($core->auth->check('admin',$core->blog->id)) 
-	$tab['admin'] = __('Administration');
-if ($core->auth->isSuperAdmin()) 
-	$tab['uninstall'] = __('Uninstall');
-
 $show_filters = false;
 $user_id = !empty($_GET['user_id']) ? $_GET['user_id'] : '';
 $cat_id = !empty($_GET['cat_id']) ? $_GET['cat_id'] : '';
@@ -144,29 +134,40 @@ if ($sortby !== '' && in_array($sortby,$sortby_combo)) {
 
 /** Display **/
 
-$request_tab = isset($_REQUEST['t']) ? $_REQUEST['t'] : '';
-if (!$core->blog->settings->rateit_active && empty($request_tab)) $request_tab = 'admin';
-if ($core->blog->settings->rateit_active && empty($request_tab)) $request_tab = 'post';
-if (empty($request_tab)) $request_tab = 'about';
+$tab = isset($_REQUEST['t']) ? $_REQUEST['t'] : '';
+if (empty($tab))
+	$tab = $core->blog->settings->rateit_active ? 'post' : 'admin';
 
 echo 
 '<html>'.
 '<head>'.
 '<title>'.__('Rate it').'</title>'.
-dcPage::jsLoad('js/_posts_list.js').
-dcPage::jsPageTabs($request_tab).
+dcPage::jsToolBar().
+dcPage::jsPageTabs($tab).
+'<script type="text/javascript">'."
+    $(function() {
+		$('#post-options-title').toggleWithLegend($('#post-options-content'),{cookie:'dcx_rateit_admin_post_options'});
+		$('#post-entries-title').toggleWithLegend($('#post-entries-content'),{cookie:'dcx_rateit_admin_post_entries'});
+    });".
+'</script>';
+
+# --BEHAVIOR-- adminRateItHeader
+$core->callBehavior('adminRateItHeader',$core);
+
+echo
 '</head>'.
 '<body>'.
-'<h2>'.html::escapeHTML($core->blog->name).' &rsaquo; '.__('Rate it').' &rsaquo; '.$tab[$request_tab].'</h2>'.
- (!empty($msg) ? '<p class="message">'.$msg.'</p>' : '');
+'<h2>'.html::escapeHTML($core->blog->name).' &rsaquo; '.__('Rate it').'</h2>'.
+(!empty($msg) ? '<p class="message">'.$msg.'</p>' : '');
 
 /**************
 ** Entries
 **************/
 
-if (isset($tab['post'])) {
+if ($core->auth->check('usage,contentadmin',$core->blog->id)) {
 
-	if (!empty($_POST['save']['post']) && isset($_POST['s'])) {
+	if ($core->auth->check('admin',$core->blog->id)
+	&& !empty($_POST['save']['post']) && isset($_POST['s'])) {
 		try {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post on post page',true,false);
@@ -200,25 +201,32 @@ if (isset($tab['post'])) {
 		$core->error->add($e->getMessage());
 	}
 
-	echo 
-	'<div class="multi-part" id="post" title="'.$tab['post'].'">'.
-	'<h2>'.__('Options').'</h2>'.
-	'<form method="post" action="'.$p_url.'">'.
-	'<table>'.
-	'<tr><td>'.__('Include on entries pages').'*</td><td>'.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</td></tr>'.
-	'<tr><td>'.__('Include on home page').'*</td><td>'.form::combo(array('s[rateit_homepoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_homepoststpl).'</td></tr>'.
-	'<tr><td>'.__('Include on categories page').'*</td><td>'.form::combo(array('s[rateit_categorypoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorypoststpl).'</td></tr>'.
-	'<tr><td>'.__('Limit to one category').'</td><td>'.form::combo(array('s[rateit_categorylimitposts]'),$categories_combo,$core->blog->settings->rateit_categorylimitposts).'</td></tr>'.
-	'</table>'.
-	'<p>'.
-	form::hidden(array('p'),'rateIt').
-	form::hidden(array('t'),'post').
-	$core->formNonce().
-	'<input type="submit" name="save[post]" value="'.__('Save').'" /></p>'.
-	'</form>'.
-	'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>'.
+	echo '<div class="multi-part" id="post" title="'.__('Entries').'">';
 
-	'<h2>'.__('Entries').'</h2>'.
+	if ($core->auth->check('admin',$core->blog->id)) {
+		echo 
+		'<h2 id="post-options-title">'.__('Settings for entries').'</h2>'.
+		'<div id="post-options-content">'.
+		'<form method="post" action="'.$p_url.'">'.
+		'<table>'.
+		'<tr><td>'.__('Include on entries pages').'*</td><td>'.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</td></tr>'.
+		'<tr><td>'.__('Include on home page').'*</td><td>'.form::combo(array('s[rateit_homepoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_homepoststpl).'</td></tr>'.
+		'<tr><td>'.__('Include on categories page').'*</td><td>'.form::combo(array('s[rateit_categorypoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorypoststpl).'</td></tr>'.
+		'<tr><td>'.__('Limit to one category').'</td><td>'.form::combo(array('s[rateit_categorylimitposts]'),$categories_combo,$core->blog->settings->rateit_categorylimitposts).'</td></tr>'.
+		'</table>'.
+		'<p>'.
+		form::hidden(array('p'),'rateIt').
+		form::hidden(array('t'),'post').
+		$core->formNonce().
+		'<input type="submit" name="save[post]" value="'.__('Save').'" /></p>'.
+		'</form>'.
+		'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>'.
+		'</div>';
+	}
+
+	echo 
+	'<h2 id="post-entries-title">'.__('List of entries').'</h2>'.
+	'<div id="post-entries-content">'.
 	'<p>'.__('This is the list of all entries having rating').'</p>';
 	if (!$show_filters) { 
 		echo dcPage::jsLoad('js/filter-controls.js').'<p><a id="filter-control" class="form-control" href="#">'.__('Filters').'</a></p>';
@@ -269,14 +277,14 @@ if (isset($tab['post'])) {
 		'</div>'.
 		'</form>'
 	);
-	echo '</div>';
+	echo '</div></div>';
 }
 
 /**************
 ** Details
 **************/
 
-if (isset($tab['details']) && isset($_REQUEST['type']) && isset($_REQUEST['id'])) {
+if ($core->auth->check('usage,contentadmin',$core->blog->id) && isset($_REQUEST['type']) && isset($_REQUEST['id'])) {
 
 	$rateIt = new rateIt($core);
 
@@ -304,7 +312,7 @@ if (isset($tab['details']) && isset($_REQUEST['type']) && isset($_REQUEST['id'])
 	}
 
 	echo 
-	'<div class="multi-part" id="details" title="'.$tab['details'].'">'.
+	'<div class="multi-part" id="details" title="'.__('Details').'">'.
 	'<p>'.sprintf(__('This is detailed list for rating of type "%s" and id "%s"'),$_REQUEST['type'],$_REQUEST['id']).'</p>'.
 	'<form action="plugin.php" method="post" id="form-details">';
 
@@ -354,28 +362,26 @@ $core->callBehavior('adminRateItTabs',$core);
 ** Options 
 **************/
 
-if (isset($tab['admin'])) {
+if ($core->auth->check('admin',$core->blog->id)) {
 
-	echo '<div class="multi-part" id="admin" title="'.$tab['admin'].'">';
+	echo '<div class="multi-part" id="admin" title="'.__('Settings').'">';
 
 	# Save admin options
 	if (!empty($_POST['save']['admin']) && isset($_POST['s'])) {
 		try {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
-			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post',true,false);
 			$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
+			$core->blog->settings->put('rateit_dispubjs',$_POST['s']['rateit_dispubjs'],'boolean','disable rateit public javascript',true,false);
 			$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 			$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
 			$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
-			$core->blog->settings->put('rateit_url_prefix',$_POST['s']['rateit_url_prefix'],'string','rateit prefix url for files',true,false);
+			$core->blog->settings->put('rateit_module_prefix',$_POST['s']['rateit_module_prefix'],'string','rateit prefix url for files',true,false);
 			$core->blog->settings->put('rateit_post_prefix',$_POST['s']['rateit_post_prefix'],'string','rateit prefix url for post form',true,false);
 			$core->blog->settings->put('rateit_rest_prefix',$_POST['s']['rateit_rest_prefix'],'string','rateit prefix url for rest service',true,false);
 
-			# Create public folder for blog stars image
-			$dest_path = DC_ROOT.'/'.$core->blog->settings->public_path.'/rateit';
-			if (!is_dir($dest_path))
-				files::makeDir($dest_path,true);
+			# Destination image according to libImagePath()
+			$dest_file = DC_ROOT.'/'.$core->blog->settings->public_path.'/rateIt-default-image.png';
 
 			# Change rate image
 			if (isset($_POST['s']['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['s']['starsimage'])) {
@@ -383,7 +389,7 @@ if (isset($tab['admin'])) {
 				$source = dirname(__FILE__).'/default-templates/img/stars/'.$_POST['s']['starsimage'];
 
 				if (file_exists($source))
-					file_put_contents($dest_path.'/rateit-stars.png',file_get_contents($source));
+					file_put_contents($dest_file,file_get_contents($source));
 			}
 			# Upload rate image
 			if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name']) {
@@ -394,7 +400,7 @@ if (isset($tab['admin'])) {
 				if ($_FILES['starsuserfile']['type'] != 'image/x-png')
 					throw new Exception(__('Image must be in png format').$_FILES['starsuserfile']['type']);
 
-				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],$dest_path.'/rateit-stars.png');
+				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],$dest_file);
 			}
 			$core->blog->triggerBlog();
 			http::redirect($p_url.'&t=admin&done=1');
@@ -419,15 +425,16 @@ if (isset($tab['admin'])) {
 	'<table>'.
 	'<tr><th colspan="2">'.__('Extension').'</th></tr>'.
 	'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</td></tr>'.
+	'<tr><td>'.__('Disable public javascript').'</td><td>'.form::combo(array('s[rateit_dispubjs]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_dispubjs).'</td></tr>'.
 	'<tr><td>'.__('Identify users by').'</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</td></tr>'.
 	'<tr><th colspan="2">'.__('Note').'</th></tr>'.
 	'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
 	'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
-	'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),50,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
-	'<tr><th colspan="2">'.__('URL prefix').'</th></tr>'.
-	'<tr><td>'.__('Files').'**</td><td>'.form::field(array('s[rateit_url_prefix]'),50,50,RATEIT_URL_PREFIX).'</td></tr>'.
-	'<tr><td>'.__('Post form').'**</td><td>'.form::field(array('s[rateit_post_prefix]'),50,50,RATEIT_POST_PREFIX).'</td></tr>'.
-	'<tr><td>'.__('Rest service').'**</td><td>'.form::field(array('s[rateit_rest_prefix]'),50,50,RATEIT_REST_PREFIX).'</td></tr>'.
+	'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
+	'<tr><th colspan="2">'.__('URL prefix').'**</th></tr>'.
+	'<tr><td>'.__('Files').'</td><td>'.form::field(array('s[rateit_module_prefix]'),40,50,$core->url->getBase('rateItmodule')).'</td></tr>'.
+	'<tr><td>'.__('Post form').'</td><td>'.form::field(array('s[rateit_post_prefix]'),40,50,$core->url->getBase('rateItpostform')).'</td></tr>'.
+	'<tr><td>'.__('Rest service').'</td><td>'.form::field(array('s[rateit_rest_prefix]'),40,50,$core->url->getBase('rateItservice')).'</td></tr>'.
 	'</table>'.
 	'<p class="form-note">*'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
 	'<p class="form-note">**'.__('Change these prefixes only if you have any conflicts with other links.').'</p>'.
@@ -436,7 +443,7 @@ if (isset($tab['admin'])) {
 	'<h2>'.__('Image').'</h2>';
 
 	$stars_rateit_files = files::scandir(dirname(__FILE__).'/default-templates/img/stars');
-	$stars = rateItStars::getArray($core);
+	$stars = libImagePath::getArray($core,'rateIt');
 
 	if (file_exists($stars['theme']['dir'])) {
 		echo 
@@ -453,10 +460,10 @@ if (isset($tab['admin'])) {
 			'<tr><td>'.form::radio(array('s[starsimage]'),'default',1).'</td>'.
 			rateit_demo($stars['public']).'</tr>';
 		}
-		elseif (file_exists($stars['rateit']['dir'])) {
+		elseif (file_exists($stars['module']['dir'])) {
 			echo 
 			'<tr><td>'.form::radio(array('s[starsimage]'),'default',1).'</td>'.
-			rateit_demo($stars['rateit']).'</tr>';
+			rateit_demo($stars['module']).'</tr>';
 		}
 		sort($stars_rateit_files);
 		foreach($stars_rateit_files AS $f) {
@@ -491,9 +498,9 @@ if (isset($tab['admin'])) {
 ** Uninstall 
 **************/
 
-if (isset($tab['uninstall']) && $core->auth->isSuperAdmin()) {
+if ($core->auth->isSuperAdmin()) {
 
-	echo '<div class="multi-part" id="uninstall" title="'.$tab['uninstall'].'">';
+	echo '<div class="multi-part" id="uninstall" title="'.__('Uninstall').'">';
 
 	# Save admin options
 	if (!empty($_POST['save']['validate']) && isset($_POST['s'])) {
@@ -573,7 +580,7 @@ if (isset($tab['uninstall']) && $core->auth->isSuperAdmin()) {
 **************/
 
 echo '
-<div class="multi-part" id="about" title="'.$tab['about'].'">
+<div class="multi-part" id="about" title="'.__('About').'">
 <h3>'.__('Version:').'</h3>
 <ul><li>rateIt '.$core->plugins->moduleInfo('rateIt','version').'</li></ul>
 <h3>'.__('Support:').'</h3>
@@ -609,8 +616,12 @@ under a Creative Commons Attribution 2.5 License<br />
 <li>jmh2o - <a href="http://www.levertpays.be/">http://www.levertpays.be/</a></li>
 </ul>
 </div>
- </body>
-</html>';
+<hr class="clear"/>
+<p class="right">
+rateIt - '.$core->plugins->moduleInfo('rateIt','version').'&nbsp;
+<img alt="'.__('Rate it').'" src="index.php?pf=rateIt/icon.png" />
+</p>
+</body></html>';
 
 function rateit_demo($star)
 {

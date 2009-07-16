@@ -13,35 +13,41 @@
 
 if (!defined('DC_RC_PATH')) return;
 
+# Class
 $GLOBALS['__autoload']['rateIt'] = 
 	dirname(__FILE__).'/inc/class.rateit.php';
+
 $GLOBALS['__autoload']['rateItRest'] = 
 	dirname(__FILE__).'/inc/class.rateit.rest.php';
+
 $GLOBALS['__autoload']['rateItInstall'] = 
 	dirname(__FILE__).'/inc/class.rateit.install.php';
+
 $GLOBALS['__autoload']['rateItPostsList'] = 
 	dirname(__FILE__).'/inc/lib.rateit.list.php';
-$GLOBALS['__autoload']['rateItStars'] = 
-	dirname(__FILE__).'/inc/lib.rateit.stars.php';
 
-$rateit_u = $GLOBALS['core']->blog->settings->rateit_url_prefix;
-$rateit_u = $rateit_u ? $rateit_u : 'rateit';
-define('RATEIT_URL_PREFIX',$rateit_u);
+# Public urls
+$rateit_m = $GLOBALS['core']->blog->settings->rateit_module_prefix;
+$rateit_m = $rateit_m ? $rateit_m : 'rateit';
 
-$rateit_p = $GLOBALS['core']->blog->settings->rateit_post_prefix;
+$rateit_p = $GLOBALS['core']->blog->settings->rateit_postform_prefix;
 $rateit_p = $rateit_p ? $rateit_p : 'rateitpost';
-define('RATEIT_POST_PREFIX',$rateit_p);
 
-$rateit_r = $GLOBALS['core']->blog->settings->rateit_rest_prefix;
+$rateit_r = $GLOBALS['core']->blog->settings->rateit_service_prefix;
 $rateit_r = $rateit_r ? $rateit_r : 'rateitservice';
-define('RATEIT_REST_PREFIX',$rateit_r);
 
-unset($rateit_u,$rateit_p,$rateit_r);
+$GLOBALS['core']->url->register('rateItmodule',
+	$rateit_m,'^'.$rateit_m.'/(.+)$',array('urlRateIt','rateit'));
 
-$GLOBALS['core']->url->register(
-	RATEIT_URL_PREFIX,
-	RATEIT_URL_PREFIX,
-	'^'.RATEIT_URL_PREFIX.'/(.+)$',
-	array('urlRateIt','rateit')
-);
+$GLOBALS['core']->url->register('rateItpostform',
+	$rateit_p,'^'.$rateit_p.'/(.+)$',array('urlRateIt','rateitpost'));
+
+$GLOBALS['core']->url->register('rateItservice',
+	$rateit_r,'^'.$rateit_r.'/$',array('rateItRest','service'));
+
+unset($rateit_m,$rateit_p,$rateit_r);
+
+# Generic class (Used on several plugins)
+if (!is_callable(array('libImagePath','getArray')))
+	require dirname(__FILE__).'/inc/lib.image.path.php';
 ?>

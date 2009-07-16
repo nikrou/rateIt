@@ -84,7 +84,7 @@ class rateItWidget
 		elseif ($w->show_fullnote == 'full')
 			$res .= '<p><span id="rateit-fullnote-'.$type.'-'.$id.'" class="rateit-fullnote">'.$rs->note.'/'.$rs->quotient.'</span></p>';
 
-		$res .= '<form class="rateit-linker" id="raiteitwidget-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.'rateitnow/'.$type.'/'.$id.'/" method="post"><p>';
+		$res .= '<form class="rateit-linker" id="raiteitwidget-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.$core->url->getBase('rateItpostform').'/'.$type.'/'.$id.'" method="post"><p>';
 
 		$dis = $voted ? ' disabled="disabled"' : '';
 		for($i=0;$i<$rs->quotient;$i++) {
@@ -160,7 +160,10 @@ class rateItWidget
 		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total'))) ? 
 			$w->sortby.' ' : 'rateit_total ';
 
-		$p['order'] .= $w->sort == 'desc' ? 'desc' : 'asc';
+		$p['order'] .= $w->sort == 'desc' ? 'DESC' : 'ASC';
+
+		if ($w->sortby != 'rateit_total')
+			$p['order'] .= ',rateit_total DESC ';
 
 		$p['limit'] = abs((integer) $w->limit);
 
