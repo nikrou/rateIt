@@ -160,7 +160,7 @@ class rateItPostsList extends rateItExtList
 				# Lower
 				array($r->min,'class="nowrap"'),
 				# Post date
-				array(dt::dt2str(__('%Y-%m-%d %H:%M'),$this->rs->post_dt),'class="nowrap"'),
+				array(dt::dt2str(__('%Y-%m-%d %H:%M'),$this->rs->post_dt,$this->core->auth->getInfo('user_tz')),'class="nowrap"'),
 				# Category
 				array($cat_title,'class="nowrap"'),
 				# Author

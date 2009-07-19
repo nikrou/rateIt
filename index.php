@@ -136,7 +136,7 @@ if ($sortby !== '' && in_array($sortby,$sortby_combo)) {
 
 $tab = isset($_REQUEST['t']) ? $_REQUEST['t'] : '';
 if (empty($tab))
-	$tab = $core->blog->settings->rateit_active ? 'post' : 'admin';
+	$tab = $core->blog->settings->rateit_active ? 'resum' : 'admin';
 
 echo 
 '<html>'.
@@ -159,6 +159,145 @@ echo
 '<body>'.
 '<h2>'.html::escapeHTML($core->blog->name).' &rsaquo; '.__('Rate it').'</h2>'.
 (!empty($msg) ? '<p class="message">'.$msg.'</p>' : '');
+
+
+$rateIt = new rateIt($core);
+
+/**************
+** Summary
+**************/
+
+$rateit_types = $rateIt->getTypes();
+$i = $total = 0;
+$last = $sort = array();
+
+foreach($rateit_types AS $type) {
+
+	$rs = $core->con->select(
+	'SELECT rateit_note,rateit_quotient,rateit_time,rateit_ip,rateit_id '.
+	'FROM '.$core->prefix.'rateit WHERE blog_id=\''.$core->blog->id.'\' '.
+	'AND rateit_type=\''.$core->con->escape($type).'\' '.
+	'ORDER BY rateit_time DESC '.$core->con->limit(1));
+	
+	$count = $rateIt->getCount($type);
+	$total += $count;
+
+	if ($rs->isEmpty()) {
+		$sort[] = $i;
+		$last[$i] = array('type' => $type,'count' => $count,
+			'date' => '-','note' => '-','ip' => '-','id' => '-');
+		$i++;
+	} else {
+		$sort[] = strtotime($rs->rateit_time);
+		$last[strtotime($rs->rateit_time)] = array(
+			'type' => $type,
+			'count' => $count,
+			'date' => dt::dt2str(__('%Y-%m-%d %H:%M'),$rs->rateit_time,$core->auth->getInfo('user_tz')),
+			'note' => ($rs->rateit_note / $rs->rateit_quotient * $core->blog->settings->rateit_quotient).'/'.$core->blog->settings->rateit_quotient,
+			'ip' => $rs->rateit_ip,
+			'id' => $rs->rateit_id
+		);
+	}
+}
+
+echo '
+<div class="multi-part" id="resum" title="'.__('Summary').'">
+<p>'.sprintf(__('There is a total of %s votes on this blog.'),$total).'</p>
+<table><tr>
+<th colspan="2">'.__('Total').'</th>
+<th colspan="4">'.__('Last').'</th>
+<tr>
+<th>'.__('Type').'</th>
+<th>'.__('Votes').'</th>
+<th>'.__('Date').'</th>
+<th>'.__('Note').'</th>
+<th>'.__('Ip').'</th>
+<th>'.__('Id').'</th></tr>';
+rsort($sort);
+foreach($sort AS $k) {
+	echo 
+	'<tr class="line">'.
+	'<td class="nowrap">'.$last[$k]['type'].'</td>'.
+	'<td class="maximal">'.$last[$k]['count'].'</td>'.
+	'<td class="nowrap">'.$last[$k]['date'].'</td>'.
+	'<td class="nowrap">'.$last[$k]['note'].'</td>'.
+	'<td class="nowrap">'.$last[$k]['ip'].'</td>'.
+	'<td class="nowrap">'.$last[$k]['id'].'</td>'.
+	'</tr>';
+}
+
+echo '</table></div>';
+
+/**************
+** Details
+**************/
+
+if ($core->auth->check('usage,contentadmin',$core->blog->id) && isset($_REQUEST['type']) && isset($_REQUEST['id'])) {
+
+	$rateIt = new rateIt($core);
+
+	if (isset($_POST['action']) && $_POST['action'] == 'rateit_del_entry' && !empty($_POST['entries'])) {
+		foreach($_POST['entries'] AS $entry) {
+			$val = explode('|',$entry);
+			$rateIt->del($val[0],$val[1],$val[2]);
+		}
+		http::redirect($p_url.'&t=details&type='.$_REQUEST['type'].'&id='.$_REQUEST['id'].'&done=1');
+	}
+	$rs = $rateIt->getDetails($_REQUEST['type'],$_REQUEST['id']);
+
+	$lines = '';
+	while ($rs->fetch()) {
+		$lines .= 
+		'<tr class="line">'.
+		'<td class="nowrap">'.form::checkbox(array('entries[]'),$rs->rateit_type.'|'.$rs->rateit_id.'|'.$rs->rateit_ip,'','','',false).'</td>'.
+		'<td class="nowrap">'.dt::dt2str(__('%Y-%m-%d %H:%M'),$rs->rateit_time,$core->auth->getInfo('user_tz')).'</td>'.
+		'<td class="nowrap">'.$rs->rateit_note.'</td>'.
+		'<td class="nowrap">'.$rs->rateit_quotient.'</td>'.
+		'<td class="nowrap maximal">'.$rs->rateit_ip.'</td>'.
+		'<td class="nowrap">'.$rs->rateit_type.'</td>'.
+		'<td class="nowrap">'.$rs->rateit_id.'</td>'.
+		'</tr>';
+	}
+
+	echo 
+	'<div class="multi-part" id="details" title="'.__('Details').'">'.
+	'<p>'.sprintf(__('This is detailed list for rating of type "%s" and id "%s"'),$_REQUEST['type'],$_REQUEST['id']).'</p>'.
+	'<form action="plugin.php" method="post" id="form-details">';
+
+	if ($lines=='') {
+		echo '<p class="message">'.__('There is no rating for this request at this time').'</p>';
+	} else {
+		echo 
+		'<table class="clear"><tr>'.
+		'<th colspan="2">'.__('Date').'</th>'.
+		'<th>'.__('Note').'</th>'.
+		'<th>'.__('Quotient').'</th>'.
+		'<th>'.__('Ip').'</th>'.
+		'<th>'.__('Type').'</th>'.
+		'<th>'.__('Id').'</th>'.
+		'</tr>'.
+		$lines.
+		'</table>';
+	}
+	if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
+		echo 
+		'<div class="two-cols">'.
+		'<p class="col checkboxes-helpers"></p>'.
+		'<p class="col right">'.__('Selected entries action:').' '.
+		form::combo(array('action'),array(__('delete entry') => 'rateit_del_entry')).
+		'<input type="submit" name="save[details]" value="'.__('ok').'" />'.
+		form::hidden(array('p'),'rateIt').
+		form::hidden(array('t'),'details').
+		form::hidden(array('type'),$_REQUEST['type']).
+		form::hidden(array('id'),$_REQUEST['id']).
+		$core->formNonce().
+		'</p>'.
+		'</div>';
+	}
+	echo '
+	</form>
+	</div>';
+}
 
 /**************
 ** Entries
@@ -193,7 +332,6 @@ if ($core->auth->check('usage,contentadmin',$core->blog->id)) {
 	'&amp;page=%s';
 
 	try {
-		$rateIt = new rateIt($core);
 		$posts = $rateIt->getPostsByRate($params);
 		$counter = $rateIt->getPostsByRate($params,true);
 		$post_list = new rateItPostsList($core,$posts,$counter->f(0),$pager_base_url);
@@ -281,77 +419,6 @@ if ($core->auth->check('usage,contentadmin',$core->blog->id)) {
 }
 
 /**************
-** Details
-**************/
-
-if ($core->auth->check('usage,contentadmin',$core->blog->id) && isset($_REQUEST['type']) && isset($_REQUEST['id'])) {
-
-	$rateIt = new rateIt($core);
-
-	if (isset($_POST['action']) && $_POST['action'] == 'rateit_del_entry' && !empty($_POST['entries'])) {
-		foreach($_POST['entries'] AS $entry) {
-			$val = explode('|',$entry);
-			$rateIt->del($val[0],$val[1],$val[2]);
-		}
-		http::redirect($p_url.'&t=details&type='.$_REQUEST['type'].'&id='.$_REQUEST['id'].'&done=1');
-	}
-	$rs = $rateIt->getDetails($_REQUEST['type'],$_REQUEST['id']);
-
-	$lines = '';
-	while ($rs->fetch()) {
-		$lines .= 
-		'<tr class="line">'.
-		'<td class="nowrap">'.form::checkbox(array('entries[]'),$rs->rateit_type.'|'.$rs->rateit_id.'|'.$rs->rateit_ip,'','','',false).'</td>'.
-		'<td class="nowrap">'.$rs->rateit_time.'</td>'.
-		'<td class="nowrap">'.$rs->rateit_note.'</td>'.
-		'<td class="nowrap">'.$rs->rateit_quotient.'</td>'.
-		'<td class="nowrap maximal">'.$rs->rateit_ip.'</td>'.
-		'<td class="nowrap">'.$rs->rateit_type.'</td>'.
-		'<td class="nowrap">'.$rs->rateit_id.'</td>'.
-		'</tr>';
-	}
-
-	echo 
-	'<div class="multi-part" id="details" title="'.__('Details').'">'.
-	'<p>'.sprintf(__('This is detailed list for rating of type "%s" and id "%s"'),$_REQUEST['type'],$_REQUEST['id']).'</p>'.
-	'<form action="plugin.php" method="post" id="form-details">';
-
-	if ($lines=='') {
-		echo '<p class="message">'.__('There is no rating for this request at this time').'</p>';
-	} else {
-		echo 
-		'<table class="clear"><tr>'.
-		'<th colspan="2">'.__('Date').'</th>'.
-		'<th>'.__('Note').'</th>'.
-		'<th>'.__('Quotient').'</th>'.
-		'<th>'.__('Ip').'</th>'.
-		'<th>'.__('Type').'</th>'.
-		'<th>'.__('Id').'</th>'.
-		'</tr>'.
-		$lines.
-		'</table>';
-	}
-	if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
-		echo 
-		'<div class="two-cols">'.
-		'<p class="col checkboxes-helpers"></p>'.
-		'<p class="col right">'.__('Selected entries action:').' '.
-		form::combo(array('action'),array(__('delete entry') => 'rateit_del_entry')).
-		'<input type="submit" name="save[details]" value="'.__('ok').'" />'.
-		form::hidden(array('p'),'rateIt').
-		form::hidden(array('t'),'details').
-		form::hidden(array('type'),$_REQUEST['type']).
-		form::hidden(array('id'),$_REQUEST['id']).
-		$core->formNonce().
-		'</p>'.
-		'</div>';
-	}
-	echo '
-	</form>
-	</div>';
-}
-
-/**************
 ** New tab behavior 
 **************/
 
@@ -394,11 +461,14 @@ if ($core->auth->check('admin',$core->blog->id)) {
 			# Upload rate image
 			if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name']) {
 
+				if (2 == $_FILES['starsuserfile']['error'])
+					throw new Exception(__('Maximum file size exceeded'));
+
 				if (0 != $_FILES['starsuserfile']['error'])
 					throw new Exception(__('Something went wrong while download file'));
 
 				if ($_FILES['starsuserfile']['type'] != 'image/x-png')
-					throw new Exception(__('Image must be in png format').$_FILES['starsuserfile']['type']);
+					throw new Exception(__('Image must be in png format'));
 
 				move_uploaded_file($_FILES['starsuserfile']['tmp_name'],$dest_file);
 			}

@@ -135,11 +135,11 @@ class rateIt
 		$req = 
 			'DELETE FROM '.$this->table.' '.
 			'WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' ';
-		if ($type!=null)
+		if (null !== $type)
 			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
-		if ($id!=null)
+		if (null !== $id)
 			$req .= 'AND rateit_id=\''.$this->core->con->escape($id).'\' ';
-		if ($ip!=null)
+		if (null !== $ip)
 			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
 
 		$rs = $this->core->con->select($req);
@@ -289,22 +289,41 @@ class rateIt
 		return $rs;
 	}
 
-	public function getDetails($type=null,$id=null,$ip=null)
+	public function getDetails($type=null,$id=null,$ip=null,$count_only=false)
 	{
-		$req=
-			'SELECT rateit_id,rateit_type,rateit_note,rateit_quotient,rateit_ip,rateit_time '.
-			'FROM '.$this->table.' WHERE blog_id=\''.$this->core->blog->id.'\' ';
-		if ($type!=null)
+		$req= 'SELECT ';
+		if ($count_only)
+			$req .= 'COUNT(*) ';
+		else
+			$req .= 'rateit_id,rateit_type,rateit_note,rateit_quotient,rateit_ip,rateit_time ';
+
+		$req .= 'FROM '.$this->table.' WHERE blog_id=\''.$this->core->blog->id.'\' ';
+
+		if (null !== $type)
 			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
-		if ($id!=null)
+		if (null !== $id)
 			$req .= 'AND rateit_id=\''.$this->core->con->escape($id).'\' ';
-		if ($ip!=null)
+		if (null !== $ip)
 			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
 
 		$rs = $this->core->con->select($req);
-		$rs->toStatic();
 
-		return $rs;
+		if ($count_only)
+			return $rs->f(0);
+		else {
+			$rs->toStatic();
+			return $rs;
+		}
+	}
+
+	public function getCount($type=null,$id=null,$ip=null)
+	{
+		return $this->getDetails($type,$id,$ip,true);
+	}
+
+	public function getTypes()
+	{
+		return $this->types;
 	}
 }
 
