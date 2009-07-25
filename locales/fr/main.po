@@ -1,13 +1,13 @@
 # Language: français
-# Module: rateIt - 0.7.1
-# Date: 2009-07-16 00:21:50
+# Module: rateIt - 0.8.2
+# Date: 2009-07-25 14:09:52
 # Author: JC Denis, http://blog.jcdenis.com
 # Translated with dcTranslater - 0.2.4
 
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-#: index.php:622
+#: index.php:694
 msgid "Rate it"
 msgstr "Évaluer ça"
 
@@ -99,11 +99,11 @@ msgstr "Billets les mieux notés"
 msgid "Length:"
 msgstr "Longueur :"
 
-#: index.php:430
+#: index.php:502
 msgid "Note"
 msgstr "Note"
 
-#: index.php:88
+#: index.php:211
 msgid "Votes"
 msgstr "Votes"
 
@@ -139,215 +139,235 @@ msgstr "Voir le détail des votes"
 msgid "Configuration saved"
 msgstr "Configuration enregistrée"
 
+#: index.php:204
+msgid "Summary"
+msgstr "Résumé"
+
+#: index.php:205
+msgid "There is a total of %s votes on this blog."
+msgstr "Il y a un total de %s votes sur ce blog."
+
 #: index.php:208
-msgid "Settings for entries"
-msgstr "Paramètres pour les billets"
+msgid "Last"
+msgstr "Dernier"
 
-#: index.php:212
-msgid "Include on entries pages"
-msgstr "Inclure dans les pages des billets"
-
-#: index.php:213
-msgid "Include on home page"
-msgstr "Inclure sur la page d'accueil"
-
-#: index.php:214
-msgid "Include on categories page"
-msgstr "Inclure sur la page des catégories"
-
-#: index.php:215
-msgid "Limit to one category"
-msgstr "Limiter à une catégorie"
-
-#: index.php:223
-msgid "To use this option you must have behavior "publicEntryAfterContent" in your theme"
-msgstr "Pour utiliser cette option vous devez avoir le behavior \"publiEntreyAfterContent\" dans votre thème"
-
-#: index.php:228
-msgid "List of entries"
-msgstr "Liste des billets"
-
-#: index.php:230
-msgid "This is the list of all entries having rating"
-msgstr "Ceci est la liste des billets aillant des votes"
-
-#: index.php:316
-msgid "This is detailed list for rating of type "%s" and id "%s""
-msgstr "Ceci est la liste détaillée des votes de type %s et d'id %s"
-
-#: index.php:320
-msgid "There is no rating for this request at this time"
-msgstr "Il n'y a pas de vote pour cette requête"
-
-#: index.php:326
-msgid "Quotient"
-msgstr "Quotient"
-
-#: index.php:417
+#: index.php:489
 msgid "Ip"
 msgstr "Ip"
 
-#: index.php:329
+#: index.php:277
 msgid "Id"
 msgstr "Id"
 
-#: index.php:339
+#: index.php:264
+msgid "This is detailed list for rating of type "%s" and id "%s""
+msgstr "Ceci est la liste détaillée des votes de type %s et d'id %s"
+
+#: index.php:268
+msgid "There is no rating for this request at this time"
+msgstr "Il n'y a pas de vote pour cette requête"
+
+#: index.php:274
+msgid "Quotient"
+msgstr "Quotient"
+
+#: index.php:287
 msgid "delete entry"
 msgstr "effacer cette entrée"
 
-#: index.php:367
+#: index.php:347
+msgid "Settings for entries"
+msgstr "Paramètres pour les billets"
+
+#: index.php:351
+msgid "Include on entries pages"
+msgstr "Inclure dans les pages des billets"
+
+#: index.php:352
+msgid "Include on home page"
+msgstr "Inclure sur la page d'accueil"
+
+#: index.php:353
+msgid "Include on tag page"
+msgstr "Inclure sur la page d'un tag"
+
+#: index.php:354
+msgid "Include on categories page"
+msgstr "Inclure sur la page des catégories"
+
+#: index.php:355
+msgid "Limit to one category"
+msgstr "Limiter à une catégorie"
+
+#: index.php:363
+msgid "To use this option you must have behavior "publicEntryAfterContent" in your theme"
+msgstr "Pour utiliser cette option vous devez avoir le behavior \"publiEntreyAfterContent\" dans votre thème"
+
+#: index.php:368
+msgid "List of entries"
+msgstr "Liste des billets"
+
+#: index.php:370
+msgid "This is the list of all entries having rating"
+msgstr "Ceci est la liste des billets aillant des votes"
+
+#: index.php:436
 msgid "Settings"
 msgstr "Paramètres"
 
-#: index.php:398
+#: index.php:467
+msgid "Maximum file size exceeded"
+msgstr "Taille maximum de fichier dépassée"
+
+#: index.php:470
 msgid "Something went wrong while download file"
 msgstr "Une erreur est survenue lors de téléchargement de l'image"
 
-#: index.php:401
+#: index.php:473
 msgid "Image must be in png format"
 msgstr "L'image doit être au format png"
 
-#: index.php:417
+#: index.php:489
 msgid "Both ip and cookie"
 msgstr "Ip et cookie"
 
-#: index.php:420
+#: index.php:492
 msgid "Administration of options of this extension on this blog"
 msgstr "Administration de l'extension sur ce blog"
 
-#: index.php:427
+#: index.php:499
 msgid "Enable plugin"
 msgstr "Activer l'extension"
 
-#: index.php:428
+#: index.php:500
 msgid "Disable public javascript"
 msgstr "Désactiver le javascript publique"
 
-#: index.php:429
+#: index.php:501
 msgid "Identify users by"
 msgstr "Identifier l'utilisateur par"
 
-#: index.php:431
+#: index.php:503
 msgid "Note out of"
 msgstr "Note sur"
 
-#: index.php:432
+#: index.php:504
 msgid "Number of digits"
 msgstr "Nombre de décimales"
 
-#: index.php:433
+#: index.php:505
 msgid "Message of thanks"
 msgstr "Message de remerciement"
 
-#: index.php:434
+#: index.php:506
 msgid "URL prefix"
 msgstr "Prefix des liens"
 
-#: index.php:594
+#: index.php:666
 msgid "Files"
 msgstr "Fichiers"
 
-#: index.php:436
+#: index.php:508
 msgid "Post form"
 msgstr "Envoie du formulaire"
 
-#: index.php:437
+#: index.php:509
 msgid "Rest service"
 msgstr "Service Rest"
 
-#: index.php:439
+#: index.php:511
 msgid "This message replaces stars, leave it empty to not replace stars"
 msgstr "Ce message remplace les images, laisser ce champ vide pour ne pas modifier l'image"
 
-#: index.php:440
+#: index.php:512
 msgid "Change these prefixes only if you have any conflicts with other links."
 msgstr "Modifier ces prefixes seulement si vous avez des conflits avec d'autres liens"
 
-#: index.php:443
+#: index.php:515
 msgid "Image"
 msgstr "Image"
 
-#: index.php:450
+#: index.php:522
 msgid "Rating image exists on theme it will be used:"
 msgstr "L'image d'évaluation existe dans le thème, elle sera utilisée"
 
-#: index.php:457
+#: index.php:529
 msgid "negative"
 msgstr "négatif"
 
-#: index.php:457
+#: index.php:529
 msgid "positive"
 msgstr "positif"
 
-#: index.php:457
+#: index.php:529
 msgid "hover"
 msgstr "survole"
 
-#: index.php:457
+#: index.php:529
 msgid "size"
 msgstr "taille"
 
-#: index.php:456
+#: index.php:528
 msgid "Rating image not exists on theme choose one to use:"
 msgstr "L'image de vote n'existe pas dans le thème, en choisir une:"
 
-#: index.php:483
+#: index.php:555
 msgid "Please read the README file before uploading image"
 msgstr "Merci de lire le ficher README avant de télécharger une image"
 
-#: index.php:572
+#: index.php:644
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: index.php:556
+#: index.php:628
 msgid "You must check warning in order to delete plugin."
 msgstr "Vous devez vérifier la mise en garde en vue de supprimer l'extension"
 
-#: index.php:559
+#: index.php:631
 msgid "In order to properly uninstall this plugin, you must specify the actions to perform"
 msgstr "Dans le but de désintaller proprement l'extension, vous devez spécifier les actions à effectuer"
 
-#: index.php:563
+#: index.php:635
 msgid "You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work."
 msgstr "Vous comprenez que si vous supprimez cette extension, les autres extensions qui utilisent ces tables et classes ne fonctionneront plus."
 
-#: index.php:536
+#: index.php:608
 msgid "Delete plugin files"
 msgstr "Supprimer les fichiers de l'extension"
 
-#: index.php:565
+#: index.php:637
 msgid "Delete plugin database table"
 msgstr "Supprimer la table de l'extension dans la base de donnée"
 
-#: index.php:567
+#: index.php:639
 msgid "Delete plugin settings"
 msgstr "Supprimer les paramètres de l'extension"
 
-#: index.php:583
+#: index.php:655
 msgid "About"
 msgstr "À propos"
 
-#: index.php:584
+#: index.php:656
 msgid "Version:"
 msgstr "Version :"
 
-#: index.php:586
+#: index.php:658
 msgid "Support:"
 msgstr "Support :"
 
-#: index.php:592
+#: index.php:664
 msgid "Copyrights:"
 msgstr "Droits :"
 
-#: index.php:600
+#: index.php:672
 msgid "Images"
 msgstr "Images"
 
-#: index.php:607
+#: index.php:679
 msgid "Tools"
 msgstr "Outils"
 
-#: index.php:613
+#: index.php:685
 msgid "Special thanks to"
 msgstr "Remerciement à"
 

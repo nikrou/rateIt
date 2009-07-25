@@ -311,6 +311,7 @@ if ($core->auth->check('usage,contentadmin',$core->blog->id)) {
 			$core->blog->settings->setNamespace('rateit');
 			$core->blog->settings->put('rateit_poststpl',$_POST['s']['rateit_poststpl'],'boolean','rateit template on post on post page',true,false);
 			$core->blog->settings->put('rateit_homepoststpl',$_POST['s']['rateit_homepoststpl'],'boolean','rateit template on post on home page',true,false);
+			$core->blog->settings->put('rateit_tagpoststpl',$_POST['s']['rateit_tagpoststpl'],'boolean','rateit template on post on tag page',true,false);
 			$core->blog->settings->put('rateit_categorypoststpl',$_POST['s']['rateit_categorypoststpl'],'boolean','rateit template on post on category page',true,false);
 			$core->blog->settings->put('rateit_categorylimitposts',$_POST['s']['rateit_categorylimitposts'],'integer','rateit limit post vote to one category',true,false);
 			$core->blog->triggerBlog();
@@ -349,6 +350,7 @@ if ($core->auth->check('usage,contentadmin',$core->blog->id)) {
 		'<table>'.
 		'<tr><td>'.__('Include on entries pages').'*</td><td>'.form::combo(array('s[rateit_poststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_poststpl).'</td></tr>'.
 		'<tr><td>'.__('Include on home page').'*</td><td>'.form::combo(array('s[rateit_homepoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_homepoststpl).'</td></tr>'.
+		'<tr><td>'.__('Include on tag page').'*</td><td>'.form::combo(array('s[rateit_tagpoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_tagpoststpl).'</td></tr>'.
 		'<tr><td>'.__('Include on categories page').'*</td><td>'.form::combo(array('s[rateit_categorypoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorypoststpl).'</td></tr>'.
 		'<tr><td>'.__('Limit to one category').'</td><td>'.form::combo(array('s[rateit_categorylimitposts]'),$categories_combo,$core->blog->settings->rateit_categorylimitposts).'</td></tr>'.
 		'</table>'.

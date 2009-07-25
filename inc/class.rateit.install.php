@@ -65,6 +65,7 @@ class rateItInstall
 
 		$core->blog->settings->put('rateit_poststpl',0,'boolean','rateit template on post on post page',$force,$glob);
 		$core->blog->settings->put('rateit_homepoststpl',0,'boolean','rateit template on post on home page',$force,$glob);
+		$core->blog->settings->put('rateit_tagpoststpl',0,'boolean','rateit template on post on tag page',$force,$glob);
 		$core->blog->settings->put('rateit_categorypoststpl',0,'boolean','rateit template on post on category page',$force,$glob);
 		$core->blog->settings->put('rateit_categorylimitposts',0,'integer','rateit limit post vote to one category',$force,$glob);
 	}

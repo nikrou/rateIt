@@ -29,6 +29,8 @@ if (!$core->blog->settings->rateit_active) {
 	$core->tpl->addValue('rateItQuotient',array('tplRateIt','disableValue'));
 
 } else {
+	$core->tpl->setPath($core->tpl->getPath(),dirname(__FILE__).'/default-templates/tpl/');
+
 	$core->addBehavior('publicHeadContent',
 		array('urlRateIt','publicHeadContent'));
 	$core->addBehavior('publicEntryAfterContent',
@@ -48,10 +50,22 @@ if (!$core->blog->settings->rateit_active) {
 
 class urlRateIt extends dcUrlHandlers
 {
-	private static function dirname(&$f)
+	private static function searchRateItTplFiles($file)
 	{
-		$f = dirname(__FILE__).'/default-templates/'.$f;
-		return dirname($f);
+		if (strstr($file,"..") !== false)
+			return false;
+
+		$paths = $GLOBALS['core']->tpl->getPath();
+
+		foreach($paths as $path)
+		{
+			if (preg_match('/tpl(\/|)$/',$path) )
+				$path = path::real($path.'/..');
+
+			if (file_exists($path.'/'.$file))
+				return $path.'/'.$file;
+		}
+		return false;
 	}
 
 	public static function rateitpost($args)
@@ -114,14 +128,7 @@ class urlRateIt extends dcUrlHandlers
 			exit;
 		}
 
-		$f = $m[1];
-		if (strstr($f,"..") !== false) {
-			self::p404();
-			exit;
-		}
-
-		$path = self::dirname($f);
-		if (!is_dir($path)) {
+		if (!($f = self::searchRateItTplFiles($m[1]))) {
 			self::p404();
 			exit;
 		}
@@ -186,8 +193,7 @@ class urlRateIt extends dcUrlHandlers
 		"rateIt.prototype.blog_uid = '".html::escapeJS($core->blog->uid)."';\n".
 		"rateIt.prototype.enable_cookie = '".($core->blog->settings->rateit_userident > 0 ? '1' : '0')."';\n".
 		"rateIt.prototype.image_size = '".$s['h']."';\n".
-		"rateIt.prototype.service_url = '".html::escapeJS(
-			$core->blog->url.$core->url->getBase('rateItservice').'/')."';\n".
+		"rateIt.prototype.service_url = '".html::escapeJS($core->blog->url.$core->url->getBase('rateItservice').'/')."';\n".
 		"rateIt.prototype.msg_thanks = '".html::escapeJS($core->blog->settings->rateit_msgthanks)."';\n".
 		"\n//]]>\n".
 		"</script>\n";
@@ -200,19 +206,14 @@ class urlRateIt extends dcUrlHandlers
 		|| ($_ctx->exists('posts') && $_ctx->posts->post_type == 'post'
 		    && ($core->blog->settings->rateit_poststpl && 'post.html' == $_ctx->current_tpl 
 		     || $core->blog->settings->rateit_homepoststpl && 'home.html' == $_ctx->current_tpl
+		     || $core->blog->settings->rateit_tagpoststpl && 'tag.html' == $_ctx->current_tpl 
 		     || $core->blog->settings->rateit_categorypoststpl && 'category.html' == $_ctx->current_tpl)
 		    && (!$core->blog->settings->rateit_categorylimitposts
 		     || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id))) {
 
-				$f = 'tpl/rateit.html';
-				$d = self::dirname($f);
-				$core->tpl->setPath($core->tpl->getPath(),$d);
+			echo $core->tpl->getData('rateit.html');
 
-			if ('' != ($fc = $core->tpl->getData('rateit.html')))
-				echo $fc;
-
-		} else
-			return;
+		} else return;
 	}
 }
 
@@ -273,19 +274,19 @@ class tplRateIt
 
 	public static function rateItTitle($attr)
 	{
-		global $core,$_ctx;
+		global $core;
 		$f = $core->tpl->getFilters($attr);
 
-		$title = '';
-		if ($_ctx->exists("posts") && $_ctx->posts->post_type == "post")
-			$title = __('Rate this entry');
+		return 
+		"<?php\n".
+		'$title = "";'."\n".
+		'if ($rateit_type == "post")'."\n".
+		' $title = "'.__('Rate this entry').'";'."\n".
+		"else\n".
+		' $title = $core->callBehavior("templateRateItTitle",$rateit_type,$title);'."\n\n".
+		'echo '.sprintf($f,'$title').'; '."\n".
+		'?>';
 
-		# --BEHAVIOR-- templateRateItTitle
-		$call_title = $core->callBehavior('templateRateItTitle',$title);
-		if (!empty($call_title))
-			$title = $call_title;
-
-		return '<?php echo '.sprintf($f,"'$title'").'; ?>';
 	}
 
 	public static function rateItLinker($attr)
