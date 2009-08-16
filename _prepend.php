@@ -11,7 +11,7 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
-if (!defined('DC_RC_PATH')) return;
+if (!defined('DC_RC_PATH')){return;}
 
 # Class
 $GLOBALS['__autoload']['rateIt'] = 
@@ -23,8 +23,14 @@ $GLOBALS['__autoload']['rateItRest'] =
 $GLOBALS['__autoload']['rateItInstall'] = 
 	dirname(__FILE__).'/inc/class.rateit.install.php';
 
+$GLOBALS['__autoload']['rateItBackup'] = 
+	dirname(__FILE__).'/inc/class.rateit.backup.php';
+
 $GLOBALS['__autoload']['rateItPostsList'] = 
 	dirname(__FILE__).'/inc/lib.rateit.list.php';
+
+$GLOBALS['__autoload']['rateItTabs'] = 
+	dirname(__FILE__).'/inc/lib.rateit.tabs.php';
 
 # Public urls
 $rateit_m = $GLOBALS['core']->blog->settings->rateit_module_prefix;
@@ -37,13 +43,13 @@ $rateit_r = $GLOBALS['core']->blog->settings->rateit_service_prefix;
 $rateit_r = $rateit_r ? $rateit_r : 'rateitservice';
 
 $GLOBALS['core']->url->register('rateItmodule',
-	$rateit_m,'^'.$rateit_m.'/(.+)$',array('urlRateIt','rateit'));
+	$rateit_m,'^'.$rateit_m.'/(.+)$',array('urlRateIt','files'));
 
 $GLOBALS['core']->url->register('rateItpostform',
-	$rateit_p,'^'.$rateit_p.'/(.+)$',array('urlRateIt','rateitpost'));
+	$rateit_p,'^'.$rateit_p.'/(.+)$',array('urlRateIt','postform'));
 
 $GLOBALS['core']->url->register('rateItservice',
-	$rateit_r,'^'.$rateit_r.'/$',array('rateItRest','service'));
+	$rateit_r,'^'.$rateit_r.'/$',array('urlRateIt','service'));
 
 unset($rateit_m,$rateit_p,$rateit_r);
 

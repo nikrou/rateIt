@@ -11,7 +11,7 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
-if (!defined('DC_CONTEXT_ADMIN')) return;
+if (!defined('DC_CONTEXT_ADMIN')){return;}
 
 if ($core->blog->settings->rateit_active === null) {
 	try {
@@ -30,7 +30,7 @@ $_menu['Plugins']->addItem(
 
 require dirname(__FILE__).'/_widgets.php';
 
-$core->addBehavior('pluginsBeforeDelete', array('rateItInstall', 'pluginsBeforeDelete'));
+$core->addBehavior('pluginsBeforeDelete',array('rateItInstall', 'pluginsBeforeDelete'));
 
 $core->addBehavior('adminBeforePostDelete',array('rateItAdmin','adminBeforePostDelete'));
 $core->addBehavior('adminPostsActionsCombo',array('rateItAdmin','adminPostsActionsCombo'));
@@ -45,14 +45,14 @@ $core->addBehavior('importFull',array('rateitBackup','importFull'));
 
 class rateItAdmin
 {
-	public static function adminBeforePostDelete(&$post_id)
+	public static function adminBeforePostDelete($post_id)
 	{
 		$post_id = (integer) $post_id;
 		$rateIt = new rateIt($GLOBALS['core']);
 		$rateIt->del('post',$post_id);
 	}
 
-	public static function adminPostsActionsCombo(&$args)
+	public static function adminPostsActionsCombo($args)
 	{
 		global $core;
 		if ($core->blog->settings->rateit_active 
@@ -61,7 +61,7 @@ class rateItAdmin
 		}
 	}
 
-	public static function adminPostsActions(&$core,$posts,$action,$redir)
+	public static function adminPostsActions($core,$posts,$action,$redir)
 	{
 		if ($action == 'rateit_do_empty') {
 			try {
@@ -101,63 +101,6 @@ class rateItAdmin
 		'<input type="submit" value="'.__('Delete').'" /></p>'.
 		'</div></form>'.
 		'</div>';
-	}
-}
-# Import/export behaviors for Import/export plugin
-class rateItBackup
-{
-	# limit to post type
-	public static function exportSingle(&$core,&$exp,$blog_id)
-	{
-		$exp->export('rateit',
-			'SELECT RI.blog_id, rateit_id, rateit_type, rateit_note, rateit_quotient, rateit_ip, rateit_time '.
-			'FROM '.$core->prefix.'rateit RI, '.$core->prefix.'post P '.
-			"WHERE P.post_id = rateit_id AND rateit_type='post' ".
-			"AND P.blog_id = '".$blog_id."'"
-		);
-	}
-
-	public static function exportFull(&$core,&$exp)
-	{
-		$exp->exportTable('rateit');
-	}
-
-	public static function importInit(&$bk,&$core)
-	{
-		$bk->cur_rateit = $core->con->openCursor($core->prefix.'rateit');
-	}
-
-	# limit to post type
-	public static function importSingle(&$line,&$bk,&$core)
-	{
-		if ($line->__name == 'rateit' && $line->rateit_type == 'post' && isset($bk->old_ids['post'][(integer) $line->rateit_id])) {
-			$line->rateit_id = $bk->old_ids['post'][(integer) $line->rateit_id];
-
-			$bk->cur_rateit->clean();
-			$bk->cur_rateit->blog_id   = (string) $line->blog_id;
-			$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;
-			$bk->cur_rateit->rateit_type   = (string) $line->rateit_type;
-			$bk->cur_rateit->rateit_note   = (integer) $line->rateit_note;
-			$bk->cur_rateit->rateit_quotient   = (integer) $line->rateit_quotient;
-			$bk->cur_rateit->rateit_ip   = (string) $line->rateit_ip;
-			$bk->cur_rateit->rateit_time   = (string) $line->rateit_time;
-			$bk->cur_rateit->insert();
-		}
-	}
-
-	public static function importFull(&$line,&$bk,&$core)
-	{
-		if ($line->__name == 'rateit') {
-			$bk->cur_rateit->clean();
-			$bk->cur_rateit->blog_id   = (string) $line->blog_id;
-			$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;
-			$bk->cur_rateit->rateit_type   = (string) $line->rateit_type;
-			$bk->cur_rateit->rateit_note   = (integer) $line->rateit_note;
-			$bk->cur_rateit->rateit_quotient   = (integer) $line->rateit_quotient;
-			$bk->cur_rateit->rateit_ip   = (string) $line->rateit_ip;
-			$bk->cur_rateit->rateit_time   = (string) $line->rateit_time;
-			$bk->cur_rateit->insert();
-		}
 	}
 }
 ?>

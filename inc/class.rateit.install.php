@@ -23,7 +23,7 @@ class rateItInstall
 		}
 	}
 
-	public static function setTable(&$core)
+	public static function setTable($core)
 	{
 		$s = new dbStruct($core->con,$core->prefix);
 		$s->rateit
@@ -44,13 +44,13 @@ class rateItInstall
 		$changes = $si->synchronize($s);
 	}
 
-	public static function delTable(&$core)
+	public static function delTable($core)
 	{
 		@$core->con->execute('TRUNCATE TABLE '.$core->con->escape($core->prefix.'rateit').'');
 		@$core->con->execute('DROP TABLE '.$core->con->escape($core->prefix.'rateit').'');
 	}
 
-	public static function setSettings(&$core,$glob=false,$force=false)
+	public static function setSettings($core,$glob=false,$force=false)
 	{
 		$core->blog->settings->setNameSpace('rateit');
 		$core->blog->settings->put('rateit_active',false,'boolean','rateit plugin enabled',$force,$glob);
@@ -70,22 +70,22 @@ class rateItInstall
 		$core->blog->settings->put('rateit_categorylimitposts',0,'integer','rateit limit post vote to one category',$force,$glob);
 	}
 
-	public static function delSettings(&$core)
+	public static function delSettings($core)
 	{
 		$core->con->execute('DELETE FROM '.$core->prefix.'setting WHERE setting_ns = \'rateit\' ');
 	}
 
-	public static function setVersion(&$core)
+	public static function setVersion($core)
 	{
 		$core->setVersion('rateIt',$core->plugins->moduleInfo('rateIt','version'));
 	}
 
-	public static function delVersion(&$core)
+	public static function delVersion($core)
 	{
 		$core->delVersion('rateIt');
 	}
 
-	public static function delModule(&$core)
+	public static function delModule($core)
 	{
 		$core->plugins->deleteModule('rateIt');
 	}

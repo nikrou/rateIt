@@ -11,16 +11,11 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
+if (!defined('DC_RC_PATH')){return;}
+
 class rateItRest
 {
-	public static function service()
-	{
-		$core =& $GLOBALS['core'];
-		$core->rest->addFunction('rateItVote',array('rateItRest','vote'));
-		$core->rest->serve();
-	}
-
-	public static function vote(&$core,$get,$post)
+	public static function vote($core,$get,$post)
 	{
 		$type = isset($post['voteType']) ? $post['voteType'] : null;
 		$id = isset($post['voteId']) ? $post['voteId'] : null;
@@ -36,7 +31,14 @@ class rateItRest
 
 		$types = new ArrayObject();
 		$types[] = 'post';
+		$types[] = 'comment';
+		$types[] = 'category';
+
+
+		# --BEHAVIOR-- addRateItType
 		$core->callBehavior('addRateItType',$types);
+
+
 		$types = (array) $types;
 
 		if (!in_array($type,$types))
@@ -64,7 +66,5 @@ class rateItRest
 
 		return $rsp;
 	}
-
 }
-
 ?>

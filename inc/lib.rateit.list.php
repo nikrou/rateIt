@@ -19,7 +19,7 @@ class rateItExtList
 	protected $rs_count;
 	protected $base_url;
 
-	public function __construct(&$core,&$rs,$rs_count,$base_url=null)
+	public function __construct($core,$rs,$rs_count,$base_url=null)
 	{
 		$this->core =& $core;
 		$this->rs =& $rs;

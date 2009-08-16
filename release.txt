@@ -1,0 +1,56 @@
+0.9 20090816
+ * Fixed php 5.3 compatibility
+ * Included ''comment'' and ''category''
+ * Changed javascript/jquery rating functions
+ * Added ability to use rate bloc everywhere in templates
+ * Changed structure of index.php
+ * Fixed missing conditions everywhere
+
+0.8.2 20090725
+ * Fixed search for existing templates, css ans js on public side
+ * Fixed widget conflict with same rateIt type
+ * Fixed some l10n
+ * Fixed titles bug on multiple rateit type
+
+0.8.1 20090719:
+ * Fixed errors on dates
+ * Added summary tabs
+ * Remove jquery.cookie.js as it be in default theme
+
+0.8 20090715
+ * Fixed sort order on widget
+ * Fixed voting on navigator whitout js enable
+ * Fixed setting for vote on post
+ * Changed uses of common library for image path
+ * Removed uses of constant for url prefix
+ * Added js features on admin tabs
+ * Cleaned code
+
+0.7 20090714:
+ * Fixed ''image path'' on multiblog
+ * Added ''url prefix'' option
+
+0.6 20090710:
+ * Fixed post_type bugs
+ * Added "enable" options for posts on some templates
+ * Added "limit to one category" for posts
+
+0.5 20090709:
+ * Fixed postgresql compatibility
+
+0.4 20090703:
+ * changed database rateit_id to allow text id
+ * Fixed some js bugs
+ * Fixed translation
+ * Added option to edit thank msg
+ * Added cookie and/or ip option
+ * Added images choice
+ * Added some options to widget
+ * Added extension ability
+ * Added import/export support
+
+0.3 20090625:
+ * Fixed jquery rating system
+
+0.2 20090621:
+ * First public release

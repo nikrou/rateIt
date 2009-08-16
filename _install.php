@@ -11,8 +11,14 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
-if (!defined('DC_CONTEXT_ADMIN')) return;
-
+if (!defined('DC_CONTEXT_ADMIN')){return;}
+//*
+if ($core->plugins->moduleExists('rateItComment') 
+ || $core->plugins->moduleExists('rateItCategory')) {
+	throw new Exception('You must uninstall rateItComment and rateItCategory before installing rateIt 0.9 and higher');
+	return false;
+}
+//*/
 $new_version = $core->plugins->moduleInfo('rateIt','version');
 $old_version = $core->getVersion('rateIt');
 

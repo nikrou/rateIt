@@ -11,6 +11,8 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
+if (!defined('DC_RC_PATH')){return;}
+
 class rateIt
 {
 	public $core;
@@ -21,7 +23,7 @@ class rateIt
 	private $ident;
 	public $ip;
 
-	public function __construct(&$core)
+	public function __construct($core)
 	{
 		$this->core =& $core;
 		$this->table = $core->prefix.'rateit';
@@ -30,6 +32,8 @@ class rateIt
 
 		$types = new ArrayObject();
 		$types[] = 'post';
+		$types[] = 'comment';
+		$types[] = 'category';
 
 		# --BEHAVIOR-- addRateItType
 		$core->callBehavior('addRateItType',$types);
@@ -57,7 +61,7 @@ class rateIt
 		$cur->rateit_ip = (string) $this->ip;
 		$cur->rateit_note = $note;
 		$cur->rateit_quotient = $this->quotient;
-		$cur->rateit_time = date('Y-m-d H:i:00');
+		$cur->rateit_time = date('Y-m-d H:i:s');
 
 		$cur->insert();
 		$this->core->con->unlock();
