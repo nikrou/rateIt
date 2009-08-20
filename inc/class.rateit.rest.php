@@ -33,6 +33,9 @@ class rateItRest
 		$types[] = 'post';
 		$types[] = 'comment';
 		$types[] = 'category';
+		$types[] = 'tag';
+		$types[] = 'gal';
+		$types[] = 'galitem';
 
 
 		# --BEHAVIOR-- addRateItType

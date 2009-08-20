@@ -1,3 +1,12 @@
+0.9.3 20090820
+ * Fixed context errors
+ * Added cut string option on widget
+ * Added attribute support for ''rateItIf'' and ''rateItTotal''
+ * Removed uninstall functions
+ * Removed urls edition as dcUrlHandlers work great for this
+ * Changed, grouped, reordered class
+ * Included ''tag'' and ''gallery''
+
 0.9 20090816
  * Fixed php 5.3 compatibility
  * Included ''comment'' and ''category''

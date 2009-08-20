@@ -13,6 +13,8 @@
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
 
+require_once dirname(__FILE__).'/inc/lib.rateit.index.php';
+
 $requests = rateItTabs::requests($core);
 $combos = rateItTabs::combos($core);
 $params = rateItTabs::params($core,$requests,$combos);
@@ -28,6 +30,9 @@ $params = rateItTabs::params($core,$requests,$combos);
 		$('#post-entries-title').toggleWithLegend($('#post-entries-content'),{cookie:'dcx_rateit_admin_post_entries'});
 		$('#comment-options-title').toggleWithLegend($('#comment-options-content'),{cookie:'dcx_rateit_admin_comment_options'});
 		$('#comment-entries-title').toggleWithLegend($('#comment-entries-content'),{cookie:'dcx_rateit_admin_comment_entries'});
+		$('#gallery-options-title').toggleWithLegend($('#gallery-options-content'),{cookie:'dcx_rateit_admin_gallery_options'});
+		$('#gallery-gals-title').toggleWithLegend($('#gallery-gals-content'),{cookie:'dcx_rateit_admin_gals_entries'});
+		$('#gallery-galitems-title').toggleWithLegend($('#gallery-galitems-content'),{cookie:'dcx_rateit_galitems_gallery_entries'});
     });
   </script>
 <?php
@@ -43,13 +48,17 @@ $core->callBehavior('adminRateItHeader',$core);
 <h2 style="padding:8px 0 8px 34px;background:url(index.php?pf=rateIt/icon-b.png) no-repeat;">
 <?php echo html::escapeHTML($core->blog->name).' &rsaquo; '.__('Rate it'); ?></h2>
 
-<?php if ('' != $requests->msg) :  ?><p class="message"><?php echo $requests->msg; ?></p><?php endif;
+<?php if ('' != $requests->msg) :  ?>
+ <p class="message"><?php echo $requests->msg; ?></p>
+<?php endif;
 
 rateItTabs::summaryTab($core);
 rateItTabs::detailTab($core,$requests);
 rateItTabs::postTab($core,$requests,$params,$combos);
 rateItTabs::commentTab($core,$requests);
 rateItTabs::categoryTab($core,$requests);
+rateItTabs::tagTab($core,$requests);
+rateItTabs::galleryTab($core,$requests);
 
 
 # --BEHAVIOR-- adminRateItTabs
@@ -57,8 +66,6 @@ $core->callBehavior('adminRateItTabs',$core);
 
 
 rateItTabs::settingsTab($core,$requests,$combos);
-rateItTabs::uninstallTab($core);
-
 
 ?>
 <div class="multi-part" id="about" title="<?php echo __('About'); ?>">

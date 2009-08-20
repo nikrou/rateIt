@@ -13,17 +13,17 @@
 
 if (!defined('DC_RC_PATH')){return;}
 
-$core->addBehavior('initWidgets',array('rateItWidget','initVote'));
-$core->addBehavior('initWidgets',array('rateItWidget','initRank'));
+$core->addBehavior('initWidgets',array('rateItAdminWidget','vote'));
+$core->addBehavior('initWidgets',array('rateItAdminWidget','rank'));
 
-class rateItWidget
+class rateItAdminWidget
 {
-	public static function initVote($w)
+	public static function vote($w)
 	{
 		global $core;
 
 		$w->create('rateit',__('Rating'),
-			array('rateItWidget','parseVote'));
+			array('rateItPublicWidget','vote'));
 		$w->rateit->setting('enable_post',__('Enable vote for entries'),
 			1,'check');
 		$w->rateit->setting('title_post',__('Title for entries:'),
@@ -34,6 +34,23 @@ class rateItWidget
 		$w->rateit->setting('title_cat',__('Title for categories:'),
 			__('Rate this category'),'text');
 
+		if ($core->plugins->moduleExists('metadata')) {
+			$w->rateit->setting('enable_tag',__('Enable vote for tags'),
+				0,'check');
+			$w->rateit->setting('title_tag',__('Title for tags:'),
+				__('Rate this tag'),'text');
+		}
+
+		if ($core->plugins->moduleExists('gallery')) {
+			$w->rateit->setting('enable_gal',__('Enable vote for gallery'),
+				0,'check');
+			$w->rateit->setting('title_gal',__('Title for gallery:'),
+				__('Rate this gallery'),'text');
+			$w->rateit->setting('enable_galitem',__('Enable vote for gallery item'),
+				0,'check');
+			$w->rateit->setting('title_galitem',__('Title for gallery item:'),
+				__('Rate this gallery item'),'text');
+		}
 
 		# --BEHAVIOR-- initWidgetRateItVote
 		$core->callBehavior('initWidgetRateItVote',$w);
@@ -54,88 +71,12 @@ class rateItWidget
 		$w->rateit->setting('title','title','rateIt','hidden');
 	}
 
-	public static function parseVote($w)
-	{
-		global $core, $_ctx; 
-
-		if (!$core->blog->settings->rateit_active) return;
-
-		if ($w->enable_post && 'post.html' == $_ctx->current_tpl 
-		&& $core->blog->settings->rateit_post_active 
-		&& (!$core->blog->settings->rateit_categorylimitposts
-		 || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id)) {
-			$w->type = 'post';
-			$w->id = $_ctx->posts->post_id;
-			$w->title = $w->title_post;
-		}
-
-		if ($w->enable_cat && 'category.html' == $_ctx->current_tpl
-		 && $core->blog->settings->rateit_category_active) {
-			$w->type = 'category';
-			$w->id = $_ctx->categories->cat_id;
-			$w->title = $w->title_cat;
-		}
-
-
-		# --BEHAVIOR-- parseWidgetRateItVote
-		$core->callBehavior('parseWidgetRateItVote',$w);
-
-
-		$type = $w->type;
-		$id = $w->id;
-		$title = $w->title;
-
-		if (empty($type)) return;
-
-		$rateIt = new rateIt($core);
-		$rs = $rateIt->get($type,$id);
-		$voted = $rateIt->voted($type,$id);
-
-		$res = '<div class="rateit">';
-
-		if (!empty($title))
-			$res .= '<h2>'.html::escapeHTML($title).'</h2>';
-
-		if ($w->show_fullnote == 'percent')
-			$res .= '<p><span id="rateit-fullnote-'.$type.'-'.$id.'" class="rateit-fullnote">'.round($rs->note / $rs->quotient * 100,$rs->digit).'%</span></p>';
-		elseif ($w->show_fullnote == 'full')
-			$res .= '<p><span id="rateit-fullnote-'.$type.'-'.$id.'" class="rateit-fullnote">'.$rs->note.'/'.$rs->quotient.'</span></p>';
-
-		$res .= '<form class="rateit-linker" id="rateit-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.$core->url->getBase('rateItpostform').'/'.$type.'/'.$id.'" method="post"><p>';
-
-		$dis = $voted ? ' disabled="disabled"' : '';
-		for($i=0;$i<$rs->quotient;$i++) {
-			$chk = $rs->note > $i && $rs->note <= $i+1 ? ' checked="checked"' : '';
-
-			$res .= '<input name="rateit-'.$type.'-'.$id.'" class="rateit-'.$type.'-'.$id.'" type="radio" value="'.($i+1).'"'.$chk.$dis.'/>';
-		}
-
-		if (!$voted)
-			$res .= '<input type="submit" name="submit" value="'.__('Vote').'"/>';
-
-		$res .= '</p></form>';
-
-		if ($w->show_note || $w->show_vote || $w->show_higher || $w->show_lower) {
-			$res .=	'<ul>';
-			if ($w->show_note)
-				$res .= '<li>'.__('Note:').'<span id="rateit-note-'.$type.'-'.$id.'" class="rateit-note">'.$rs->note.'</span></li>';
-			if ($w->show_vote)
-				$res .= '<li>'.__('Votes:').'<span id="rateit-total-'.$type.'-'.$id.'" class="rateit-total">'.$rs->total.'</span></li>';
-			if ($w->show_higher)
-				$res .= '<li>'.__('Higher:').'<span id="rateit-max-'.$type.'-'.$id.'" class="rateit-max">'.$rs->max.'</span></li>';
-			if ($w->show_lower)
-				$res .= '<li>'.__('Lower:').'<span id="rateit-min-'.$type.'-'.$id.'" class="rateit-min">'.$rs->min.'</span></li>';
-			$res .= '</ul>';
-		}
-		return $res.'<p>&nbsp;</p></div>';
-	}
-
-	public static function initRank($w)
+	public static function rank($w)
 	{
 		global $core;
 
 		$w->create('rateitrank',__('Top rating'),
-			array('rateItWidget','parseRank'));
+			array('rateItPublicWidget','rank'));
 		$w->rateitrank->setting('title',__('Title:'),
 			__('Top rated entries'),'text');
 
@@ -149,6 +90,14 @@ class rateItWidget
 		$types[] = array(__('entries')=>'post');
 		$types[] = array(__('Comments')=>'comment');
 		$types[] = array(__('Categories')=>'category');
+
+		if ($core->plugins->moduleExists('metadata')) {
+			$types[] = array(__('Tag')=>'tag');
+		}
+		if ($core->plugins->moduleExists('gallery')) {
+			$types[] = array(__('Gallery')=>'gal');
+			$types[] = array(__('Gallery item')=>'galitem');
+		}
 
 		$types = (array) $types;
 		$combo = array();
@@ -167,105 +116,9 @@ class rateItWidget
 			__('Ascending') => 'asc',
 			__('Descending') => 'desc'));
 		$w->rateitrank->setting('text',__('Text'),'%rank% %title% (%note%/%quotient%)','text');
+		$w->rateitrank->setting('titlelen',__('Title length (if truncate)'),100);
 		$w->rateitrank->setting('homeonly',__('Home page only'),1,'check');
 		$w->rateitrank->setting('sql','sql','','hidden');
-	}
-
-	public static function parseRank($w)
-	{
-		global $core; 
-
-		if (!$core->blog->settings->rateit_active 
-		 || $w->homeonly && $core->url->type != 'default') return;
-
-		$p = array('from'=>'','sql'=>'','columns'=>array());
-		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total'))) ? 
-			$w->sortby.' ' : 'rateit_total ';
-
-		$p['order'] .= $w->sort == 'desc' ? 'DESC' : 'ASC';
-
-		if ($w->sortby != 'rateit_total')
-			$p['order'] .= ',rateit_total DESC ';
-
-		$p['limit'] = abs((integer) $w->limit);
-
-		$p['rateit_type'] = $w->type;
-
-		if ($w->type == 'post') {
-			if (!$core->blog->settings->rateit_post_active) return;
-
-			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
-			$p['columns'][] = 'P.post_title AS title';
-			$p['groups'][] = 'P.post_url';
-			$p['groups'][] = 'P.post_title';
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
-			$p['sql'] .= " AND P.post_type='post' AND P.post_status = 1 AND P.post_password IS NULL ";
-		}
-
-		if ($w->type == 'comment') {
-			if (!$core->blog->settings->rateit_comment_active) return;
-
-			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
-			$p['columns'][] = 'P.post_title AS title';
-			$p['groups'][] = 'P.post_url';
-			$p['groups'][] = 'P.post_title';
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON C.comment_id = P.post_id ';
-		}
-
-		if ($w->type == 'category') {
-			if (!$core->blog->settings->rateit_category_active) return;
-
-			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('category')."/'",'C.cat_url').' AS url';
-			$p['columns'][] = 'C.cat_title AS title';
-			$p['groups'][] = 'C.cat_url';
-			$p['groups'][] = 'C.cat_title';
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'category C ON CAST(C.cat_id as char)=RI.rateit_id ';
-		}
-
-		$w->sql = $p;
-
-
-		# --BEHAVIOR-- parseWidgetRateItRank
-		$core->callBehavior('parseWidgetRateItRank',$w);
-
-
-		if ($w->type == '') return;
-
-		$sql = (array) $w->sql;
-		foreach($sql as $k => $v){
-			$p[$k] = $v;
-		}
-
-		$rateIt = new rateIt($core);
-		$rs = $rateIt->getRates($p);
-
-		if ($rs->isEmpty()) return;
-
-		$q = $core->blog->settings->rateit_quotient;
-		$d = $core->blog->settings->rateit_digit;
-
-		$res =
-		'<div class="rateitpostsrank rateittype'.$w->type.'">'.
-		($w->title ? '<h2>'.html::escapeHTML($w->title).'</h2>' : '').
-		'<ul>';
-		$i=0;
-		while ($rs->fetch()) {
-			$i++;
-			$res .= '<li>'.str_replace(array('%rank%','%title%','%note%','%quotient%','%percent%','%count%'),array(
-				'<span class="rateit-rank">'.$i.'</span>',
-				'<a href="'.$rs->url.'">'.
-					html::escapeHTML($rs->title).'</a>',
-				round($rs->rateit_avg * $q,$d),
-				$q,
-				floor($rs->rateit_avg * 100),
-				$rs->rateit_total
-			),
-			$w->text).'</li>';
-		}
-		$res .= '</ul></div>';
-
-		return $res;
 	}
 }
 ?>

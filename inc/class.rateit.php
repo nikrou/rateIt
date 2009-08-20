@@ -34,9 +34,14 @@ class rateIt
 		$types[] = 'post';
 		$types[] = 'comment';
 		$types[] = 'category';
+		$types[] = 'tag';
+		$types[] = 'gal';
+		$types[] = 'galitem';
+
 
 		# --BEHAVIOR-- addRateItType
 		$core->callBehavior('addRateItType',$types);
+
 
 		$this->types = (array) $types;
 		$this->ident = (integer) $core->blog->settings->rateit_userident;
@@ -110,6 +115,9 @@ class rateIt
 		$res->sum = $sum;
 		$res->quotient = $this->quotient;
 		$res->digit = $this->digit;
+		$res->type = $type;
+		$res->id = $id;
+		$res->ip = $ip;
 
 		return $res;
 	}
@@ -287,8 +295,10 @@ class rateIt
 
 		$rs = $this->core->con->select($strReq);
 
+
 		# --BEHAVIOR-- rateitGetRates
 		$this->core->callBehavior('rateitGetRates',$rs);
+
 
 		return $rs;
 	}

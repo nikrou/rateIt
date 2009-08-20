@@ -189,89 +189,6 @@ class rateItTabs
 		return $params;
 	}
 
-	public static function uninstallTab($core)
-	{
-		if (!$core->auth->isSuperAdmin()) return;
-
-		$understand = isset($_POST['s']['understand']) ? $_POST['s']['understand'] : 0;
-		$delete_table = isset($_POST['s']['delete_table']) ? $_POST['s']['delete_table'] : 0;
-		$delete_settings = isset($_POST['s']['delete_settings']) ? $_POST['s']['delete_settings'] : 0;
-
-		echo '<div class="multi-part" id="uninstall" title="'.__('Uninstall').'">';
-
-		# Save admin options
-		if (!empty($_POST['save']['validate']) && isset($_POST['s'])) {
-			try {
-				if (1 != $understand)
-					throw new Exception(__('You must check warning in order to delete plugin.'));
-
-				if (1 == $delete_table)
-					rateItInstall::delTable($core);
-
-				if (1 == $delete_settings)
-					rateItInstall::delSettings($core);
-
-				rateItInstall::delVersion($core);
-				rateItInstall::delModule($core);
-			}
-			catch (Exception $e) {
-				$core->error->add($e->getMessage());
-			}
-
-			if (!$core->error->flag())
-				http::redirect('plugins.php?removed=1');
-		}
-		# Confirm options
-		if (!empty($_POST['save']['uninstall']) && isset($_POST['s']) && 1 == $understand) {
-			echo 
-			'<p>'.__('In order to properly uninstall this plugin, you must specify the actions to perform').'</p>'.
-			'<form method="post" action="'.$p_url.'">'.
-			'<p>'.
-			'<label class=" classic">'.sprintf(($understand ? $img_green : $img_red),'-').
-			__('You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.').'</label><br />'.
-			'<label class=" classic">'.sprintf($img_green,'-').
-			__('Delete plugin files').'</label><br />'.
-			'<label class=" classic">'.sprintf(($delete_table ? $img_green : $img_red),'-').
-			__('Delete plugin database table').'</label><br />'.
-			'<label class=" classic">'.sprintf(($delete_settings ? $img_green : $img_red),'-').
-			__('Delete plugin settings').'</label><br />'.
-			'</p>'.
-			'<p>'.
-			form::hidden(array('p'),'rateIt').
-			form::hidden(array('t'),'uninstall').
-			form::hidden(array('s[understand]'),$understand).
-			form::hidden(array('s[delete_table]'),$delete_table).
-			form::hidden(array('s[delete_settings]'),$delete_settings).
-			$core->formNonce().
-			'<input type="submit" name="save[validate]" value="'.__('Uninstall').'" />'.
-			'<input type="submit" name="save[back]" value="'.__('Back').'" /></p>'.
-			'</form>';
-
-		# Option form
-		} else {
-			if (!empty($_POST['save']['uninstall']) && 1 != $understand)
-				$core->error->add(__('You must check warning in order to delete plugin.'));
-
-			echo 
-			'<p>'.__('In order to properly uninstall this plugin, you must specify the actions to perform').'</p>'.
-			'<form method="post" action="'.$p_url.'">'.
-			'<p>'.
-			'<label class=" classic">'.form::checkbox(array('s[understand]'),1,$understand).
-			__('You understand that if you delete this plugin, the other plugins that use there tables and classes will no longer work.').'</label><br />'.
-			'<label class=" classic">'.form::checkbox(array('s[delete_table]'),1,$delete_table).
-			__('Delete plugin database table').'</label><br />'.
-			'<label class=" classic">'.form::checkbox(array('s[delete_settings]'),1,$delete_settings).
-			__('Delete plugin settings').'</label><br />'.
-			'</p><p>'.
-			form::hidden('p','rateIt').
-			form::hidden('t','uninstall').
-			$core->formNonce().
-			'<input type="submit" name="save[uninstall]" value="'.__('Uninstall').'" /></p>'.
-			'</form>';
-		}
-		echo '</div>';
-	}
-
 	public static function settingsTab($core,$requests,$combos)
 	{
 		if (!$core->auth->check('admin',$core->blog->id)) return;
@@ -288,9 +205,6 @@ class rateItTabs
 				$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 				$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
 				$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
-				$core->blog->settings->put('rateit_module_prefix',$_POST['s']['rateit_module_prefix'],'string','rateit prefix url for files',true,false);
-				$core->blog->settings->put('rateit_post_prefix',$_POST['s']['rateit_post_prefix'],'string','rateit prefix url for post form',true,false);
-				$core->blog->settings->put('rateit_rest_prefix',$_POST['s']['rateit_rest_prefix'],'string','rateit prefix url for rest service',true,false);
 
 				# Destination image according to libImagePath()
 				$dest_file = DC_ROOT.'/'.$core->blog->settings->public_path.'/rateIt-default-image.png';
@@ -333,7 +247,7 @@ class rateItTabs
 		# Display
 		echo 
 		'<p>'.__('Administration of options of this extension on this blog').'</p>'.
-		'<form method="post" action="'.$p_url.'" enctype="multipart/form-data">'.
+		'<form method="post" action="'.$requests->p_url.'" enctype="multipart/form-data">'.
 		'<div class="two-cols">'.
 		'<div class="col">'.
 		'<h2>'.__('Options').'</h2>'.
@@ -346,13 +260,9 @@ class rateItTabs
 		'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
 		'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
 		'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
-		'<tr><th colspan="2">'.__('URL prefix').'**</th></tr>'.
-		'<tr><td>'.__('Files').'</td><td>'.form::field(array('s[rateit_module_prefix]'),40,50,$core->url->getBase('rateItmodule')).'</td></tr>'.
-		'<tr><td>'.__('Post form').'</td><td>'.form::field(array('s[rateit_post_prefix]'),40,50,$core->url->getBase('rateItpostform')).'</td></tr>'.
-		'<tr><td>'.__('Rest service').'</td><td>'.form::field(array('s[rateit_rest_prefix]'),40,50,$core->url->getBase('rateItservice')).'</td></tr>'.
 		'</table>'.
 		'<p class="form-note">*'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
-		'<p class="form-note">**'.__('Change these prefixes only if you have any conflicts with other links.').'</p>'.
+		'<p class="form-note">'.__('In order to change url of public page you can use plugin dcUrlHandlers.').'</p>'.
 		'</div>'.
 		'<div class="col">'.
 		'<h2>'.__('Image').'</h2>';
@@ -529,7 +439,7 @@ class rateItTabs
 			'<p class="col checkboxes-helpers"></p>'.
 			'<p class="col right">'.__('Selected entries action:').' '.
 			form::combo(array('action'),array(__('delete entry') => 'rateit_del_entry')).
-			'<input type="submit" name="save[details]" value="'.__('ok').'" />'.
+			'<input type="submit" name="save" value="'.__('ok').'" />'.
 			form::hidden(array('p'),'rateIt').
 			form::hidden(array('t'),'details').
 			form::hidden(array('type'),$requests->type).
@@ -708,7 +618,7 @@ class rateItTabs
 		&& !$core->blog->settings->rateit_category_active) {
 			echo
 			'<form action="plugin.php" method="post" id="form-categories-active"><p>'.
-			'<input type="submit" name="save[category]" value="'.__('Activate addon category').'" />'.
+			'<input type="submit" name="save_category" value="'.__('Activate addon category').'" />'.
 			form::hidden(array('action'),'rateit_cat_active').
 			form::hidden(array('p'),'rateIt').
 			form::hidden(array('t'),'category').
@@ -719,7 +629,7 @@ class rateItTabs
 			if ($core->auth->check('admin',$core->blog->id)) {
 				echo
 				'<form action="plugin.php" method="post" id="form-categories-unactive"><p>'.
-				'<input type="submit" name="save[category]" value="'.__('Disactivate addon category').'" />'.
+				'<input type="submit" name="save_category" value="'.__('Disactivate addon category').'" />'.
 				form::hidden(array('action'),'rateit_cat_unactive').
 				form::hidden(array('p'),'rateIt').
 				form::hidden(array('t'),'category').
@@ -771,7 +681,7 @@ class rateItTabs
 					'<p class="col checkboxes-helpers"></p>'.
 					'<p class="col right">'.__('Selected categories action:').' '.
 					form::combo(array('action'),array(__('delete rating') => 'rateit_cat_empty')).
-					'<input type="submit" name="save[category]" value="'.__('ok').'" />'.
+					'<input type="submit" name="save" value="'.__('ok').'" />'.
 					form::hidden(array('p'),'rateIt').
 					form::hidden(array('t'),'category').
 					$core->formNonce().
@@ -893,6 +803,460 @@ class rateItTabs
 			echo '</form>';
 		}
 		echo '</div></div>';
+	}
+
+	public static function tagTab($core,$requests)
+	{
+		if (!$core->plugins->moduleExists('metadata')) return;
+
+		try {
+			$rateIt = new rateIt($core);
+			$objMeta = new dcMeta($core);
+			$metas = $objMeta->getMeta('tag',null);
+		} catch (Exception $e) {
+			$core->error->add($e->getMessage());
+		}
+
+		if (isset($_POST['action']) && $_POST['action'] == 'rateit_tag_empty' && isset($_POST['entries'])) {
+
+			foreach($_POST['entries'] as $tag_id) {
+				$rateIt->del('tag',$tag_id);
+			}
+		}
+
+		if ($core->auth->check('admin',$core->blog->id)
+		&& isset($_POST['action']) && $_POST['action'] == 'rateit_tag_active') {
+
+			$core->blog->settings->setNameSpace('rateit');
+			$core->blog->settings->put('rateit_tag_active',true,'boolean','rateit tag addon enabled',true,false);
+			$core->blog->triggerBlog();
+			http::redirect('plugin.php?p=rateIt&t=tag');
+		}
+
+		if ($core->auth->check('admin',$core->blog->id)
+		&& isset($_POST['action']) && $_POST['action'] == 'rateit_tag_unactive') {
+
+			$core->blog->settings->setNameSpace('rateit');
+			$core->blog->settings->put('rateit_tag_active',false,'boolean','rateit tag addon enabled',true,false);
+			$core->blog->triggerBlog();
+			http::redirect('plugin.php?p=rateIt&t=tag');
+		}
+
+		echo 
+		'<div class="multi-part" id="tag" title="'.__('Tags').'">';
+
+		if ($core->auth->check('admin',$core->blog->id)
+		&& !$core->blog->settings->rateit_tag_active) {
+			echo
+			'<form action="plugin.php" method="post" id="form-tags-active"><p>'.
+			'<input type="submit" name="save_tag" value="'.__('Activate addon tag').'" />'.
+			form::hidden(array('action'),'rateit_tag_active').
+			form::hidden(array('p'),'rateIt').
+			form::hidden(array('t'),'tag').
+			$core->formNonce().
+			'</p></form>';
+		}
+		if ($core->blog->settings->rateit_tag_active) {
+			if ($core->auth->check('admin',$core->blog->id)) {
+				echo
+				'<form action="plugin.php" method="post" id="form-tags-unactive"><p>'.
+				'<input type="submit" name="save_tag" value="'.__('Disactivate addon tag').'" />'.
+				form::hidden(array('action'),'rateit_tag_unactive').
+				form::hidden(array('p'),'rateIt').
+				form::hidden(array('t'),'tag').
+				$core->formNonce().
+				'</p></form>';
+			}
+
+			$table = '';
+			while ($metas->fetch()) {
+				$rs = $rateIt->get('tag',$metas->meta_id);
+				if (!$rs->total) continue;
+				$table .= 
+				'<tr class="line">'.
+				'<td class="nowrap">'.form::checkbox(array('entries[]'),$metas->meta_id,'','','',false).'</td>'.
+				'<td class="maximal"><a href="plugin.php?p=metadata&amp;m=tag_posts&amp;tag='.$metas->meta_id.'">
+					'.html::escapeHTML($metas->meta_id).'</a></td>'.
+				'<td class="nowrap"><a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=tag&amp;id='.$metas->meta_id.'">'.$rs->total.'</a></td>'.
+				'<td class="nowrap">'.$rs->note.'</td>'.
+				'<td class="nowrap">'.$rs->max.'</td>'.
+				'<td class="nowrap">'.$rs->min.'</td>'.
+				'</tr>';
+			}
+
+			echo 
+			'<p>'.__('This is a list of all the tags having rating').'</p>'.
+			'<form action="plugin.php" method="post" id="form-tags">';
+
+			if ($table=='')
+				echo '<p class="message">'.__('There is no tag rating at this time').'</p>';
+			else {
+				echo 
+				'<table class="clear"><tr>'.
+				'<th colspan="2">'.__('Title').'</th>'.
+				'<th>'.__('Votes').'</th>'.
+				'<th>'.__('Note').'</th>'.
+				'<th>'.__('Higher').'</th>'.
+				'<th>'.__('Lower').'</th>'.
+				'</tr>'.
+				$table.
+				'</table>';
+			}
+
+			if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
+				echo 
+				'<div class="two-cols">'.
+				'<p class="col checkboxes-helpers"></p>'.
+				'<p class="col right">'.__('Selected tags action:').' '.
+				form::combo(array('action'),array(__('delete rating') => 'rateit_tag_empty')).
+				'<input type="submit" name="save" value="'.__('ok').'" />'.
+				form::hidden(array('p'),'rateIt').
+				form::hidden(array('t'),'tag').
+				$core->formNonce().
+				'</p>'.
+				'</div>';
+			}
+			echo '</form>';
+		}
+		echo '</div>';
+	}
+
+	public static function galleryTab($core,$requests)
+	{
+		if (!$core->plugins->moduleExists('gallery')) return;
+
+		try {
+			$rateIt = new rateIt($core);
+			$galObject = new dcGallery($core);
+			$galleries = $galObject->getGalleries();
+			$galleries_items = $galObject->getGalItems();
+		} catch (Exception $e) {
+			$core->error->add($e->getMessage());
+		}
+
+		if (isset($_POST['action']) && $_POST['action'] == 'rateit_gal_empty' && isset($_POST['entries'])) {
+			foreach($_POST['entries'] as $gal_id) {
+				$rateIt->del('gal',$gal_id);
+			}
+		}
+
+		if (isset($_POST['action']) && $_POST['action'] == 'rateit_galitem_empty' && isset($_POST['entries'])) {
+			foreach($_POST['entries'] as $galitem_id) {
+				$rateIt->del('galitem',$galitem_id);
+			}
+		}
+
+		# Save admin options
+		if ($core->auth->check('admin',$core->blog->id)
+		&& !empty($_POST['save_gal'])) {
+			try {
+				$core->blog->settings->setNamespace('rateit');
+				$core->blog->settings->put('rateit_gal_active',$_POST['rateit_gal_active'],'boolean','rateit addon gallery enabled',true,false);
+				$core->blog->settings->put('rateit_galitem_active',$_POST['rateit_galitem_active'],'boolean','rateit addon gallery item enabled',true,false);
+				$core->blog->settings->put('rateit_galtpl',$_POST['rateit_galtpl'],'boolean','rateit template galleries page',true,false);
+				$core->blog->settings->put('rateit_galitemtpl',$_POST['rateit_galitemtpl'],'boolean','rateit template gallery items page',true,false);
+				$core->blog->triggerBlog();
+				http::redirect('plugin.php?p=rateIt&t=gal&done=1');
+			}
+			catch (Exception $e) {
+				$core->error->add($e->getMessage());
+			}
+		}
+
+		echo '<div class="multi-part" id="gal" title="'.__('Galleries').'">';
+
+		if ($core->auth->check('admin',$core->blog->id)) {
+			echo
+			'<h2 id="gallery-options-title">'.__('Settings for galleries').'</h2>'.
+			'<div id="gallery-options-content">'.
+			'<form method="post" action="plugin.php">'.
+			'<table>'.
+			'<tr><td>'.__('Enable addon gallery').'</td><td>'.form::combo(array('rateit_gal_active'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_gal_active).'</td></tr>'.
+			'<tr><td>'.__('Enable addon gallery item').'</td><td>'.form::combo(array('rateit_galitem_active'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_galitem_active).'</td></tr>'.
+			'<tr><td>'.__('Include on galleries page').'*</td><td>'.form::combo(array('sateit_galtpl'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_galtpl).'</td></tr>'.
+			'<tr><td>'.__('Include on gallery items pages').'*</td><td>'.form::combo(array('rateit_galitemtpl'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_galitemtpl).'</td></tr>'.
+			'</table>'.
+			'<p>'.
+			form::hidden(array('p'),'rateIt').
+			form::hidden(array('t'),'gal').
+			$core->formNonce().
+			'<input type="submit" name="save_gal" value="'.__('Save').'" /></p>'.
+			'</form>'.
+			'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>'.
+			'</div>';
+		}
+
+		if ($core->blog->settings->rateit_gal_active) {
+
+			$table = '';
+			while ($galleries->fetch()) {
+				$rs = $rateIt->get('gal',$galleries->post_id);
+				if (!$rs->total) continue;
+				$table .= 
+				'<tr class="line">'.
+				'<td class="nowrap">'.form::checkbox(array('entries[]'),$galleries->post_id,'','','',false).'</td>'.
+				'<td class="maximal"><a href="plugin.php?p=gallery&amp;m=gal&amp;id='.$galleries->post_id.'">
+					'.html::escapeHTML($galleries->post_title).'</a></td>'.
+				'<td class="nowrap"><a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=gal&amp;id='.$galleries->post_id.'">'.$rs->total.'</a></td>'.
+				'<td class="nowrap">'.$rs->note.'</td>'.
+				'<td class="nowrap">'.$rs->max.'</td>'.
+				'<td class="nowrap">'.$rs->min.'</td>'.
+				'</tr>';
+			}
+
+			echo 
+			'<h2 id="gallery-gals-title">'.__('List of galleries').'</h2>'.
+			'<div id="gallery-gals-content">'.
+			'<p>'.__('This is a list of all the galleries having rating').'</p>'.
+			'<form action="plugin.php" method="post" id="form-gal">';
+
+			if ($table=='')
+				echo '<p class="message">'.__('There is no gallery rating at this time').'</p>';
+			else {
+				echo 
+				'<table class="clear"><tr>'.
+				'<th colspan="2">'.__('Title').'</th>'.
+				'<th>'.__('Votes').'</th>'.
+				'<th>'.__('Note').'</th>'.
+				'<th>'.__('Higher').'</th>'.
+				'<th>'.__('Lower').'</th>'.
+				'</tr>'.
+				$table.
+				'</table>';
+			}
+
+			if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
+				echo 
+				'<div class="two-cols">'.
+				'<p class="col checkboxes-helpers"></p>'.
+				'<p class="col right">'.__('Selected galeries action:').' '.
+				form::combo(array('action'),array(__('delete rating') => 'rateit_gal_empty')).
+				'<input type="submit" name="save" value="'.__('ok').'" />'.
+				form::hidden(array('p'),'rateIt').
+				form::hidden(array('t'),'gal').
+				$core->formNonce().
+				'</p>'.
+				'</div>';
+			}
+			echo '</form></div>';
+		}
+
+		if ($core->blog->settings->rateit_galitem_active) {
+
+			$table = '';
+			while ($galleries_items->fetch()) {
+				$rs = $rateIt->get('galitem',$galleries_items->post_id);
+				if (!$rs->total) continue;
+				$table .= 
+				'<tr class="line">'.
+				'<td class="nowrap">'.form::checkbox(array('entries[]'),$galleries_items->post_id,'','','',false).'</td>'.
+				'<td class="maximal"><a href="plugin.php?p=gallery&amp;m=item&amp;id='.$galleries_items->post_id.'">
+					'.html::escapeHTML($galleries_items->post_title).'</a></td>'.
+				'<td class="nowrap"><a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=galitem&amp;id='.$galleries_items->post_id.'">'.$rs->total.'</a></td>'.
+				'<td class="nowrap">'.$rs->note.'</td>'.
+				'<td class="nowrap">'.$rs->max.'</td>'.
+				'<td class="nowrap">'.$rs->min.'</td>'.
+				'</tr>';
+			}
+
+			echo 
+			'<h2 id="gallery-galitems-title">'.__('List of images').'</h2>'.
+			'<div id="gallery-galitems-content">'.
+			'<p>'.__('This is a list of all the galleries items having rating').'</p>'.
+			'<form action="plugin.php" method="post" id="form-galitem">';
+
+			if ($table=='')
+				echo '<p class="message">'.__('There is no gallery item rating at this time').'</p>';
+			else {
+				echo 
+				'<table class="clear"><tr>'.
+				'<th colspan="2">'.__('Title').'</th>'.
+				'<th>'.__('Votes').'</th>'.
+				'<th>'.__('Note').'</th>'.
+				'<th>'.__('Higher').'</th>'.
+				'<th>'.__('Lower').'</th>'.
+				'</tr>'.
+				$table.
+				'</table>';
+			}
+
+			if ($core->auth->check('delete,contentadmin',$core->blog->id)) {
+				echo 
+				'<div class="two-cols">'.
+				'<p class="col checkboxes-helpers"></p>'.
+				'<p class="col right">'.__('Selected galeries items action:').' '.
+				form::combo(array('action'),array(__('delete rating') => 'rateit_galitem_empty')).
+				'<input type="submit" name="save" value="'.__('ok').'" />'.
+				form::hidden(array('p'),'rateIt').
+				form::hidden(array('t'),'gal').
+				$core->formNonce().
+				'</p>'.
+				'</div>';
+			}
+			echo '</form></div>';
+		}
+		echo '</div>';
+	}
+}
+
+class rateItExtList
+{
+	protected $core;
+	protected $rs;
+	protected $rs_count;
+	protected $base_url;
+
+	public function __construct($core,$rs,$rs_count,$base_url=null)
+	{
+		$this->core =& $core;
+		$this->rs =& $rs;
+		$this->rs_count = $rs_count;
+		$this->base_url = $base_url;
+		$this->html_prev = __('&#171;prev.');
+		$this->html_next = __('next&#187;');
+
+		$this->html_none = '<p><strong>'.__('No entry').'</strong></p>';
+		$this->html = '%1$s';
+		$this->html_pager =  '<p>'.__('Page(s)').' : %1$s</p>';
+		$this->html_table = '<table class="clear">%1$s%2$s</table>';
+		$this->html_headline = '<tr %2$s>%1$s</tr>';
+		$this->html_headcell = '<th %2$s>%1$s</th>';
+		$this->html_line = '<tr %2$s>%1$s</tr>';
+		$this->html_cell = '<td %2$s>%1$s</td>';
+		$this->headlines = '';
+		$this->headcells = '';
+		$this->lines = '';
+		$this->cells = '';
+
+		$this->rateit = new rateIt($core);
+
+		$this->init();
+	}
+
+	public function headline($cells,$head='')
+	{
+		$line = '';
+		foreach($cells AS $content => $extra) {
+			$line .= sprintf($this->html_headcell,$content,$extra);
+		}
+		$this->headlines .= sprintf($this->html_headline,$line,$head);
+	}
+
+	public function line($cells,$head='')
+	{
+		$line = '';
+		foreach($cells AS $k => $cell) {
+			$line .= sprintf($this->html_cell,$cell[0],$cell[1]);
+		}
+		$this->lines .= sprintf($this->html_line,$line,$head);
+	}
+
+	public function display($page,$nb_per_page,$enclose_block='')
+	{
+		if ($this->rs->isEmpty()) {
+			echo $this->html_none;
+		} else {
+			$pager = new pager($page,$this->rs_count,$nb_per_page,10);
+			$pager->base_url = $this->base_url;
+			$pager->html_prev = $this->html_prev;
+			$pager->html_next = $this->html_next;
+			$pager->var_page = 'page';
+
+			while ($this->rs->fetch()) {
+				$this->setLine();
+			}
+
+			echo
+			sprintf($this->html,
+				sprintf($enclose_block,
+					sprintf($this->html_pager,$pager->getLinks()).
+						sprintf($this->html_table,$this->headlines,$this->lines).
+					sprintf($this->html_pager,$pager->getLinks())));
+		}
+	}
+}
+
+# Display admin posts list class
+class rateItPostsList extends rateItExtList
+{
+	protected $core;
+	protected $rs;
+	protected $rs_count;
+	protected $base_url;
+
+	public function init()
+	{
+		self::headline(array(
+			__('Title') => 'colspan="2"',
+			__('Votes') => '',
+			__('Note') => '',
+			__('Higher') => '',
+			__('Lower') => '',
+			__('Published on') => '',
+			__('Category') => '',
+			__('Author') => '',
+			__('Status') => ''));
+	}
+	
+	public function setLine()
+	{
+		if ($this->rs->cat_title)
+			$cat_title = html::escapeHTML($this->rs->cat_title);
+		else
+			$cat_title = __('None');
+
+		$img = '<img alt="%1$s" title="%1$s" src="images/%2$s" />';
+		switch ($this->rs->post_status) {
+			case 1:  $img_status = sprintf($img,__('published'),'check-on.png'); break;
+			case 0:  $img_status = sprintf($img,__('unpublished'),'check-off.png'); break;
+			case -1: $img_status = sprintf($img,__('scheduled'),'scheduled.png'); break;
+			case -2: $img_status = sprintf($img,__('pending'),'check-wrn.png'); break;
+		}
+
+		$protected = '';
+		if ($this->rs->post_password)
+			$protected = sprintf($img,__('protected'),'locker.png');
+
+		$selected = '';
+		if ($this->rs->post_selected)
+			$selected = sprintf($img,__('selected'),'selected.png');
+
+		$attach = '';
+		$nb_media = $this->rs->countMedia();
+		if ($nb_media > 0) {
+			$attach_str = $nb_media == 1 ? __('%d attachment') : __('%d attachments');
+			$attach = sprintf($img,sprintf($attach_str,$nb_media),'attach.png');
+		}
+		
+		$q = $this->core->blog->settings->rateit_quotient;
+		$d = $this->core->blog->settings->rateit_digit;
+		
+		$r = $this->rateit->get('post',$this->rs->post_id);
+
+		self::line(
+			array(
+				# Title
+				array(form::checkbox(array('entries[]'),$this->rs->post_id,'','','',!$this->rs->isEditable()),'class="nowrap"'),
+				array('<a href="'.$this->core->getPostAdminURL($this->rs->post_type,$this->rs->post_id).'">'.html::escapeHTML($this->rs->post_title).'</a>','class="maximal"'),
+				# Votes
+				array('<a title="'.__('Show rating details').'" href="plugin.php?p=rateIt&amp;t=details&amp;type=post&amp;id='.$this->rs->post_id.'">'.$r->total.'</a>','class="nowrap"'),
+				# Note
+				array($r->note,'class="nowrap"'),
+				# Higher
+				array($r->max,'class="nowrap"'),
+				# Lower
+				array($r->min,'class="nowrap"'),
+				# Post date
+				array(dt::dt2str(__('%Y-%m-%d %H:%M'),$this->rs->post_dt,$this->core->auth->getInfo('user_tz')),'class="nowrap"'),
+				# Category
+				array($cat_title,'class="nowrap"'),
+				# Author
+				array($this->rs->user_id,'class="nowrap"'),
+				# Status
+				array($img_status.' '.$selected.' '.$protected.' '.$attach,'class="nowrap status"')
+			),
+			'class="line'.($this->rs->post_status != 1 ? ' offline' : '').'" '
+		);
 	}
 }
 ?>
