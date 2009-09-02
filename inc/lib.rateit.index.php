@@ -202,6 +202,7 @@ class rateItTabs
 				$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
 				$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
 				$core->blog->settings->put('rateit_dispubjs',$_POST['s']['rateit_dispubjs'],'boolean','disable rateit public javascript',true,false);
+				$core->blog->settings->put('rateit_dispubcss',$_POST['s']['rateit_dispubcss'],'boolean','disable rateit public css',true,false);
 				$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
 				$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
 				$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
@@ -255,13 +256,15 @@ class rateItTabs
 		'<tr><th colspan="2">'.__('Extension').'</th></tr>'.
 		'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</td></tr>'.
 		'<tr><td>'.__('Disable public javascript').'</td><td>'.form::combo(array('s[rateit_dispubjs]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_dispubjs).'</td></tr>'.
-		'<tr><td>'.__('Identify users by').'</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</td></tr>'.
+		'<tr><td>'.__('Disable public css').'</td><td>'.form::combo(array('s[rateit_dispubcss]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_dispubcss).'</td></tr>'.
+		'<tr><td>'.__('Identify users by').'*</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</td></tr>'.
 		'<tr><th colspan="2">'.__('Note').'</th></tr>'.
 		'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
 		'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
-		'<tr><td>'.__('Message of thanks').'*</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
+		'<tr><td>'.__('Message of thanks').'**</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
 		'</table>'.
-		'<p class="form-note">*'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
+		'<p class="form-note">*'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p>'. 
+		'<p class="form-note">**'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
 		'<p class="form-note">'.__('In order to change url of public page you can use plugin dcUrlHandlers.').'</p>'.
 		'</div>'.
 		'<div class="col">'.

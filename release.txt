@@ -1,3 +1,9 @@
+0.9.4 20090903
+ * Fixed CSS features (validation, option, file length)
+ * Fixed import/export behaviors
+ * Added option to disable import/export in about:config
+ * Added _uninstall.php support
+
 0.9.3 20090820
  * Fixed context errors
  * Added cut string option on widget

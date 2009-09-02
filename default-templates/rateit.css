@@ -12,19 +12,19 @@
 }
 .rateit-fullnote{
  float:left;
+ width:50px;
  margin-right:10px;
  font-size: 1.2em;
  font-weight: bold;
 }
-.rateit-linker *,#comments .rateit-linker * {
+.rateit-linker * {
  margin:0px;
  padding:0px;
 }
-.rateit-linker, .rateitwidget-linker {
- float:left;
+.rateit-linker {
  font-style: italic;
 }
-.rateit ul, .rateitwidget ul {
+.rateit ul {
  clear:both;
 }
 .rateit li {
@@ -45,22 +45,17 @@
  display:block;
  position:relative;
  bottom:0;
- right:0;
+ left:0;
  margin:0px;
  padding:0px;
 }
-#comments .rateit h3{
+#comments .rateit h3 {
  border:none;
  margin:0px;
  padding:0px;
  background: transparent;
  font-size: 1em;
 }
-#comments .rateit-fullnote,#comments .rateit ul{
+#comments .rateit-fullnote, #comments .rateit ul {
  display:none;
-}
-#comments .rateit-linker{
- float: none;
- margin:0px;
- padding:0px;
 }

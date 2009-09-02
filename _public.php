@@ -186,7 +186,7 @@ class urlRateIt extends dcUrlHandlers
 		//http::cache(array_merge(array($f),get_included_files()));
 		$type = files::getMimeType($f);
 		header('Content-Type: '.$type);
-		header('Content-Length: '.filesize($f));
+		//header('Content-Length: '.filesize($f));
 		if ($type != "text/css" || $core->blog->settings->url_scan == 'path_info') {
 			readfile($f);
 		} else {
@@ -214,9 +214,15 @@ class urlRateIt extends dcUrlHandlers
 		"div.star-rating-hover a{background-position:0 -".($s['h']*2)."px} \n".
 		"div.star-rating-readonly a{cursor:default !important} \n".
 		"div.star-rating{background:transparent!important;overflow:hidden!important} \n".
-		"</style> \n".
-		"<style type=\"text/css\"> \n @import url(".
-			$core->blog->url.$core->url->getBase('rateItmodule')."/rateit.css); \n</style> \n";
+		"</style> \n";
+
+		if (!$core->blog->settings->rateit_dispubcss) {
+
+			echo
+			"<style type=\"text/css\"> \n @import url(".
+				$core->blog->url.$core->url->getBase('rateItmodule')."/rateit.css); \n".
+			"</style> \n";
+		}
 
 		if ($core->blog->settings->rateit_dispubjs) return;
 

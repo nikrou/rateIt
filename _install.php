@@ -50,11 +50,13 @@ try {
 
 	# Settings main
 	$core->blog->settings->put('rateit_active',false,'boolean','rateit plugin enabled',false,true);
+	$core->blog->settings->put('rateit_importexport_active',true,'boolean','rateit import/export enabled',false,true);
 	$core->blog->settings->put('rateit_quotient',5,'integer','rateit maximum note',false,true);
 	$core->blog->settings->put('rateit_digit',1,'integer','rateit note digits number',false,true);
 	$core->blog->settings->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',false,true);
 	$core->blog->settings->put('rateit_userident',0,'integer','rateit use cookie and/or ip',false,true);
 	$core->blog->settings->put('rateit_dispubjs',false,'boolean','disable rateit public javascript',false,true);
+	$core->blog->settings->put('rateit_dispubcss',false,'boolean','disable rateit public css',false,true);
 	# Settings for posts
 	$core->blog->settings->put('rateit_post_active',true,'boolean','Enabled post rating',false,true);
 	$core->blog->settings->put('rateit_poststpl',false,'boolean','rateit template on post on post page',false,true);

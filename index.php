@@ -75,8 +75,8 @@ rateItTabs::settingsTab($core,$requests,$combos);
 <ul><li>rateIt <?php echo $core->plugins->moduleInfo('rateIt','version'); ?></li></ul>
 <h3>Support:</h3>
 <ul>
-<li><a href="http://dotclear.jcdenis.com/">Author's blog</a></li>
-<li><a href="http://forum.dotclear.net/viewtopic.php?id=39801">Dotclear forum</a></li>
+<li><a href="http://dotclear.jcdenis.com/go/rateIt">Author's blog</a></li>
+<li><a href="http://dotclear.jcdenis.com/go/rateIt-support">Dotclear forum</a></li>
 <li><a href="http://lab.dotclear.org/wiki/plugin/rateIt">Dotclear lab</a></li>
 </ul>
 <h3>Copyrights:</h3>

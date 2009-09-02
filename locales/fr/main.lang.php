@@ -1,23 +1,23 @@
 <?php
 // Language: français 
 // Module: rateIt - 0.9.3
-// Date: 2009-08-20 02:07:39 
+// Date: 2009-09-02 23:05:14 
 // Author: JC Denis, jcdenis@gdwd.com
 // Translated with dcTranslater - 0.2.4 
 
 #index.php:49
 $GLOBALS['__l10n']['Rate it'] = 'Évaluer ça';
 
-#inc/lib.rateit.index.php:1088
+#inc/lib.rateit.index.php:1091
 $GLOBALS['__l10n']['delete rating'] = 'Effacer les votes';
 
-#_admin.php:80
+#_admin.php:83
 $GLOBALS['__l10n']['Do you really want to delete all votes for these entries?'] = 'Êtes vous sûr de vouloir effacer les votes pour ces entrées?';
 
 #_widgets.php:30
 $GLOBALS['__l10n']['Rate this entry'] = 'Évaluer ce billet';
 
-#_public.php:437
+#_public.php:438
 $GLOBALS['__l10n']['Rate this comment'] = 'Évaluer ce commentaire';
 
 #_widgets.php:35
@@ -29,31 +29,31 @@ $GLOBALS['__l10n']['Rate this tag'] = 'Évaluer cet tag';
 #_widgets.php:48
 $GLOBALS['__l10n']['Rate this gallery'] = 'Évaluer cette galerie';
 
-#_public.php:443
+#_public.php:442
 $GLOBALS['__l10n']['Rate this image'] = 'Évaluer cette image';
 
-#_public.php:619
+#_public.php:618
 $GLOBALS['__l10n']['Vote'] = 'Vote';
 
-#_public.php:758
+#_public.php:757
 $GLOBALS['__l10n']['no rate'] = 'aucun vote';
 
-#_public.php:760
+#_public.php:759
 $GLOBALS['__l10n']['one rate'] = 'un vote';
 
-#_public.php:762
+#_public.php:761
 $GLOBALS['__l10n']['%d rates'] = '%d votes';
 
-#_public.php:626
+#_public.php:625
 $GLOBALS['__l10n']['Note:'] = 'Note :';
 
-#_public.php:628
+#_public.php:627
 $GLOBALS['__l10n']['Votes:'] = 'Votes :';
 
-#_public.php:630
+#_public.php:629
 $GLOBALS['__l10n']['Higher:'] = 'Plus haute :';
 
-#_public.php:632
+#_public.php:631
 $GLOBALS['__l10n']['Lower:'] = 'Plus basse :';
 
 #_widgets.php:25
@@ -131,10 +131,10 @@ $GLOBALS['__l10n']['Gallery item'] = 'Image';
 #_widgets.php:110
 $GLOBALS['__l10n']['Length:'] = 'Longueur :';
 
-#inc/lib.rateit.index.php:1192
+#inc/lib.rateit.index.php:1195
 $GLOBALS['__l10n']['Note'] = 'Note';
 
-#inc/lib.rateit.index.php:1191
+#inc/lib.rateit.index.php:1194
 $GLOBALS['__l10n']['Votes'] = 'Votes';
 
 #_widgets.php:119
@@ -158,232 +158,238 @@ $GLOBALS['__l10n']['Configuration saved'] = 'Configuration enregistrée';
 #inc/lib.rateit.index.php:196
 $GLOBALS['__l10n']['Settings'] = 'Paramètres';
 
-#inc/lib.rateit.index.php:224
+#inc/lib.rateit.index.php:225
 $GLOBALS['__l10n']['Maximum file size exceeded'] = 'Taille maximum de fichier dépassée';
 
-#inc/lib.rateit.index.php:227
+#inc/lib.rateit.index.php:228
 $GLOBALS['__l10n']['Something went wrong while download file'] = 'Une erreur est survenue lors de téléchargement de l\'image';
 
-#inc/lib.rateit.index.php:230
+#inc/lib.rateit.index.php:231
 $GLOBALS['__l10n']['Image must be in png format'] = 'L\'image doit être au format png';
 
-#inc/lib.rateit.index.php:429
+#inc/lib.rateit.index.php:432
 $GLOBALS['__l10n']['Ip'] = 'Ip';
 
-#inc/lib.rateit.index.php:246
+#inc/lib.rateit.index.php:247
 $GLOBALS['__l10n']['Both ip and cookie'] = 'Ip et cookie';
 
-#inc/lib.rateit.index.php:249
+#inc/lib.rateit.index.php:250
 $GLOBALS['__l10n']['Administration of options of this extension on this blog'] = 'Administration de l\'extension sur ce blog';
 
-#inc/lib.rateit.index.php:256
+#inc/lib.rateit.index.php:257
 $GLOBALS['__l10n']['Enable plugin'] = 'Activer l\'extension';
 
-#inc/lib.rateit.index.php:257
+#inc/lib.rateit.index.php:258
 $GLOBALS['__l10n']['Disable public javascript'] = 'Désactiver le javascript publique';
 
-#inc/lib.rateit.index.php:258
-$GLOBALS['__l10n']['Identify users by'] = 'Identifier l\'utilisateur par';
+#inc/lib.rateit.index.php:259
+$GLOBALS['__l10n']['Disable public css'] = 'Désactiver le CSS publique';
 
 #inc/lib.rateit.index.php:260
-$GLOBALS['__l10n']['Note out of'] = 'Note sur';
-
-#inc/lib.rateit.index.php:261
-$GLOBALS['__l10n']['Number of digits'] = 'Nombre de décimales';
+$GLOBALS['__l10n']['Identify users by'] = 'Identifier l\'utilisateur par';
 
 #inc/lib.rateit.index.php:262
-$GLOBALS['__l10n']['Message of thanks'] = 'Message de remerciement';
+$GLOBALS['__l10n']['Note out of'] = 'Note sur';
+
+#inc/lib.rateit.index.php:263
+$GLOBALS['__l10n']['Number of digits'] = 'Nombre de décimales';
 
 #inc/lib.rateit.index.php:264
+$GLOBALS['__l10n']['Message of thanks'] = 'Message de remerciement';
+
+#inc/lib.rateit.index.php:266
+$GLOBALS['__l10n']['This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.'] = 'Ceci désactive le fichier "rateit.css" si vous souhaitez directement inclure vos styles dans le fichier CSS du thème.';
+
+#inc/lib.rateit.index.php:267
 $GLOBALS['__l10n']['This message replaces stars, leave it empty to not replace stars'] = 'Ce message remplace les images, laisser ce champ vide pour ne pas modifier l\'image';
 
-#inc/lib.rateit.index.php:265
+#inc/lib.rateit.index.php:268
 $GLOBALS['__l10n']['In order to change url of public page you can use plugin dcUrlHandlers.'] = 'Pour modifier l\'url de la page publique vous pouvez utiliser le plugin dcUrlHandlers';
 
-#inc/lib.rateit.index.php:268
+#inc/lib.rateit.index.php:271
 $GLOBALS['__l10n']['Image'] = 'Image';
 
-#inc/lib.rateit.index.php:275
+#inc/lib.rateit.index.php:278
 $GLOBALS['__l10n']['Rating image exists on theme it will be used:'] = 'L\'image d\'évaluation existe dans le thème, elle sera utilisée';
 
-#inc/lib.rateit.index.php:282
+#inc/lib.rateit.index.php:285
 $GLOBALS['__l10n']['negative'] = 'négatif';
 
-#inc/lib.rateit.index.php:282
+#inc/lib.rateit.index.php:285
 $GLOBALS['__l10n']['positive'] = 'positif';
 
-#inc/lib.rateit.index.php:282
+#inc/lib.rateit.index.php:285
 $GLOBALS['__l10n']['hover'] = 'survole';
 
-#inc/lib.rateit.index.php:282
+#inc/lib.rateit.index.php:285
 $GLOBALS['__l10n']['size'] = 'taille';
 
-#inc/lib.rateit.index.php:281
+#inc/lib.rateit.index.php:284
 $GLOBALS['__l10n']['Rating image not exists on theme choose one to use:'] = 'L\'image de vote n\'existe pas dans le thème, en choisir une:';
 
-#inc/lib.rateit.index.php:308
+#inc/lib.rateit.index.php:311
 $GLOBALS['__l10n']['Please read the README file before uploading image'] = 'Merci de lire le ficher README avant de télécharger une image';
 
-#inc/lib.rateit.index.php:359
+#inc/lib.rateit.index.php:362
 $GLOBALS['__l10n']['Summary'] = 'Résumé';
 
-#inc/lib.rateit.index.php:360
+#inc/lib.rateit.index.php:363
 $GLOBALS['__l10n']['There is a total of %s votes on this blog.'] = 'Il y a un total de %s votes sur ce blog.';
 
-#inc/lib.rateit.index.php:363
+#inc/lib.rateit.index.php:366
 $GLOBALS['__l10n']['Last'] = 'Dernier';
 
-#inc/lib.rateit.index.php:783
+#inc/lib.rateit.index.php:786
 $GLOBALS['__l10n']['Id'] = 'Id';
 
-#inc/lib.rateit.index.php:418
+#inc/lib.rateit.index.php:421
 $GLOBALS['__l10n']['This is detailed list for rating of type "%s" and id "%s"'] = 'Ceci est la liste détaillée des votes de type %s et d\'id %s';
 
-#inc/lib.rateit.index.php:422
+#inc/lib.rateit.index.php:425
 $GLOBALS['__l10n']['There is no rating for this request at this time'] = 'Il n\'y a pas de vote pour cette requête';
 
-#inc/lib.rateit.index.php:428
+#inc/lib.rateit.index.php:431
 $GLOBALS['__l10n']['Quotient'] = 'Quotient';
 
-#inc/lib.rateit.index.php:441
+#inc/lib.rateit.index.php:444
 $GLOBALS['__l10n']['delete entry'] = 'effacer cette entrée';
 
-#inc/lib.rateit.index.php:502
+#inc/lib.rateit.index.php:505
 $GLOBALS['__l10n']['Settings for entries'] = 'Paramètres pour les billets';
 
-#inc/lib.rateit.index.php:506
+#inc/lib.rateit.index.php:509
 $GLOBALS['__l10n']['Enable posts rating'] = 'Autoriser le vote sur les billets';
 
-#inc/lib.rateit.index.php:507
+#inc/lib.rateit.index.php:510
 $GLOBALS['__l10n']['Include on entries pages'] = 'Inclure dans les pages des billets';
 
-#inc/lib.rateit.index.php:508
+#inc/lib.rateit.index.php:511
 $GLOBALS['__l10n']['Include on home page'] = 'Inclure sur la page d\'accueil';
 
-#inc/lib.rateit.index.php:509
+#inc/lib.rateit.index.php:512
 $GLOBALS['__l10n']['Include on tag page'] = 'Inclure sur la page d\'un tag';
 
-#inc/lib.rateit.index.php:510
+#inc/lib.rateit.index.php:513
 $GLOBALS['__l10n']['Include on categories page'] = 'Inclure sur la page des catégories';
 
-#inc/lib.rateit.index.php:511
+#inc/lib.rateit.index.php:514
 $GLOBALS['__l10n']['Limit to one category'] = 'Limiter à une catégorie';
 
-#inc/lib.rateit.index.php:985
+#inc/lib.rateit.index.php:988
 $GLOBALS['__l10n']['To use this option you must have behavior "publicEntryAfterContent" in your theme'] = 'Pour utiliser cette option vous devez avoir le behavior "publicEntryAfterContent" dans votre thème';
 
-#inc/lib.rateit.index.php:524
+#inc/lib.rateit.index.php:527
 $GLOBALS['__l10n']['List of entries'] = 'Liste des billets';
 
-#inc/lib.rateit.index.php:528
+#inc/lib.rateit.index.php:531
 $GLOBALS['__l10n']['There is no post rating at this time'] = 'Il n\'y a pas de vote sur les billets pour l\'instant';
 
-#inc/lib.rateit.index.php:530
+#inc/lib.rateit.index.php:533
 $GLOBALS['__l10n']['This is the list of all entries having rating'] = 'Ceci est la liste des billets aillant des votes';
 
-#inc/lib.rateit.index.php:621
+#inc/lib.rateit.index.php:624
 $GLOBALS['__l10n']['Activate addon category'] = 'Activer l\'extension pour les catégories';
 
-#inc/lib.rateit.index.php:632
+#inc/lib.rateit.index.php:635
 $GLOBALS['__l10n']['Disactivate addon category'] = 'Désactiver l\'extension pour les catégories';
 
-#inc/lib.rateit.index.php:1242
+#inc/lib.rateit.index.php:1245
 $GLOBALS['__l10n']['Show rating details'] = 'Voir le détail des votes';
 
-#inc/lib.rateit.index.php:660
+#inc/lib.rateit.index.php:663
 $GLOBALS['__l10n']['There is no category rating at this time'] = 'Il n\'y a pas de vote sur les catégories pour l\'instant';
 
-#inc/lib.rateit.index.php:663
+#inc/lib.rateit.index.php:666
 $GLOBALS['__l10n']['This is a list of all the categories having rating'] = 'Ceci est la liste des toutes les catégories aillant des votes';
 
-#inc/lib.rateit.index.php:1193
+#inc/lib.rateit.index.php:1196
 $GLOBALS['__l10n']['Higher'] = 'Haute';
 
-#inc/lib.rateit.index.php:1194
+#inc/lib.rateit.index.php:1197
 $GLOBALS['__l10n']['Lower'] = 'Basse';
 
-#inc/lib.rateit.index.php:672
+#inc/lib.rateit.index.php:675
 $GLOBALS['__l10n']['Level'] = 'Niveau';
 
-#inc/lib.rateit.index.php:682
+#inc/lib.rateit.index.php:685
 $GLOBALS['__l10n']['Selected categories action:'] = 'Action sur les catégories sélectionnées :';
 
-#inc/lib.rateit.index.php:731
+#inc/lib.rateit.index.php:734
 $GLOBALS['__l10n']['Settings for comments'] = 'Paramètres pour les commentaires';
 
-#inc/lib.rateit.index.php:735
+#inc/lib.rateit.index.php:738
 $GLOBALS['__l10n']['Enable comments rating'] = 'Autoriser le vote sur les commentaires';
 
-#inc/lib.rateit.index.php:736
+#inc/lib.rateit.index.php:739
 $GLOBALS['__l10n']['Include on comments'] = 'Inclure dans les commentaires';
 
-#inc/lib.rateit.index.php:744
+#inc/lib.rateit.index.php:747
 $GLOBALS['__l10n']['To use this option you must have behavior "publicCommentAfterContent" in your theme'] = 'Pour utiliser cette option vous devez avoir le behavior "publicCommentAfterContent" dans votre thème';
 
-#inc/lib.rateit.index.php:768
+#inc/lib.rateit.index.php:771
 $GLOBALS['__l10n']['List of comments'] = 'Liste des commentaires';
 
-#inc/lib.rateit.index.php:772
+#inc/lib.rateit.index.php:775
 $GLOBALS['__l10n']['There is no comment rating at this time'] = 'Il n\'y a pas de vote sur les commentaires pour l\'instant';
 
-#inc/lib.rateit.index.php:775
+#inc/lib.rateit.index.php:778
 $GLOBALS['__l10n']['This is a list of all the comments having rating'] = 'Ceci est la liste des toutes les commentaires aillant des votes';
 
-#inc/lib.rateit.index.php:852
+#inc/lib.rateit.index.php:855
 $GLOBALS['__l10n']['Activate addon tag'] = 'Activer l\'extension pour les tags';
 
-#inc/lib.rateit.index.php:863
+#inc/lib.rateit.index.php:866
 $GLOBALS['__l10n']['Disactivate addon tag'] = 'Désactiver l\'extension pour les tags';
 
-#inc/lib.rateit.index.php:888
+#inc/lib.rateit.index.php:891
 $GLOBALS['__l10n']['This is a list of all the tags having rating'] = 'Ceci est la liste des tags aillants des votes';
 
-#inc/lib.rateit.index.php:892
+#inc/lib.rateit.index.php:895
 $GLOBALS['__l10n']['There is no tag rating at this time'] = 'Il n\'y a pas de vote sur les tags pour l\'instant';
 
-#inc/lib.rateit.index.php:910
+#inc/lib.rateit.index.php:913
 $GLOBALS['__l10n']['Selected tags action:'] = 'Action sur les tags selectionnés :';
 
-#inc/lib.rateit.index.php:966
+#inc/lib.rateit.index.php:969
 $GLOBALS['__l10n']['Galleries'] = 'Galeries';
 
-#inc/lib.rateit.index.php:970
+#inc/lib.rateit.index.php:973
 $GLOBALS['__l10n']['Settings for galleries'] = 'Paramètres pour les galeries';
 
-#inc/lib.rateit.index.php:974
+#inc/lib.rateit.index.php:977
 $GLOBALS['__l10n']['Enable addon gallery'] = 'Activer l\'extension pour les galeries';
 
-#inc/lib.rateit.index.php:975
+#inc/lib.rateit.index.php:978
 $GLOBALS['__l10n']['Enable addon gallery item'] = 'Activer l\'extension pour les images';
 
-#inc/lib.rateit.index.php:976
+#inc/lib.rateit.index.php:979
 $GLOBALS['__l10n']['Include on galleries page'] = 'Inclure dans la page des galeries';
 
-#inc/lib.rateit.index.php:977
+#inc/lib.rateit.index.php:980
 $GLOBALS['__l10n']['Include on gallery items pages'] = 'Inclure dans la page des images';
 
-#inc/lib.rateit.index.php:1008
+#inc/lib.rateit.index.php:1011
 $GLOBALS['__l10n']['List of galleries'] = 'Liste des galeries';
 
-#inc/lib.rateit.index.php:1010
+#inc/lib.rateit.index.php:1013
 $GLOBALS['__l10n']['This is a list of all the galleries having rating'] = 'Ceci est la liste des galeries aillants des votes';
 
-#inc/lib.rateit.index.php:1014
+#inc/lib.rateit.index.php:1017
 $GLOBALS['__l10n']['There is no gallery rating at this time'] = 'Il n\'y a pas vote sur les galeries pour l\'instant';
 
-#inc/lib.rateit.index.php:1032
+#inc/lib.rateit.index.php:1035
 $GLOBALS['__l10n']['Selected galeries action:'] = 'Action sur les galeries selectionnées :';
 
-#inc/lib.rateit.index.php:1063
+#inc/lib.rateit.index.php:1066
 $GLOBALS['__l10n']['List of images'] = 'Liste des images';
 
-#inc/lib.rateit.index.php:1065
+#inc/lib.rateit.index.php:1068
 $GLOBALS['__l10n']['This is a list of all the galleries items having rating'] = 'Ceci est la liste des images aillants des votes';
 
-#inc/lib.rateit.index.php:1069
+#inc/lib.rateit.index.php:1072
 $GLOBALS['__l10n']['There is no gallery item rating at this time'] = 'Il n\'y a pas de vote sur les images pour l\'instant';
 
-#inc/lib.rateit.index.php:1087
+#inc/lib.rateit.index.php:1090
 $GLOBALS['__l10n']['Selected galeries items action:'] = 'Action sur les images selectionnées :';
 
 #index.php:71
