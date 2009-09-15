@@ -68,13 +68,23 @@ class rateIt
 		$cur->rateit_quotient = $this->quotient;
 		$cur->rateit_time = date('Y-m-d H:i:s');
 
+
+		# --BEHAVIOR-- rateItBeforeSet
+		$this->core->callBehavior('rateItBeforeSet',$cur);
+
+
 		$cur->insert();
 		$this->core->con->unlock();
 		$this->core->blog->triggerBlog();
 
 		if ($this->ident > 0)
 			setcookie('rateit-'.$type.'-'.$id,1,(time()+3600*365));
-		
+
+
+		# --BEHAVIOR-- rateItAfterSet
+		$this->core->callBehavior('rateItAfterSet',$cur);
+
+
 		return true;
 	}
 	

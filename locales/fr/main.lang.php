@@ -204,7 +204,7 @@ $GLOBALS['__l10n']['This disables the file "rateit.css" if you want to include y
 $GLOBALS['__l10n']['This message replaces stars, leave it empty to not replace stars'] = 'Ce message remplace les images, laisser ce champ vide pour ne pas modifier l\'image';
 
 #inc/lib.rateit.index.php:268
-$GLOBALS['__l10n']['In order to change url of public page you can use plugin dcUrlHandlers.'] = 'Pour modifier l\'url de la page publique vous pouvez utiliser le plugin dcUrlHandlers';
+$GLOBALS['__l10n']['In order to change url of public page you can use plugin myUrlHandlers.'] = 'Pour modifier l\'url de la page publique vous pouvez utiliser le plugin myUrlHandlers';
 
 #inc/lib.rateit.index.php:271
 $GLOBALS['__l10n']['Image'] = 'Image';

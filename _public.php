@@ -350,7 +350,7 @@ class tplRateIt
 			" \$rateit_params['id'] = \$_ctx->categories->cat_id; \n".
 			"} \n";
 		}
-		elseif ($type == 'tag') {
+		elseif ($type == 'tag' || $type == 'meta') {
 
 			$return = 
 			"if (\$_ctx->exists('meta')".

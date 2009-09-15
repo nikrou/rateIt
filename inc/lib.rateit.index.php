@@ -265,7 +265,7 @@ class rateItTabs
 		'</table>'.
 		'<p class="form-note">*'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p>'. 
 		'<p class="form-note">**'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.
-		'<p class="form-note">'.__('In order to change url of public page you can use plugin dcUrlHandlers.').'</p>'.
+		'<p class="form-note">'.__('In order to change url of public page you can use plugin myUrlHandlers.').'</p>'.
 		'</div>'.
 		'<div class="col">'.
 		'<h2>'.__('Image').'</h2>';

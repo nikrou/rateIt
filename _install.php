@@ -27,17 +27,22 @@ $old_version = $core->getVersion('rateIt');
 if (version_compare($old_version,$new_version,'>=')) return;
 
 try {
+	# Is DC 2.1.5 ?
+	if (!version_compare(DC_VERSION,'2.1.5','>=')) {
+
+		throw new Exception('rateIt requires Dotclear 2.1.5');
+	}
 	# Database
 	$s = new dbStruct($core->con,$core->prefix);
 	$s->rateit
 		->blog_id ('varchar',32,false)
-		->rateit_id ('varchar',255,false)
-		->rateit_type('varchar',64,false)
+		->rateit_id ('varchar',192,false)
+		->rateit_type('varchar',16,false)
 		->rateit_note ('float',0,false)
 		->rateit_quotient ('float',0,false)
-		->rateit_ip ('varchar',64,false)
+		->rateit_ip ('varchar',48,false)
 		->rateit_time ('timestamp',0,false,'now()')
-		->primary('pk_rateit','blog_id','rateit_type','rateit_id','rateit_ip')
+		->primary('pk_rateit','blog_id','rateit_type','rateit_id','rateit_ip') //mysql error 1071 limit key to 768.
 		->index('idx_rateit_blog_id','btree','blog_id')
 		->index('idx_rateit_rateit_type','btree','rateit_type')
 		->index('idx_rateit_rateit_id','btree','rateit_id')

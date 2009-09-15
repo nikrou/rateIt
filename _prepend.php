@@ -30,4 +30,10 @@ $core->url->register('rateItservice',
 # Generic class (Used on several plugins)
 if (!is_callable(array('libImagePath','getArray')))
 	require dirname(__FILE__).'/inc/lib.image.path.php';
+
+# Add rateIt report on plugin activityReport
+if ($core->activityReport instanceof activityReport)
+{
+	require_once dirname(__FILE__).'/inc/lib.rateit.activityreport.php';
+}
 ?>

@@ -129,6 +129,7 @@ class rateItBackup
 
 		elseif ($line->rateit_type == 'comment') {
 			# Can't retreive old/new comment_id
+			# See: http://dev.dotclear.org/2.0/ticket/789#comment:1
 			return;
 		}
 

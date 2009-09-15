@@ -1,3 +1,9 @@
+0.9.5 20090915
+ * Fixed erreur 1071 in some MySQL servers
+ * Added type ''meta'' equal to type ''tag''
+ * Added support for plugin activityReport
+ * Fixed typo
+
 0.9.4 20090903
  * Fixed CSS features (validation, option, file length)
  * Fixed import/export behaviors

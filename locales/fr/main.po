@@ -272,8 +272,8 @@ msgid "This message replaces stars, leave it empty to not replace stars"
 msgstr "Ce message remplace les images, laisser ce champ vide pour ne pas modifier l'image"
 
 #: inc/lib.rateit.index.php:268
-msgid "In order to change url of public page you can use plugin dcUrlHandlers."
-msgstr "Pour modifier l'url de la page publique vous pouvez utiliser le plugin dcUrlHandlers"
+msgid "In order to change url of public page you can use plugin myUrlHandlers."
+msgstr "Pour modifier l'url de la page publique vous pouvez utiliser le plugin myUrlHandlers"
 
 #: inc/lib.rateit.index.php:271
 msgid "Image"
