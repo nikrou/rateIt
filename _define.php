@@ -17,8 +17,8 @@ $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your posts",
 	/* Author */			"JC Denis",
-	/* Version */			'0.9.5',
+	/* Version */			'0.9.6',
 	/* Permissions */		'admin'
 );
-	/* date */		#20090909
+	/* date */		#20090923
 ?>

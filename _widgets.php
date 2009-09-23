@@ -111,7 +111,8 @@ class rateItAdminWidget
 			1=>1,2=>2,3=>3,4=>4,5=>5,10=>10,15=>15,20=>20));
 		$w->rateitrank->setting('sortby',__('Order by:'),'rateit_avg','combo',array(
 			__('Note') => 'rateit_avg',
-			__('Votes') => 'rateit_total'));
+			__('Votes') => 'rateit_total',
+			__('Date') => 'rateit_time'));
 		$w->rateitrank->setting('sort',__('Sort:'),'desc','combo',array(
 			__('Ascending') => 'asc',
 			__('Descending') => 'desc'));

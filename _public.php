@@ -82,17 +82,17 @@ class urlRateIt extends dcUrlHandlers
 
 		if (!$core->blog->settings->rateit_active) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		if (!preg_match('#([^/]+)/([^/]+)$#',$args,$m)) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		if (!isset($_POST['rateit-'.$m[1].'-'.$m[2]])) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		$voted = false;
@@ -111,7 +111,7 @@ class urlRateIt extends dcUrlHandlers
 			$post = $core->blog->getPosts(array('post_id'=>$id,'no_content'=>1));
 			if ($post->post_id) {
 				http::redirect($core->blog->url.$core->url->getBase('post').'/'.$post->post_url.($voted ? '#rateit' : ''));
-				exit;
+				return;
 			}
 		}
 
@@ -119,6 +119,7 @@ class urlRateIt extends dcUrlHandlers
 			$comment = $core->blog->getComments($id);
 			if ($comment->comment_id) {
 				http::redirect($core->blog->url.$core->url->getBase('post').'/'.$post->post_url.($voted ? '#rateit' : ''));
+				return;
 			}
 		}
 
@@ -126,6 +127,7 @@ class urlRateIt extends dcUrlHandlers
 			$cat = $core->blog->getCategory($id);
 			if ($cat->cat_id) {
 				http::redirect($core->blog->url.$core->url->getBase('category').'/'.$cat->cat_url.($voted ? '#rateit' : ''));
+				return;
 			}
 		}
 
@@ -134,6 +136,7 @@ class urlRateIt extends dcUrlHandlers
 			$metas = $objMeta->getMeta('tag',null,$id);
 			if ($metas->meta_id) {
 				http::redirect($core->blog->url.$core->url->getBase('tag').'/'.$metas->meta_id.($voted ? '#rateit' : ''));
+				return;
 			}
 		}
 
@@ -141,6 +144,7 @@ class urlRateIt extends dcUrlHandlers
 			$gal = $core->blog->getPost(array('post_id'=>$id,'no_content'=>true));
 			if ($gal->cat_id) {
 				http::redirect($core->blog->url.$core->url->getBase('galleries').'/'.$gal->post_url.($voted ? '#rateit' : ''));
+				return;
 			}
 		}
 
@@ -148,6 +152,7 @@ class urlRateIt extends dcUrlHandlers
 			$gal = $core->blog->getPost(array('post_id'=>$id,'no_content'=>true));
 			if ($gal->cat_id) {
 				http::redirect($core->blog->url.$core->url->getBase('gal').'/'.$gal->post_url.($voted ? '#rateit' : ''));
+				return;
 			}
 		}
 		# --BEHAVIOR-- templateRateItRedirect
@@ -155,7 +160,7 @@ class urlRateIt extends dcUrlHandlers
 
 
 		http::redirect($core->blog->url);
-		exit;
+		return;
 	}
 
 	public static function files($args)
@@ -164,23 +169,23 @@ class urlRateIt extends dcUrlHandlers
 
 		if (!$core->blog->settings->rateit_active) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		if (!preg_match('#^(.*?)$#',$args,$m)) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		if (!($f = self::searchRateItTplFiles($m[1]))) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		$allowed_types = array('png','jpg','jpeg','gif','css','js','swf');
 		if (!file_exists($f) || !in_array(files::getExtension($f),$allowed_types)) {
 			self::p404();
-			exit;
+			return;
 		}
 
 		//http::cache(array_merge(array($f),get_included_files()));
@@ -192,7 +197,7 @@ class urlRateIt extends dcUrlHandlers
 		} else {
 			echo preg_replace('#url\((?!(http:)|/)#','url('.$core->blog->url.$core->url->getBase('rateItmodule').'/',file_get_contents($f));
 		}
-		exit;
+		return;
 	}
 
 	public static function publicHeadContent($core)
@@ -642,7 +647,7 @@ class rateItPublicWidget
 		 || $w->homeonly && $core->url->type != 'default') return;
 
 		$p = array('from'=>'','sql'=>'','columns'=>array());
-		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total'))) ? 
+		$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total','rateit_time'))) ? 
 			$w->sortby.' ' : 'rateit_total ';
 
 		$p['order'] .= $w->sort == 'desc' ? 'DESC' : 'ASC';

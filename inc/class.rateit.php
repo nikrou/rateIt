@@ -16,6 +16,8 @@ if (!defined('DC_RC_PATH')){return;}
 class rateIt
 {
 	public $core;
+	public $con;
+	private $blog;
 	private $table;
 	private $quotient;
 	private $digit;
@@ -26,6 +28,8 @@ class rateIt
 	public function __construct($core)
 	{
 		$this->core =& $core;
+		$this->con = $core->con;
+		$this->blog = $core->con->escape($core->blog->id);
 		$this->table = $core->prefix.'rateit';
 		$this->quotient = $core->blog->settings->rateit_quotient;
 		$this->digit = $core->blog->settings->rateit_digit;
@@ -57,10 +61,10 @@ class rateIt
 		if (!in_array($type,$this->types))
 			return false;
 
-		$cur = $this->core->con->openCursor($this->table);
-		$this->core->con->writeLock($this->table);
+		$cur = $this->con->openCursor($this->table);
+		$this->con->writeLock($this->table);
 
-		$cur->blog_id = $this->core->blog->id;
+		$cur->blog_id = $this->blog;
 		$cur->rateit_type = (string) $type;
 		$cur->rateit_id = (string) $id;
 		$cur->rateit_ip = (string) $this->ip;
@@ -74,7 +78,7 @@ class rateIt
 
 
 		$cur->insert();
-		$this->core->con->unlock();
+		$this->con->unlock();
 		$this->core->blog->triggerBlog();
 
 		if ($this->ident > 0)
@@ -92,15 +96,15 @@ class rateIt
 	{
 		$req=
 			'SELECT rateit_note, rateit_quotient '.
-			'FROM '.$this->table.' WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' ';
+			'FROM '.$this->table.' WHERE blog_id=\''.$this->blog.'\' ';
 		if ($type!=null)
-			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
+			$req .= 'AND rateit_type=\''.$this->con->escape($type).'\' ';
 		if ($id!=null)
-			$req .= 'AND rateit_id=\''.$this->core->con->escape($id).'\' ';
+			$req .= 'AND rateit_id=\''.$this->con->escape($id).'\' ';
 		if ($ip!=null)
-			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
+			$req .= 'AND rateit_ip=\''.$this->con->escape($ip).'\' ';
 
-		$rs = $this->core->con->select($req);
+		$rs = $this->con->select($req);
 		$rs->toStatic();
 
 		$note = $sum = $max = $total = 0;
@@ -134,15 +138,15 @@ class rateIt
 
 	public function voted($type=null,$id=null)
 	{
-		$rs = $this->core->con->select(
+		$rs = $this->con->select(
 			'SELECT COUNT(*) '.
 			'FROM '.$this->table.' '.
-			'WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' '.
-			'AND rateit_ip=\''.$this->core->con->escape($this->ip).'\' '.
+			'WHERE blog_id=\''.$this->blog.'\' '.
+			'AND rateit_ip=\''.$this->con->escape($this->ip).'\' '.
 			($type!=null ? 
-			'AND rateit_type=\''.$this->core->con->escape($type).'\' ' : '').
+			'AND rateit_type=\''.$this->con->escape($type).'\' ' : '').
 			($id!=null ? 
-			'AND rateit_id=\''.$this->core->con->escape($id).'\' ' : '')
+			'AND rateit_id=\''.$this->con->escape($id).'\' ' : '')
 		);
 		$sql = (boolean) $rs->f(0);
 		$cookie = false;
@@ -156,15 +160,15 @@ class rateIt
 	{
 		$req = 
 			'DELETE FROM '.$this->table.' '.
-			'WHERE blog_id=\''.$this->core->con->escape($this->core->blog->id).'\' ';
+			'WHERE blog_id=\''.$this->blog.'\' ';
 		if (null !== $type)
-			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
+			$req .= 'AND rateit_type=\''.$this->con->escape($type).'\' ';
 		if (null !== $id)
-			$req .= 'AND rateit_id=\''.$this->core->con->escape($id).'\' ';
+			$req .= 'AND rateit_id=\''.$this->con->escape($id).'\' ';
 		if (null !== $ip)
-			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
+			$req .= 'AND rateit_ip=\''.$this->con->escape($ip).'\' ';
 
-		$rs = $this->core->con->select($req);
+		$rs = $this->con->select($req);
 		$this->core->blog->triggerBlog();
 	}
 
@@ -182,12 +186,12 @@ class rateIt
 		if (!isset($params['sql'])) $params['sql'] = '';
 
 		if (!empty($params['rateit_type'])) {
-			$params['sql'] .= "AND rateit_type = '".$this->core->con->escape($params['rateit_type'])."' ";
+			$params['sql'] .= "AND rateit_type = '".$this->con->escape($params['rateit_type'])."' ";
 			unset($params['rateit_type']);
 		}
 
 		if (!empty($params['post_type'])) {
-			$params['sql'] .= "AND post_type = '".$this->core->con->escape($params['post_type'])."' ";
+			$params['sql'] .= "AND post_type = '".$this->con->escape($params['post_type'])."' ";
 			unset($params['post_type']);
 		}
 
@@ -252,15 +256,15 @@ class rateIt
 			$strReq .= $params['from'].' ';
 
 		$strReq .=
-		" WHERE RI.blog_id = '".$this->core->con->escape($this->core->blog->id)."' ";
+		" WHERE RI.blog_id = '".$this->blog."' ";
 
 		# rate type
 		if (isset($params['rateit_type'])) {
 
 			if (is_array($params['rateit_type']) && !empty($params['rateit_type']))
-				$strReq .= 'AND RI.rateit_type '.$this->core->con->in($params['rateit_type']);
+				$strReq .= 'AND RI.rateit_type '.$this->con->in($params['rateit_type']);
 			elseif ($params['rateit_type'] != '')
-				$strReq .= "AND RI.rateit_type = '".$this->core->con->escape($params['rateit_type'])."' ";
+				$strReq .= "AND RI.rateit_type = '".$this->con->escape($params['rateit_type'])."' ";
 		} else
 			$strReq .= "AND RI.rateit_type = 'post' ";
 
@@ -272,7 +276,7 @@ class rateIt
 			else
 				$params['rateit_id'] = array((integer) $params['rateit_id']);
 
-			$strReq .= 'AND RI.rateit_id '.$this->core->con->in($params['rateit_id']);
+			$strReq .= 'AND RI.rateit_id '.$this->con->in($params['rateit_id']);
 		}
 
 		# rate ip
@@ -283,7 +287,7 @@ class rateIt
 			else
 				$params['rateit_ip'] = array((integer) $params['rateit_ip']);
 
-			$strReq .= 'AND RI.rateit_ip '.$this->core->con->in($params['rateit_ip']);
+			$strReq .= 'AND RI.rateit_ip '.$this->con->in($params['rateit_ip']);
 		}
 
 		if (!empty($params['sql']))
@@ -295,13 +299,13 @@ class rateIt
 				$strReq .= ', '.implode(', ',$params['groups']).' ';
 
 			if (!empty($params['order']))
-				$strReq .= 'ORDER BY '.$this->core->con->escape($params['order']).' ';
+				$strReq .= 'ORDER BY '.$this->con->escape($params['order']).' ';
 			else
 				$strReq .= 'ORDER BY rateit_time DESC ';
 		}
 
 		if (!$count_only && !empty($params['limit']))
-			$strReq .= $this->core->con->limit($params['limit']);
+			$strReq .= $this->con->limit($params['limit']);
 
 		$rs = $this->core->con->select($strReq);
 
@@ -321,16 +325,16 @@ class rateIt
 		else
 			$req .= 'rateit_id,rateit_type,rateit_note,rateit_quotient,rateit_ip,rateit_time ';
 
-		$req .= 'FROM '.$this->table.' WHERE blog_id=\''.$this->core->blog->id.'\' ';
+		$req .= 'FROM '.$this->table.' WHERE blog_id=\''.$this->blog.'\' ';
 
 		if (null !== $type)
-			$req .= 'AND rateit_type=\''.$this->core->con->escape($type).'\' ';
+			$req .= 'AND rateit_type=\''.$this->con->escape($type).'\' ';
 		if (null !== $id)
-			$req .= 'AND rateit_id=\''.$this->core->con->escape($id).'\' ';
+			$req .= 'AND rateit_id=\''.$this->con->escape($id).'\' ';
 		if (null !== $ip)
-			$req .= 'AND rateit_ip=\''.$this->core->con->escape($ip).'\' ';
+			$req .= 'AND rateit_ip=\''.$this->con->escape($ip).'\' ';
 
-		$rs = $this->core->con->select($req);
+		$rs = $this->con->select($req);
 
 		if ($count_only)
 			return $rs->f(0);

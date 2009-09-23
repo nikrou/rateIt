@@ -1,3 +1,11 @@
+x.x.x xxxxxxxx
+ - Not fixed bug with rate by cookie
+
+0.9.6 20090923
+ * Fixed DC 2.1.6 URL handlers ending
+ * Added sort by sort rate by date (thanks to lottie14)
+ * Cleaned some stuff
+
 0.9.5 20090915
  * Fixed erreur 1071 in some MySQL servers
  * Added type ''meta'' equal to type ''tag''
