@@ -150,6 +150,14 @@ class rateItTabs
 		__('Ascending') => 'asc'
 		);
 
+		$combos->firstimage_size = array(
+			__('square') => 'sq',
+			__('thumbnail') => 't',
+			__('small') => 's',
+			__('medium') => 'm',
+			__('original') => 'o'
+		);
+
 		return $combos;
 	}
 
@@ -191,35 +199,40 @@ class rateItTabs
 	public static function settingsTab($core,$requests,$combos)
 	{
 		if (!$core->auth->check('admin',$core->blog->id)) return;
+		$s =& $core->blog->settings;
 
 		echo '<div class="multi-part" id="admin" title="'.__('Settings').'">';
 
 		# Save admin options
-		if (!empty($_POST['save']['admin']) && isset($_POST['s'])) {
-			try {
-				$core->blog->settings->setNamespace('rateit');
-				$core->blog->settings->put('rateit_active',$_POST['s']['rateit_active'],'boolean','rateit plugin enabled',true,false);
-				$core->blog->settings->put('rateit_userident',$_POST['s']['rateit_userident'],'integer','rateit use cookie and/or ip',true,false);
-				$core->blog->settings->put('rateit_dispubjs',$_POST['s']['rateit_dispubjs'],'boolean','disable rateit public javascript',true,false);
-				$core->blog->settings->put('rateit_dispubcss',$_POST['s']['rateit_dispubcss'],'boolean','disable rateit public css',true,false);
-				$core->blog->settings->put('rateit_quotient',$_POST['s']['rateit_quotient'],'integer','rateit maximum note',true,false);
-				$core->blog->settings->put('rateit_digit',$_POST['s']['rateit_digit'],'integer','rateit note digits number',true,false);
-				$core->blog->settings->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks'],'string','rateit message when voted',true,false);
+		if (!empty($_POST['save']['admin']) && isset($_POST['s']))
+		{
+			try
+			{
+				$s->setNamespace('rateit');
+				$s->put('rateit_active',$_POST['s']['rateit_active']);
+				$s->put('rateit_userident',$_POST['s']['rateit_userident']);
+				$s->put('rateit_dispubjs',$_POST['s']['rateit_dispubjs']);
+				$s->put('rateit_dispubcss',$_POST['s']['rateit_dispubcss']);
+				$s->put('rateit_quotient',$_POST['s']['rateit_quotient']);
+				$s->put('rateit_digit',$_POST['s']['rateit_digit']);
+				$s->put('rateit_msgthanks',$_POST['s']['rateit_msgthanks']);
+				$s->put('rateit_firstimage_size',$_POST['s']['rateit_firstimage_size']);
+				$s->setNamespace('system');
 
 				# Destination image according to libImagePath()
-				$dest_file = DC_ROOT.'/'.$core->blog->settings->public_path.'/rateIt-default-image.png';
+				$dest_file = DC_ROOT.'/'.$s->public_path.'/rateIt-default-image.png';
 
 				# Change rate image
-				if (isset($_POST['s']['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['s']['starsimage'])) {
-
+				if (isset($_POST['s']['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['s']['starsimage']))
+				{
 					$source = dirname(__FILE__).'/../default-templates/img/stars/'.$_POST['s']['starsimage'];
 
 					if (file_exists($source))
 						file_put_contents($dest_file,file_get_contents($source));
 				}
 				# Upload rate image
-				if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name']) {
-
+				if (isset($_POST['s']['starsimage']) && $_POST['s']['starsimage'] == 'user' && $_FILES['starsuserfile']['tmp_name'])
+				{
 					if (2 == $_FILES['starsuserfile']['error'])
 						throw new Exception(__('Maximum file size exceeded'));
 
@@ -253,14 +266,16 @@ class rateItTabs
 		'<h2>'.__('Options').'</h2>'.
 		'<table>'.
 		'<tr><th colspan="2">'.__('Extension').'</th></tr>'.
-		'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_active).'</td></tr>'.
-		'<tr><td>'.__('Disable public javascript').'</td><td>'.form::combo(array('s[rateit_dispubjs]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_dispubjs).'</td></tr>'.
-		'<tr><td>'.__('Disable public css').'</td><td>'.form::combo(array('s[rateit_dispubcss]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_dispubcss).'</td></tr>'.
-		'<tr><td>'.__('Identify users by').'*</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$core->blog->settings->rateit_userident).'</td></tr>'.
+		'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$s->rateit_active).'</td></tr>'.
+		'<tr><td>'.__('Disable public javascript').'</td><td>'.form::combo(array('s[rateit_dispubjs]'),array(__('no')=>0,__('yes')=>1),$s->rateit_dispubjs).'</td></tr>'.
+		'<tr><td>'.__('Disable public css').'</td><td>'.form::combo(array('s[rateit_dispubcss]'),array(__('no')=>0,__('yes')=>1),$s->rateit_dispubcss).'</td></tr>'.
+		'<tr><td>'.__('Identify users by').'*</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$s->rateit_userident).'</td></tr>'.
 		'<tr><th colspan="2">'.__('Note').'</th></tr>'.
-		'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$core->blog->settings->rateit_quotient).'</td></tr>'.
-		'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$core->blog->settings->rateit_digit).'</td></tr>'.
-		'<tr><td>'.__('Message of thanks').'**</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($core->blog->settings->rateit_msgthanks),'',2).'</td></tr>'.
+		'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$s->rateit_quotient).'</td></tr>'.
+		'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$s->rateit_digit).'</td></tr>'.
+		'<tr><td>'.__('Message of thanks').'**</td><td>'.form::field(array('s[rateit_msgthanks]'),40,255,html::escapeHTML($s->rateit_msgthanks),'',2).'</td></tr>'.
+		'<tr><th colspan="2">'.__('Misc').'</th></tr>'.
+		'<tr><td>'.__('Widget entry image size').'</td><td>'.form::combo(array('s[rateit_firstimage_size]'),$combos->firstimage_size,$s->rateit_firstimage_size).'</td></tr>'.
 		'</table>'.
 		'<p class="form-note">*'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p>'. 
 		'<p class="form-note">**'.__('This message replaces stars, leave it empty to not replace stars').'</p>'.

@@ -49,39 +49,42 @@ try {
 
 	$si = new dbStruct($core->con,$core->prefix);
 	$changes = $si->synchronize($s);
+	$s = null;
 
-	$core->blog->settings->setNameSpace('rateit');
+	$s =& $core->blog->settings;
+	$s->setNameSpace('rateit');
 
 	# Settings main
-	$core->blog->settings->put('rateit_active',false,'boolean','rateit plugin enabled',false,true);
-	$core->blog->settings->put('rateit_importexport_active',true,'boolean','rateit import/export enabled',false,true);
-	$core->blog->settings->put('rateit_quotient',5,'integer','rateit maximum note',false,true);
-	$core->blog->settings->put('rateit_digit',1,'integer','rateit note digits number',false,true);
-	$core->blog->settings->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',false,true);
-	$core->blog->settings->put('rateit_userident',0,'integer','rateit use cookie and/or ip',false,true);
-	$core->blog->settings->put('rateit_dispubjs',false,'boolean','disable rateit public javascript',false,true);
-	$core->blog->settings->put('rateit_dispubcss',false,'boolean','disable rateit public css',false,true);
+	$s->put('rateit_active',false,'boolean','rateit plugin enabled',false,true);
+	$s->put('rateit_importexport_active',true,'boolean','rateit import/export enabled',false,true);
+	$s->put('rateit_quotient',5,'integer','rateit maximum note',false,true);
+	$s->put('rateit_digit',1,'integer','rateit note digits number',false,true);
+	$s->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',false,true);
+	$s->put('rateit_userident',0,'integer','rateit use cookie and/or ip',false,true);
+	$s->put('rateit_dispubjs',false,'boolean','disable rateit public javascript',false,true);
+	$s->put('rateit_dispubcss',false,'boolean','disable rateit public css',false,true);
+	$s->put('rateit_firstimage_size','t','string','Size of entryfirstimage on widget',false,true);
 	# Settings for posts
-	$core->blog->settings->put('rateit_post_active',true,'boolean','Enabled post rating',false,true);
-	$core->blog->settings->put('rateit_poststpl',false,'boolean','rateit template on post on post page',false,true);
-	$core->blog->settings->put('rateit_homepoststpl',false,'boolean','rateit template on post on home page',false,true);
-	$core->blog->settings->put('rateit_tagpoststpl',false,'boolean','rateit template on post on tag page',false,true);
-	$core->blog->settings->put('rateit_categorypoststpl',false,'boolean','rateit template on post on category page',false,true);
-	$core->blog->settings->put('rateit_categorylimitposts',false,'integer','rateit limit post vote to one category',false,true);
+	$s->put('rateit_post_active',true,'boolean','Enabled post rating',false,true);
+	$s->put('rateit_poststpl',false,'boolean','rateit template on post on post page',false,true);
+	$s->put('rateit_homepoststpl',false,'boolean','rateit template on post on home page',false,true);
+	$s->put('rateit_tagpoststpl',false,'boolean','rateit template on post on tag page',false,true);
+	$s->put('rateit_categorypoststpl',false,'boolean','rateit template on post on category page',false,true);
+	$s->put('rateit_categorylimitposts',false,'integer','rateit limit post vote to one category',false,true);
 	# Settings for comments
-	$core->blog->settings->put('rateit_comment_active',false,'boolean','Enable comments rating',false,true);
-	$core->blog->settings->put('rateit_commentstpl',true,'boolean','Use comments behavior',false,true);
+	$s->put('rateit_comment_active',false,'boolean','Enable comments rating',false,true);
+	$s->put('rateit_commentstpl',true,'boolean','Use comments behavior',false,true);
 	# Settings for categories
-	$core->blog->settings->put('rateit_category_active',false,'boolean','rateit category addon enabled',false,true);
+	$s->put('rateit_category_active',false,'boolean','rateit category addon enabled',false,true);
 	# Settings for tags
-	$core->blog->settings->put('rateit_tag_active',false,'boolean','rateit tag addon enabled',false,true);
+	$s->put('rateit_tag_active',false,'boolean','rateit tag addon enabled',false,true);
 	# Settings for galleries
-	$core->blog->settings->put('rateit_gal_active',false,'boolean','rateit addon gallery enabled',false,true);
-	$core->blog->settings->put('rateit_galitem_active',false,'boolean','rateit addon gallery item enabled',false,true);
-	$core->blog->settings->put('rateit_galtpl',true,'boolean','rateit template galleries page',false,true);
-	$core->blog->settings->put('rateit_galitemtpl',true,'boolean','rateit template gallery items page',false,true);
+	$s->put('rateit_gal_active',false,'boolean','rateit addon gallery enabled',false,true);
+	$s->put('rateit_galitem_active',false,'boolean','rateit addon gallery item enabled',false,true);
+	$s->put('rateit_galtpl',true,'boolean','rateit template galleries page',false,true);
+	$s->put('rateit_galitemtpl',true,'boolean','rateit template gallery items page',false,true);
 
-	$core->blog->settings->setNameSpace('system');
+	$s->setNameSpace('system');
 
 	# Version
 	$core->setVersion('rateIt',$core->plugins->moduleInfo('rateIt','version'));

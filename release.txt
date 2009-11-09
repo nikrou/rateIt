@@ -1,6 +1,9 @@
 x.x.x xxxxxxxx
  - Not fixed bug with rate by cookie
 
+0.9.7.1 20091109
+ * Fixed missing settings for widget and image
+
 0.9.7 20091108
  * Added entryFirstImage to wigdet
  * Fixed bug with date sorting on widget
