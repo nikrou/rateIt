@@ -1,14 +1,13 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-#
+# 
 # Copyright (c) 2009 JC Denis and contributors
 # jcdenis@gdwd.com
-#
+# 
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')){return;}
@@ -610,7 +609,9 @@ class rateItPublicWidget
 		elseif ($w->show_fullnote == 'full')
 			$res .= '<p><span id="rateit-fullnote-'.$type.'-'.$id.'" class="rateit-fullnote">'.$rs->note.'/'.$rs->quotient.'</span></p>';
 
-		$res .= '<form class="rateit-linker" id="rateit-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.$core->url->getBase('rateItpostform').'/'.$type.'/'.$id.'" method="post"><p>';
+		$res .= 
+		'<form class="rateit-linker" id="rateit-linker-'.$type.'-'.$id.'" action="'.$core->blog->url.$core->url->getBase('rateItpostform').'/'.$type.'/'.$id.'" method="post"><p>'.
+		'<input type="hidden" name="rateit-style" value="'.$core->blog->settings->rateit_style.'" />';
 
 		$dis = $voted ? ' disabled="disabled"' : '';
 		for($i=0;$i<$rs->quotient;$i++) {
@@ -664,8 +665,10 @@ class rateItPublicWidget
 
 			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
 			$p['columns'][] = 'P.post_title AS title';
+			$p['columns'][] = 'P.post_id AS id';
 			$p['groups'][] = 'P.post_url';
 			$p['groups'][] = 'P.post_title';
+			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= " AND P.post_type='post' AND P.post_status = 1 AND P.post_password IS NULL ";
 		}
@@ -706,8 +709,10 @@ class rateItPublicWidget
 
 			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('gal')."/'",'P.post_url').' AS url';
 			$p['columns'][] = 'P.post_title AS title';
+			$p['columns'][] = 'P.post_id AS id';
 			$p['groups'][] = 'P.post_url';
 			$p['groups'][] = 'P.post_title';
+			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= "AND post_type='gal' ";
 		}
@@ -717,8 +722,10 @@ class rateItPublicWidget
 
 			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('galitem')."/'",'P.post_url').' AS url';
 			$p['columns'][] = 'P.post_title AS title';
+			$p['columns'][] = 'P.post_id AS id';
 			$p['groups'][] = 'P.post_url';
 			$p['groups'][] = 'P.post_title';
+			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= "AND post_type='galitem' ";
 		}
@@ -766,20 +773,119 @@ class rateItPublicWidget
 				$totaltext = sprintf(__('%d rates'),$rs->rateit_total);
 
 			$i++;
-			$res .= '<li>'.str_replace(array('%rank%','%title%','%note%','%quotient%','%percent%','%count%','%totaltext%'),array(
-				'<span class="rateit-rank">'.$i.'</span>',
-				'<a href="'.$rs->url.'">'.$title.'</a>',
-				round($rs->rateit_avg * $q,$d),
-				$q,
-				floor($rs->rateit_avg * 100),
-				$rs->rateit_total,
-				$totaltext
-			),
-			$w->text).'</li>';
+			$res .= '<li>'.str_replace(
+				array(
+					'%rank%',
+					'%title%',
+					'%note%',
+					'%quotient%',
+					'%percent%',
+					'%count%',
+					'%totaltext%',
+					'%entryfirstimage%'
+				),
+				array(
+					'<span class="rateit-rank">'.$i.'</span>',
+					'<a href="'.$rs->url.'">'.$title.'</a>',
+					round($rs->rateit_avg * $q,$d),
+					$q,
+					floor($rs->rateit_avg * 100),
+					$rs->rateit_total,
+					$totaltext,
+					self::entryFirstImage($core,$w->type,$rs->id)
+				),
+				$w->text
+			).'</li>';
 		}
 		$res .= '</ul></div>';
 
 		return $res;
+	}
+
+	private static function entryFirstImage($core,$type,$id)
+	{
+		if (!in_array($type,array('post','gal','galitem'))) return '';
+
+		$rs = $core->blog->getPosts(array('post_id'=>$id,'post_type'=>$type));
+
+		if ($rs->isEmpty()) return '';
+
+		$size = $core->blog->settings->rateit_firstimage_size;
+		if (!preg_match('/^sq|t|s|m|o$/',$size))
+		{
+			$size = 's';
+		}
+
+		$p_url = $core->blog->settings->public_url;
+		$p_site = preg_replace('#^(.+?//.+?)/(.*)$#','$1',$core->blog->url);
+		$p_root = $core->blog->public_path;
+
+		$pattern = '(?:'.preg_quote($p_site,'/').')?'.preg_quote($p_url,'/');
+		$pattern = sprintf('/<img.+?src="%s(.*?\.(?:jpg|gif|png))"[^>]+/msu',$pattern);
+
+		$src = '';
+		$alt = '';
+
+		$subject = $rs->post_excerpt_xhtml.$rs->post_content_xhtml.$rs->cat_desc;
+		if (preg_match_all($pattern,$subject,$m) > 0)
+		{
+			foreach ($m[1] as $i => $img)
+			{
+				if (($src = self::ContentFirstImageLookup($p_root,$img,$size)) !== false)
+				{
+					$src = $p_url.(dirname($img) != '/' ? dirname($img) : '').'/'.$src;
+					if (preg_match('/alt="([^"]+)"/',$m[0][$i],$malt))
+					{
+						$alt = $malt[1];
+					}
+					break;
+				}
+			}
+		}
+		if (!$src) return '';
+
+		return 
+		'<div class="img-box">'.				
+		'<div class="img-thumbnail">'.
+		'<a title="'.html::escapeHTML($rs->post_title).'" href="'.$rs->getURL().'">'.
+		'<img alt="'.$alt.'" src="'.$src.'" />'.
+		'</a></div>'.
+		"</div>\n";
+	}
+	
+	private static function ContentFirstImageLookup($root,$img,$size)
+	{
+		# Get base name and extension
+		$info = path::info($img);
+		$base = $info['base'];
+		
+		if (preg_match('/^\.(.+)_(sq|t|s|m)$/',$base,$m)) {
+			$base = $m[1];
+		}
+		
+		$res = false;
+		if ($size != 'o' && file_exists($root.'/'.$info['dirname'].'/.'.$base.'_'.$size.'.jpg'))
+		{
+			$res = '.'.$base.'_'.$size.'.jpg';
+		}
+		else
+		{
+			$f = $root.'/'.$info['dirname'].'/'.$base;
+			if (file_exists($f.'.'.$info['extension'])) {
+				$res = $base.'.'.$info['extension'];
+			} elseif (file_exists($f.'.jpg')) {
+				$res = $base.'.jpg';
+			} elseif (file_exists($f.'.png')) {
+				$res = $base.'.png';
+			} elseif (file_exists($f.'.gif')) {
+				$res = $base.'.gif';
+			}
+		}
+		
+		if ($res) {
+			return $res;
+		}
+		return false;
 	}
 }
 ?>

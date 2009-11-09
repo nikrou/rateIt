@@ -1,14 +1,13 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-#
+# 
 # Copyright (c) 2009 JC Denis and contributors
 # jcdenis@gdwd.com
-#
+# 
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
@@ -56,7 +55,7 @@ class rateItTabs
 		$requests = new ArrayObject();
 		$requests->p_url = 'plugin.php?p=rateIt';
 
-		$requests->msg = isset($_REQUEST['done']) ? __('Configuration saved') : '';
+		$requests->msg = isset($_REQUEST['done']) ? __('Configuration successfully updated') : '';
 		$requests->img_green = '<img alt="" src="images/check-on.png" />';
 		$requests->img_red = '<img alt="" src="images/check-off.png" />';
 

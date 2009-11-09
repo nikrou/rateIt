@@ -1,6 +1,12 @@
 x.x.x xxxxxxxx
  - Not fixed bug with rate by cookie
 
+0.9.7 20091108
+ * Added entryFirstImage to wigdet
+ * Fixed bug with date sorting on widget
+ * Fixed bug with plugin ativityReport
+ * Removed about tabs and fixed typo
+
 0.9.6 20090923
  * Fixed DC 2.1.6 URL handlers ending
  * Added sort by sort rate by date (thanks to lottie14)

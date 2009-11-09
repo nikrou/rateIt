@@ -10,14 +10,7 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # -- END LICENSE BLOCK ------------------------------------
 
-if (!defined('DC_RC_PATH')){return;}
+if (!defined('DC_RC_PATH')) { return; }
 
-$this->registerModule(
-	/* Name */			"Rate it",
-	/* Description*/		"Rating system for your posts",
-	/* Author */			"JC Denis",
-	/* Version */			'0.9.7',
-	/* Permissions */		'admin'
-);
-	/* date */		#20091109
+$__resources['help']['rateIt'] = dirname(__FILE__).'/help/help.html';
 ?>
