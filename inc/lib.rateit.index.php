@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -268,8 +268,8 @@ class rateItTabs
 		'<tr><th colspan="2">'.__('Extension').'</th></tr>'.
 		'<tr><td>'.__('Enable plugin').'</td><td>'.form::combo(array('s[rateit_active]'),array(__('no')=>0,__('yes')=>1),$s->rateit_active).'</td></tr>'.
 		'<tr><td>'.__('Disable public javascript').'</td><td>'.form::combo(array('s[rateit_dispubjs]'),array(__('no')=>0,__('yes')=>1),$s->rateit_dispubjs).'</td></tr>'.
-		'<tr><td>'.__('Disable public css').'</td><td>'.form::combo(array('s[rateit_dispubcss]'),array(__('no')=>0,__('yes')=>1),$s->rateit_dispubcss).'</td></tr>'.
-		'<tr><td>'.__('Identify users by').'*</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$s->rateit_userident).'</td></tr>'.
+		'<tr><td>'.__('Disable public css').'*</td><td>'.form::combo(array('s[rateit_dispubcss]'),array(__('no')=>0,__('yes')=>1),$s->rateit_dispubcss).'</td></tr>'.
+		'<tr><td>'.__('Identify users by').'</td><td>'.form::combo(array('s[rateit_userident]'),$combo_userident,$s->rateit_userident).'</td></tr>'.
 		'<tr><th colspan="2">'.__('Note').'</th></tr>'.
 		'<tr><td>'.__('Note out of').'</td><td>'.form::combo(array('s[rateit_quotient]'),$combo_quotient,$s->rateit_quotient).'</td></tr>'.
 		'<tr><td>'.__('Number of digits').'</td><td>'.form::combo(array('s[rateit_digit]'),$combo_digit,$s->rateit_digit).'</td></tr>'.

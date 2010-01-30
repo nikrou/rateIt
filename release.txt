@@ -1,5 +1,11 @@
 x.x.x xxxxxxxx
  - Not fixed bug with rate by cookie
+ - Not added ability to explode post type rating in subcategories
+
+0.9.7.2 20100130
+ * Fixed issue on widget with other plugin that used coreBlogGetPosts
+ * Fixed http header on file serving
+ * Fixed limitation to current blog on some requests
 
 0.9.7.1 20091109
  * Fixed missing settings for widget and image

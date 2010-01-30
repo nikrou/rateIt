@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -14,10 +14,10 @@ if (!defined('DC_RC_PATH')){return;}
 
 $this->registerModule(
 	/* Name */			"Rate it",
-	/* Description*/		"Rating system for your posts",
+	/* Description*/		"Rating system for your blogs",
 	/* Author */			"JC Denis",
-	/* Version */			'0.9.7.1',
+	/* Version */			'0.9.7.2',
 	/* Permissions */		'admin'
 );
-	/* date */		#20091109
+	/* date */		#20100130
 ?>

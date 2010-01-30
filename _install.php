@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -11,25 +11,25 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
+
+$new_version = $core->plugins->moduleInfo('rateIt','version');
+$old_version = $core->getVersion('rateIt');
 //*
 if ($core->plugins->moduleExists('rateItComment') 
  || $core->plugins->moduleExists('rateItCategory')
  || $core->plugins->moduleExists('rateItTag')
  || $core->plugins->moduleExists('rateItGallery')) {
-	throw new Exception('You must uninstall rateItComment, rateItCategory, rateItTag, rateItGallery before installing rateIt 0.9.5 and higher');
+	throw new Exception('You must uninstall rateItComment, rateItCategory, rateItTag, rateItGallery before installing rateIt '.$new_version);
 	return false;
 }
 //*/
-$new_version = $core->plugins->moduleInfo('rateIt','version');
-$old_version = $core->getVersion('rateIt');
-
 if (version_compare($old_version,$new_version,'>=')) return;
 
 try {
-	# Is DC 2.1.5 ?
-	if (!version_compare(DC_VERSION,'2.1.5','>=')) {
-
-		throw new Exception('rateIt requires Dotclear 2.1.5');
+	# Check DC version (dev on)
+	if (!version_compare(DC_VERSION,'2.1.6','>='))
+	{
+		throw new Exception('Plugin called rateIt requires Dotclear 2.1.6 or higher.');
 	}
 	# Database
 	$s = new dbStruct($core->con,$core->prefix);

@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -47,14 +47,14 @@ $this->addDirectAction(
 	/* type */ 'plugins',
 	/* action */ 'delete',
 	/* ns */ 'rateIt',
-	/* description */ __('delete rateIt plugin files')
+	/* description */ sprintf(__('delete %s plugin files'),'rateIt')
 );
 
 $this->addDirectAction(
 	/* type */ 'versions',
 	/* action */ 'delete',
 	/* ns */ 'rateIt',
-	/* description */ __('delete RateIt version number')
+	/* description */  sprintf(__('delete %s version number'),'rateIt')
 );
 
 ?>

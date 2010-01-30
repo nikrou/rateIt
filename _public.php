@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -189,7 +189,7 @@ class urlRateIt extends dcUrlHandlers
 
 		//http::cache(array_merge(array($f),get_included_files()));
 		$type = files::getMimeType($f);
-		header('Content-Type: '.$type);
+		header('Content-Type: '.$type.'; charset=UTF-8');
 		//header('Content-Length: '.filesize($f));
 		if ($type != "text/css" || $core->blog->settings->url_scan == 'path_info') {
 			readfile($f);
@@ -664,6 +664,7 @@ class rateItPublicWidget
 			if (!$core->blog->settings->rateit_post_active) return;
 
 			$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
+			$p['columns'][] = 'P.post_url AS url';
 			$p['columns'][] = 'P.post_title AS title';
 			$p['columns'][] = 'P.post_id AS id';
 			$p['groups'][] = 'P.post_url';
@@ -772,6 +773,15 @@ class rateItPublicWidget
 			else
 				$totaltext = sprintf(__('%d rates'),$rs->rateit_total);
 
+			# Fixed issue with plugin planet
+			if ($w->type == 'post') {
+				$post = $core->blog->getPosts(array('post_id'=>$rs->id));
+				$url = $post->getURL();
+			} else {
+				$url = $rs->url;
+			}
+
+				
 			$i++;
 			$res .= '<li>'.str_replace(
 				array(
@@ -786,7 +796,7 @@ class rateItPublicWidget
 				),
 				array(
 					'<span class="rateit-rank">'.$i.'</span>',
-					'<a href="'.$rs->url.'">'.$title.'</a>',
+					'<a href="'.$url.'">'.$title.'</a>',
 					round($rs->rateit_avg * $q,$d),
 					$q,
 					floor($rs->rateit_avg * 100),

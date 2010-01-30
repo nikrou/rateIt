@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 # 
-# Copyright (c) 2009 JC Denis and contributors
+# Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
 # 
 # Licensed under the GPL version 2.0 license.
@@ -183,6 +183,8 @@ class rateIt
 		$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as char)=rateit_id ';
 
 		if (!isset($params['sql'])) $params['sql'] = '';
+
+		$params['sql'] .= "AND P.blog_id='".$this->blog."' ";
 
 		if (!empty($params['rateit_type'])) {
 			$params['sql'] .= "AND rateit_type = '".$this->con->escape($params['rateit_type'])."' ";
