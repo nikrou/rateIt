@@ -266,7 +266,10 @@ class urlRateIt extends dcUrlHandlers
 		 )
 		 && (
 			!$core->blog->settings->rateit_categorylimitposts
-		  || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id
+		  || (
+				$core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id && !$core->blog->settings->rateit_categorylimitinvert
+			 || $core->blog->settings->rateit_categorylimitposts != $_ctx->posts->cat_id && $core->blog->settings->rateit_categorylimitinvert
+			)
 		 )
 		) {
 
@@ -550,7 +553,10 @@ class rateItPublicWidget
 		if ($w->enable_post && 'post.html' == $_ctx->current_tpl 
 		&& $core->blog->settings->rateit_post_active 
 		&& (!$core->blog->settings->rateit_categorylimitposts
-		 || $core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id)) {
+		 || ($core->blog->settings->rateit_categorylimitposts == $_ctx->posts->cat_id && !$core->blog->settings->rateit_categorylimitinvert 
+			 || $core->blog->settings->rateit_categorylimitposts != $_ctx->posts->cat_id && $core->blog->settings->rateit_categorylimitinvert )
+			)
+		) {
 			$w->type = 'post';
 			$w->id = $_ctx->posts->post_id;
 			$w->title = $w->title_post;
@@ -672,6 +678,10 @@ class rateItPublicWidget
 			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= " AND P.post_type='post' AND P.post_status = 1 AND P.post_password IS NULL ";
+
+			if ($w->catlimit) {
+				$p['sql'] .= " AND P.cat_id='".$w->catlimit."' ";
+			}
 		}
 
 		if ($w->type == 'comment') {
@@ -683,6 +693,10 @@ class rateItPublicWidget
 			$p['groups'][] = 'P.post_title';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON C.comment_id = P.post_id ';
+
+			if ($w->catlimit) {
+				$p['sql'] .= " AND P.cat_id='".$w->catlimit."' ";
+			}
 		}
 
 		if ($w->type == 'category') {
@@ -703,6 +717,11 @@ class rateItPublicWidget
 			$p['groups'][] = 'M.meta_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'meta M ON M.meta_id=RI.rateit_id ';
 			$p['sql'] .= "AND M.meta_type='tag' ";
+
+			if ($w->catlimit) {
+				$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON M.post_id = P.post_id ';
+				$p['sql'] .= " AND P.cat_id='".$w->catlimit."' ";
+			}
 		}
 
 		if ($w->type == 'gal') {
@@ -716,6 +735,10 @@ class rateItPublicWidget
 			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= "AND post_type='gal' ";
+
+			if ($w->catlimit) {
+				$p['sql'] .= " AND P.cat_id='".$w->catlimit."' ";
+			}
 		}
 
 		if ($w->type == 'galitem') {
@@ -729,6 +752,10 @@ class rateItPublicWidget
 			$p['groups'][] = 'P.post_id';
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 			$p['sql'] .= "AND post_type='galitem' ";
+
+			if ($w->catlimit) {
+				$p['sql'] .= " AND P.cat_id='".$w->catlimit."' ";
+			}
 		}
 
 		$w->sql = $p;

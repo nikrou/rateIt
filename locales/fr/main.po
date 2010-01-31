@@ -1,14 +1,14 @@
 # Language: français
-# Module: rateIt - 0.9.7.1
-# Date: 2009-11-09 22:46:12
+# Module: rateIt - 1.0
+# Date: 2010-01-31 16:41:24
 # Translated with translater 1.3
 
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: rateIt 0.9.7.1\n"
+"Project-Id-Version: rateIt 1.0\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-11-09T22:46:12+00:00\n"
+"PO-Revision-Date: 2010-01-31T16:41:24+00:00\n"
 "Last-Translator: JC Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,11 +23,11 @@ msgstr "Évaluer ça"
 #: _admin.php:53
 #: _admin.php:80
 #: inc/lib.rateit.index.php:98
-#: inc/lib.rateit.index.php:700
-#: inc/lib.rateit.index.php:812
-#: inc/lib.rateit.index.php:928
-#: inc/lib.rateit.index.php:1050
-#: inc/lib.rateit.index.php:1105
+#: inc/lib.rateit.index.php:702
+#: inc/lib.rateit.index.php:814
+#: inc/lib.rateit.index.php:930
+#: inc/lib.rateit.index.php:1052
+#: inc/lib.rateit.index.php:1107
 msgid "delete rating"
 msgstr "Effacer les votes"
 
@@ -35,70 +35,70 @@ msgstr "Effacer les votes"
 msgid "Do you really want to delete all votes for these entries?"
 msgstr "Êtes-vous sûr de vouloir effacer les votes pour ces entrées ?"
 
-#: _public.php:441
+#: _public.php:444
 #: _widgets.php:29
 msgid "Rate this entry"
 msgstr "Évaluer ce billet"
 
-#: _public.php:442
+#: _public.php:445
 msgid "Rate this comment"
 msgstr "Évaluer ce commentaire"
 
-#: _public.php:443
+#: _public.php:446
 #: _widgets.php:34
 msgid "Rate this category"
 msgstr "Évaluer cette catégorie"
 
-#: _public.php:444
+#: _public.php:447
 #: _widgets.php:40
 msgid "Rate this tag"
 msgstr "Évaluer ce tag"
 
-#: _public.php:445
+#: _public.php:448
 #: _widgets.php:47
 msgid "Rate this gallery"
 msgstr "Évaluer cette galerie"
 
-#: _public.php:446
+#: _public.php:449
 msgid "Rate this image"
 msgstr "Évaluer cette image"
 
-#: _public.php:467
-#: _public.php:624
+#: _public.php:470
+#: _public.php:630
 msgid "Vote"
 msgstr "Vote"
 
-#: _public.php:490
-#: _public.php:769
+#: _public.php:493
+#: _public.php:797
 msgid "no rate"
 msgstr "aucun vote"
 
-#: _public.php:492
-#: _public.php:771
+#: _public.php:495
+#: _public.php:799
 msgid "one rate"
 msgstr "un vote"
 
-#: _public.php:494
-#: _public.php:773
+#: _public.php:497
+#: _public.php:801
 msgid "%d rates"
 msgstr "%d votes"
 
-#: _public.php:631
+#: _public.php:637
 #: default-templates/tpl/rateit.html:7
 msgid "Note:"
 msgstr "Note :"
 
-#: _public.php:633
+#: _public.php:639
 #: default-templates/tpl/rateit.html:8
 msgid "Votes:"
 msgstr "Votes :"
 
-#: _public.php:635
+#: _public.php:641
 #: default-templates/tpl/rateit.html:9
 msgid "Higher:"
 msgstr "Plus haute :"
 
-#: _public.php:637
+#: _public.php:643
 #: default-templates/tpl/rateit.html:10
 msgid "Lower:"
 msgstr "Plus basse :"
@@ -199,36 +199,40 @@ msgstr "Galerie"
 msgid "Gallery item"
 msgstr "Image"
 
-#: _widgets.php:109
+#: _widgets.php:119
+msgid "Category limit (if possible):"
+msgstr "Limiter à une catégorie (si possible) :"
+
+#: _widgets.php:120
 msgid "Length:"
 msgstr "Longueur :"
 
-#: _widgets.php:112
+#: _widgets.php:123
 #: inc/lib.rateit.index.php:273
 #: inc/lib.rateit.index.php:385
 #: inc/lib.rateit.index.php:444
-#: inc/lib.rateit.index.php:684
-#: inc/lib.rateit.index.php:796
-#: inc/lib.rateit.index.php:915
-#: inc/lib.rateit.index.php:1037
-#: inc/lib.rateit.index.php:1092
-#: inc/lib.rateit.index.php:1209
+#: inc/lib.rateit.index.php:686
+#: inc/lib.rateit.index.php:798
+#: inc/lib.rateit.index.php:917
+#: inc/lib.rateit.index.php:1039
+#: inc/lib.rateit.index.php:1094
+#: inc/lib.rateit.index.php:1211
 msgid "Note"
 msgstr "Note"
 
-#: _widgets.php:113
+#: _widgets.php:124
 #: inc/lib.rateit.index.php:140
 #: inc/lib.rateit.index.php:383
-#: inc/lib.rateit.index.php:685
-#: inc/lib.rateit.index.php:797
-#: inc/lib.rateit.index.php:914
-#: inc/lib.rateit.index.php:1036
-#: inc/lib.rateit.index.php:1091
-#: inc/lib.rateit.index.php:1208
+#: inc/lib.rateit.index.php:687
+#: inc/lib.rateit.index.php:799
+#: inc/lib.rateit.index.php:916
+#: inc/lib.rateit.index.php:1038
+#: inc/lib.rateit.index.php:1093
+#: inc/lib.rateit.index.php:1210
 msgid "Votes"
 msgstr "Votes"
 
-#: _widgets.php:119
+#: _widgets.php:130
 msgid "Title length (if truncate)"
 msgstr "Longueur maxi du titre (si tronqué)"
 
@@ -299,12 +303,24 @@ msgid "Ip"
 msgstr "Ip"
 
 #: inc/lib.rateit.index.php:259
+msgid "Cookie"
+msgstr "Cookie"
+
+#: inc/lib.rateit.index.php:259
 msgid "Both ip and cookie"
 msgstr "Ip et cookie"
 
 #: inc/lib.rateit.index.php:262
 msgid "Administration of options of this extension on this blog"
 msgstr "Administration de l'extension sur ce blog"
+
+#: inc/lib.rateit.index.php:266
+msgid "Options"
+msgstr "Options"
+
+#: inc/lib.rateit.index.php:268
+msgid "Extension"
+msgstr "Extension"
 
 #: inc/lib.rateit.index.php:269
 msgid "Enable plugin"
@@ -398,14 +414,18 @@ msgstr "Résumé"
 msgid "There is a total of %s votes on this blog."
 msgstr "Il y a un total de %s votes sur ce blog."
 
+#: inc/lib.rateit.index.php:379
+msgid "Total"
+msgstr "Total"
+
 #: inc/lib.rateit.index.php:380
 msgid "Last"
 msgstr "Dernier"
 
 #: inc/lib.rateit.index.php:387
 #: inc/lib.rateit.index.php:448
-#: inc/lib.rateit.index.php:688
-#: inc/lib.rateit.index.php:800
+#: inc/lib.rateit.index.php:690
+#: inc/lib.rateit.index.php:802
 msgid "Id"
 msgstr "Id"
 
@@ -425,203 +445,207 @@ msgstr "Quotient"
 msgid "delete entry"
 msgstr "effacer cette entrée"
 
-#: inc/lib.rateit.index.php:519
+#: inc/lib.rateit.index.php:520
 msgid "Settings for entries"
 msgstr "Paramètres pour les billets"
 
-#: inc/lib.rateit.index.php:523
+#: inc/lib.rateit.index.php:524
 msgid "Enable posts rating"
 msgstr "Autoriser le vote sur les billets"
 
-#: inc/lib.rateit.index.php:524
+#: inc/lib.rateit.index.php:525
 msgid "Include on entries pages"
 msgstr "Inclure dans les pages des billets"
 
-#: inc/lib.rateit.index.php:525
+#: inc/lib.rateit.index.php:526
 msgid "Include on home page"
 msgstr "Inclure sur la page d'accueil"
 
-#: inc/lib.rateit.index.php:526
+#: inc/lib.rateit.index.php:527
 msgid "Include on tag page"
 msgstr "Inclure sur la page d'un tag"
 
-#: inc/lib.rateit.index.php:527
+#: inc/lib.rateit.index.php:528
 msgid "Include on categories page"
 msgstr "Inclure sur la page des catégories"
 
-#: inc/lib.rateit.index.php:528
+#: inc/lib.rateit.index.php:529
 msgid "Limit to one category"
 msgstr "Limiter à une catégorie"
 
-#: inc/lib.rateit.index.php:536
-#: inc/lib.rateit.index.php:1002
+#: inc/lib.rateit.index.php:530
+msgid "Invert and exclude this category"
+msgstr "Inverser et exclure cette catégorie"
+
+#: inc/lib.rateit.index.php:538
+#: inc/lib.rateit.index.php:1004
 msgid "To use this option you must have behavior \"publicEntryAfterContent\" in your theme"
 msgstr "Pour utiliser cette option vous devez avoir le behavior \"publicEntryAfterContent\" dans votre thème"
 
-#: inc/lib.rateit.index.php:541
+#: inc/lib.rateit.index.php:543
 msgid "List of entries"
 msgstr "Liste des billets"
 
-#: inc/lib.rateit.index.php:545
+#: inc/lib.rateit.index.php:547
 msgid "There is no post rating at this time"
 msgstr "Il n'y a pas de vote sur les billets pour l'instant"
 
-#: inc/lib.rateit.index.php:547
+#: inc/lib.rateit.index.php:549
 msgid "This is the list of all entries having rating"
 msgstr "Ceci est la liste des billets ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:638
+#: inc/lib.rateit.index.php:640
 msgid "Activate addon category"
 msgstr "Activer l'extension pour les catégories"
 
-#: inc/lib.rateit.index.php:649
+#: inc/lib.rateit.index.php:651
 msgid "Disactivate addon category"
 msgstr "Désactiver l'extension pour les catégories"
 
-#: inc/lib.rateit.index.php:667
-#: inc/lib.rateit.index.php:775
-#: inc/lib.rateit.index.php:897
-#: inc/lib.rateit.index.php:1017
-#: inc/lib.rateit.index.php:1072
-#: inc/lib.rateit.index.php:1259
+#: inc/lib.rateit.index.php:669
+#: inc/lib.rateit.index.php:777
+#: inc/lib.rateit.index.php:899
+#: inc/lib.rateit.index.php:1019
+#: inc/lib.rateit.index.php:1074
+#: inc/lib.rateit.index.php:1261
 msgid "Show rating details"
 msgstr "Voir le détail des votes"
 
-#: inc/lib.rateit.index.php:677
+#: inc/lib.rateit.index.php:679
 msgid "There is no category rating at this time"
 msgstr "Il n'y a pas de vote sur les catégories pour l'instant"
 
-#: inc/lib.rateit.index.php:680
+#: inc/lib.rateit.index.php:682
 msgid "This is a list of all the categories having rating"
 msgstr "Ceci est la liste des toutes les catégories ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:686
-#: inc/lib.rateit.index.php:798
-#: inc/lib.rateit.index.php:916
-#: inc/lib.rateit.index.php:1038
-#: inc/lib.rateit.index.php:1093
-#: inc/lib.rateit.index.php:1210
+#: inc/lib.rateit.index.php:688
+#: inc/lib.rateit.index.php:800
+#: inc/lib.rateit.index.php:918
+#: inc/lib.rateit.index.php:1040
+#: inc/lib.rateit.index.php:1095
+#: inc/lib.rateit.index.php:1212
 msgid "Higher"
 msgstr "Haute"
 
-#: inc/lib.rateit.index.php:687
-#: inc/lib.rateit.index.php:799
-#: inc/lib.rateit.index.php:917
-#: inc/lib.rateit.index.php:1039
-#: inc/lib.rateit.index.php:1094
-#: inc/lib.rateit.index.php:1211
+#: inc/lib.rateit.index.php:689
+#: inc/lib.rateit.index.php:801
+#: inc/lib.rateit.index.php:919
+#: inc/lib.rateit.index.php:1041
+#: inc/lib.rateit.index.php:1096
+#: inc/lib.rateit.index.php:1213
 msgid "Lower"
 msgstr "Basse"
 
-#: inc/lib.rateit.index.php:689
+#: inc/lib.rateit.index.php:691
 msgid "Level"
 msgstr "Niveau"
 
-#: inc/lib.rateit.index.php:699
+#: inc/lib.rateit.index.php:701
 msgid "Selected categories action:"
 msgstr "Action sur les catégories sélectionnées :"
 
-#: inc/lib.rateit.index.php:748
+#: inc/lib.rateit.index.php:750
 msgid "Settings for comments"
 msgstr "Paramètres pour les commentaires"
 
-#: inc/lib.rateit.index.php:752
+#: inc/lib.rateit.index.php:754
 msgid "Enable comments rating"
 msgstr "Autoriser le vote sur les commentaires"
 
-#: inc/lib.rateit.index.php:753
+#: inc/lib.rateit.index.php:755
 msgid "Include on comments"
 msgstr "Inclure dans les commentaires"
 
-#: inc/lib.rateit.index.php:761
+#: inc/lib.rateit.index.php:763
 msgid "To use this option you must have behavior \"publicCommentAfterContent\" in your theme"
 msgstr "Pour utiliser cette option vous devez avoir le behavior \"publicCommentAfterContent\" dans votre thème"
 
-#: inc/lib.rateit.index.php:785
+#: inc/lib.rateit.index.php:787
 msgid "List of comments"
 msgstr "Liste des commentaires"
 
-#: inc/lib.rateit.index.php:789
+#: inc/lib.rateit.index.php:791
 msgid "There is no comment rating at this time"
 msgstr "Il n'y a pas de vote sur les commentaires pour l'instant"
 
-#: inc/lib.rateit.index.php:792
+#: inc/lib.rateit.index.php:794
 msgid "This is a list of all the comments having rating"
 msgstr "Ceci est la liste de tous les commentaires ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:869
+#: inc/lib.rateit.index.php:871
 msgid "Activate addon tag"
 msgstr "Activer l'extension pour les tags"
 
-#: inc/lib.rateit.index.php:880
+#: inc/lib.rateit.index.php:882
 msgid "Disactivate addon tag"
 msgstr "Désactiver l'extension pour les tags"
 
-#: inc/lib.rateit.index.php:905
+#: inc/lib.rateit.index.php:907
 msgid "This is a list of all the tags having rating"
 msgstr "Ceci est la liste des tags ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:909
+#: inc/lib.rateit.index.php:911
 msgid "There is no tag rating at this time"
 msgstr "Il n'y a pas de vote sur les tags pour l'instant"
 
-#: inc/lib.rateit.index.php:927
+#: inc/lib.rateit.index.php:929
 msgid "Selected tags action:"
 msgstr "Action sur les tags selectionnés :"
 
-#: inc/lib.rateit.index.php:983
+#: inc/lib.rateit.index.php:985
 msgid "Galleries"
 msgstr "Galeries"
 
-#: inc/lib.rateit.index.php:987
+#: inc/lib.rateit.index.php:989
 msgid "Settings for galleries"
 msgstr "Paramètres pour les galeries"
 
-#: inc/lib.rateit.index.php:991
+#: inc/lib.rateit.index.php:993
 msgid "Enable addon gallery"
 msgstr "Activer l'extension pour les galeries"
 
-#: inc/lib.rateit.index.php:992
+#: inc/lib.rateit.index.php:994
 msgid "Enable addon gallery item"
 msgstr "Activer l'extension pour les images"
 
-#: inc/lib.rateit.index.php:993
+#: inc/lib.rateit.index.php:995
 msgid "Include on galleries page"
 msgstr "Inclure dans la page des galeries"
 
-#: inc/lib.rateit.index.php:994
+#: inc/lib.rateit.index.php:996
 msgid "Include on gallery items pages"
 msgstr "Inclure dans la page des images"
 
-#: inc/lib.rateit.index.php:1025
+#: inc/lib.rateit.index.php:1027
 msgid "List of galleries"
 msgstr "Liste des galeries"
 
-#: inc/lib.rateit.index.php:1027
+#: inc/lib.rateit.index.php:1029
 msgid "This is a list of all the galleries having rating"
 msgstr "Ceci est la liste des galeries ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:1031
+#: inc/lib.rateit.index.php:1033
 msgid "There is no gallery rating at this time"
 msgstr "Il n'y a pas vote sur les galeries pour l'instant"
 
-#: inc/lib.rateit.index.php:1049
+#: inc/lib.rateit.index.php:1051
 msgid "Selected galeries action:"
 msgstr "Action sur les galeries selectionnées :"
 
-#: inc/lib.rateit.index.php:1080
+#: inc/lib.rateit.index.php:1082
 msgid "List of images"
 msgstr "Liste des images"
 
-#: inc/lib.rateit.index.php:1082
+#: inc/lib.rateit.index.php:1084
 msgid "This is a list of all the galleries items having rating"
 msgstr "Ceci est la liste des images ayant reçu des votes"
 
-#: inc/lib.rateit.index.php:1086
+#: inc/lib.rateit.index.php:1088
 msgid "There is no gallery item rating at this time"
 msgstr "Il n'y a pas de vote sur les images pour l'instant"
 
-#: inc/lib.rateit.index.php:1104
+#: inc/lib.rateit.index.php:1106
 msgid "Selected galeries items action:"
 msgstr "Action sur les images selectionnées :"
 

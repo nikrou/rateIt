@@ -52,7 +52,7 @@ class rateIt
 		if ($this->ident == 2)
 			$this->ip = $core->getNonce();
 		else
-			$this->ip = $_SERVER['REMOTE_ADDR'];
+			$this->ip = $this->con->escape(http::realIP());
 	}
 
 	public function set($type,$id,$note)
@@ -81,7 +81,7 @@ class rateIt
 		$this->core->blog->triggerBlog();
 
 		if ($this->ident > 0)
-			setcookie('rateit-'.$type.'-'.$id,1,(time()+3600*365));
+			$this->writeCookie($type,$id);
 
 
 		# --BEHAVIOR-- rateItAfterSet
@@ -150,7 +150,7 @@ class rateIt
 		$sql = (boolean) $rs->f(0);
 		$cookie = false;
 		if ($this->ident > 0 && $id !== null && $type !== null)
-			$cookie = isset($_COOKIE['rateit-'.$type.'-'.$id]);
+			$cookie = $this->readCookie($type,$id);
 
 		return $sql || $cookie;
 	}
@@ -282,13 +282,7 @@ class rateIt
 
 		# rate ip
 		if (!empty($params['rateit_ip'])) {
-
-			if (is_array($params['rateit_ip']))
-				array_walk($params['rateit_ip'],create_function('&$v,$k','if($v!==null){$v=(integer)$v;}'));
-			else
-				$params['rateit_ip'] = array((integer) $params['rateit_ip']);
-
-			$strReq .= 'AND RI.rateit_ip '.$this->con->in($params['rateit_ip']);
+			$strReq .= "AND RI.rateit_ip = '".$this->con->escape($params['rateit_ip'])."' ";
 		}
 
 		if (!empty($params['sql']))
@@ -354,6 +348,24 @@ class rateIt
 	{
 		return $this->types;
 	}
-}
 
+	private static function getCookie()
+	{
+		return isset($_COOKIE['rateItVotedList']) ?
+			explode(',',$_COOKIE['rateItVotedList']) :
+			array();
+	}
+
+	public function readCookie($type,$id)
+	{
+		return in_array($type.'-'.$id,$this->getCookie());
+	}
+
+	public function writeCookie($type,$id)
+	{
+		$c = $this->getCookie();
+		$c[] = $type.'-'.$id;
+		setcookie('rateItVotedList',implode(',',$c),time()+60*60*24*30);
+	}
+}
 ?>

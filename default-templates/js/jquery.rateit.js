@@ -30,18 +30,14 @@
 		$(target).find('.rateit-linker').each(function(){
 
 			var def = $(this).attr('id').split('-');
+			var dis = $(this).attr('disabled');
 
 			if (def[2] == undefined || def[3] == undefined) return;
 
 			var type=def[2];
 			var id=def[3];
 
-			if (enable_cookie==1)
-				var oldvote = $.cookie('rateit-'+type+'-'+id);
-			else
-				var oldvote = 0;
-
-			if (oldvote==1)
+			if (dis!=undefined)
 				$('input.rateit-'+type+'-'+id).rating({readOnly:true});
 			else {
 				$(function(){
@@ -68,10 +64,6 @@
 										if (msg_thanks!='')
 											$('*').find('#rateit-linker-'+type+'-'+id).each(function(){$(this).empty().append('<p>'+msg_thanks+'</p>')});
 
-										if (enable_cookie==1) {
-											$.cookie('rateit-'+type+'-'+id,null);
-											$.cookie('rateit-'+type+'-'+id,1,{ expires: 365});
-										}
 									}else{
 										alert($(data).find('message').text());
 									}

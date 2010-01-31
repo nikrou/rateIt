@@ -483,7 +483,8 @@ class rateItTabs
 				$core->blog->settings->put('rateit_homepoststpl',$_POST['s']['rateit_homepoststpl'],'boolean','rateit template on post on home page',true,false);
 				$core->blog->settings->put('rateit_tagpoststpl',$_POST['s']['rateit_tagpoststpl'],'boolean','rateit template on post on tag page',true,false);
 				$core->blog->settings->put('rateit_categorypoststpl',$_POST['s']['rateit_categorypoststpl'],'boolean','rateit template on post on category page',true,false);
-				$core->blog->settings->put('rateit_categorylimitposts',$_POST['s']['rateit_categorylimitposts'],'integer','rateit limit post vote to one category',true,false);
+				$core->blog->settings->put('rateit_categorylimitposts',$_POST['s']['rateit_categorylimitposts'],'integer','rateit limit post vote only to one category',true,false);
+				$core->blog->settings->put('rateit_categorylimitinvert',$_POST['s']['rateit_categorylimitinvert'],'integer','rateit limit post vote only to other categories',true,false);
 				$core->blog->triggerBlog();
 				http::redirect($requests->p_url.'&t=post&done=1');
 			}
@@ -526,6 +527,7 @@ class rateItTabs
 			'<tr><td>'.__('Include on tag page').'*</td><td>'.form::combo(array('s[rateit_tagpoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_tagpoststpl).'</td></tr>'.
 			'<tr><td>'.__('Include on categories page').'*</td><td>'.form::combo(array('s[rateit_categorypoststpl]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorypoststpl).'</td></tr>'.
 			'<tr><td>'.__('Limit to one category').'</td><td>'.form::combo(array('s[rateit_categorylimitposts]'),$combos->categories,$core->blog->settings->rateit_categorylimitposts).'</td></tr>'.
+			'<tr><td>'.__('Invert and exclude this category').'</td><td>'.form::combo(array('s[rateit_categorylimitinvert]'),array(__('no')=>0,__('yes')=>1),$core->blog->settings->rateit_categorylimitinvert).'</td></tr>'.
 			'</table>'.
 			'<p>'.
 			form::hidden(array('p'),'rateIt').

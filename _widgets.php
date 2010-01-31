@@ -99,13 +99,24 @@ class rateItAdminWidget
 		}
 
 		$types = (array) $types;
-		$combo = array();
+		$combo_types = array();
 		foreach($types as $k => $v){
-			$combo = array_merge($v,$combo);
+			$combo_types = array_merge($v,$combo_types);
 		}
 
-		$w->rateitrank->setting('type',__('Type:'),'post','combo',$combo);
-		
+		$combo_categories = array('-'=>'');
+		try {
+			$categories = $core->blog->getCategories(array('post_type'=>'post'));
+		} catch (Exception $e) {
+			$core->error->add($e->getMessage());
+		}
+		while ($categories->fetch()) {
+			$combo_categories[str_repeat('&nbsp;&nbsp;',$categories->level-1).'&bull; '.
+				html::escapeHTML($categories->cat_title)] = $categories->cat_id;
+		}
+
+		$w->rateitrank->setting('type',__('Type:'),'post','combo',$combo_types);
+		$w->rateitrank->setting('catlimit',__('Category limit (if possible):'),'','combo',$combo_categories);
 		$w->rateitrank->setting('limit',__('Length:'),3,'combo',array(
 			1=>1,2=>2,3=>3,4=>4,5=>5,10=>10,15=>15,20=>20));
 		$w->rateitrank->setting('sortby',__('Order by:'),'rateit_avg','combo',array(

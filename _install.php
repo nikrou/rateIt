@@ -70,7 +70,8 @@ try {
 	$s->put('rateit_homepoststpl',false,'boolean','rateit template on post on home page',false,true);
 	$s->put('rateit_tagpoststpl',false,'boolean','rateit template on post on tag page',false,true);
 	$s->put('rateit_categorypoststpl',false,'boolean','rateit template on post on category page',false,true);
-	$s->put('rateit_categorylimitposts',false,'integer','rateit limit post vote to one category',false,true);
+	$s->put('rateit_categorylimitposts',false,'integer','rateit limit post vote only to one category',false,true);
+	$s->put('rateit_categorylimitinvert',false,'boolean','rateit limit post vote only to other category',false,true);
 	# Settings for comments
 	$s->put('rateit_comment_active',false,'boolean','Enable comments rating',false,true);
 	$s->put('rateit_commentstpl',true,'boolean','Use comments behavior',false,true);
