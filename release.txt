@@ -2,6 +2,9 @@ x.x.x xxxxxxxx
  - Not added ability to explode post type rating in subcategories
  - Not added other styles of rate (I love /I d'ont love)
 
+1.1 20100307
+ * Fixed bug for votes without javascript
+
 1.0 20100131
  * Fixed bug with rate by cookie
  * Added option to exclude one category for post rate

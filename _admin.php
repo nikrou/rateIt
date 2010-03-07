@@ -50,7 +50,7 @@ class rateItAdmin
 		global $core;
 		if ($core->blog->settings->rateit_active 
 		 && $core->auth->check('delete,contentadmin',$core->blog->id)) {
-			$args[0][__('delete rating')] = 'rateit_empty';
+			$args[0][__('Rate it')][__('delete rating')] = 'rateit_empty';
 		}
 	}
 
