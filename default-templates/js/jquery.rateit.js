@@ -29,13 +29,12 @@
 
 		$(target).find('.rateit-linker').each(function(){
 
-			var def = $(this).attr('id').split('-');
-			var dis = $(this).attr('disabled');
+			var type = $(this).find('input[name=linkertype]').val();
+			var id = $(this).find('input[name=linkerid]').val();
+			var uid = $(this).find('input[name=linkeruid]').val();
+			var dis = $(this).find('input[disabled=disabled]').val();
 
-			if (def[2] == undefined || def[3] == undefined) return;
-
-			var type=def[2];
-			var id=def[3];
+			if (type==undefined || id==undefined || uid==undefined) return;
 
 			if (dis!=undefined)
 				$('input.rateit-'+type+'-'+id).rating({readOnly:true});
@@ -43,32 +42,45 @@
 				$(function(){
 					$('input.rateit-'+type+'-'+id).rating({
 						callback:function(note,link){
-							$('input.rateit-'+type+'-'+id).rating('disable');
-							$.ajax({
-								timeout:3000,
-								url:service_url,
-								type:'POST',
-								data:{f:service_func,voteType:type,voteId:id,voteNote:note},
-								error:function(){alert('Failed to call server');},
-								success:function(data){
-									data=$(data);
-									if(data.find('rsp').attr('status')=='ok'){
+							$('input.rateit-'+type+'-'+id).rating({readOnly:true});
+							if ($('input.rateit-'+type+'-'+id).hasClass('rateit-loop-prevent')){
+								//$('input.rateit-'+type+'-'+id).rating('disable');
+							}
+							else{
+								$.ajax({
+									timeout:3000,
+									url:service_url,
+									type:'POST',
+									data:{f:service_func,voteType:type,voteId:id,voteNote:note},
+									error:function(){alert('Failed to call server');},
+									success:function(data){
+										data=$(data);
+										if(data.find('rsp').attr('status')=='ok'){
+										
+											$('input.rateit-'+type+'-'+id).addClass('rateit-loop-prevent');
+											
+											var n=Math.round(parseFloat(data.find('item').attr('note')))-1;
+											$('input.rateit-'+type+'-'+id).rating('select',n);
+											$('input.rateit-'+type+'-'+id).rating('disable');
+											
+											$('*').find('.rateit-total-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('total'))});
+											$('*').find('.rateit-max-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('max'))});
+											$('*').find('.rateit-min-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('min'))});
+											$('*').find('.rateit-maxcount-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('maxcount'))});
+											$('*').find('.rateit-mincount-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('mincount'))});
+											$('*').find('.rateit-note-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note'))});
+											$('*').find('.rateit-quotient-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('quotient'))});
+											$('*').find('.rateit-fullnote-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note')+'/'+data.find('item').attr('quotient'))});
+											
+											if (msg_thanks!='')
+												$('*').find('.rateit-linker-'+type+'-'+id).each(function(){$(this).empty().append('<p>'+msg_thanks+'</p>')});
 
-										$('*').find('#rateit-total-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('total'))});
-										$('*').find('#rateit-max-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('max'))});
-										$('*').find('#rateit-min-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('min'))});
-										$('*').find('#rateit-note-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note'))});
-										$('*').find('#rateit-quotient-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('quotient'))});
-										$('*').find('#rateit-fullnote-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note')+'/'+data.find('item').attr('quotient'))});
-
-										if (msg_thanks!='')
-											$('*').find('#rateit-linker-'+type+'-'+id).each(function(){$(this).empty().append('<p>'+msg_thanks+'</p>')});
-
-									}else{
-										alert($(data).find('message').text());
+										}else{
+											alert($(data).find('message').text());
+										}
 									}
-								}
-							});
+								});
+							}
 						}
 					});
 				});

@@ -41,7 +41,7 @@ $this->addUserAction(
 );
 
 
-# Keep settings and table on delete from pluginsBeforeDelete
+# Keep settings and table on direct actions
 
 $this->addDirectAction(
 	/* type */ 'plugins',

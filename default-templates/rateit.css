@@ -1,6 +1,11 @@
 .rateit {
  clear:both;
 }
+
+.rateit * {
+ margin:0px;
+ padding:0px;
+}
 .rateit h3 {
  border-width: 1px 0;
  border-style: solid;
@@ -10,18 +15,31 @@
  margin: 20px 0 8px 0;
  font-size: 1.2em;
 }
-.rateit-fullnote{
+.rateit-fullnote {
  float:left;
- width:50px;
- margin-right:10px;
+ margin-top:0;
+ margin-right:5px;
  font-size: 1.2em;
  font-weight: bold;
 }
-.rateit-linker * {
- margin:0px;
- padding:0px;
+.rateit-mincount {
+ float:left;
+ margin-top:0;
+ margin-right:5px;
+ font-size: 1.2em;
+ font-weight: bold;
+}
+.rateit-maxcount {
+ float:left;
+ margin-top:0;
+ margin-right:5px;
+ font-size: 1.2em;
+ font-weight: bold;
 }
 .rateit-linker {
+ float:left;
+ margin-top:0;
+ margin-right:5px;
  font-style: italic;
 }
 .rateit ul {
@@ -34,6 +52,13 @@
  padding-left: 12px;
  background: transparent url(img/star_little.png) no-repeat 0 0;
 }
+#sidebar div .rateit li {
+ white-space: nowrap;
+ list-style: none;
+ padding-left: 16px;
+ background: transparent url(img/star_little.png) no-repeat 0 center;
+}
+
 .rateit-rank {
  font-weight: bold;
  font-size: 1.2em;

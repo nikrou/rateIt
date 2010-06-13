@@ -1,3 +1,5 @@
+!!! This document is not up to date !!!
+
 rateIt 0.5 (2009/07/09) plugin for Dotclear 2
 
 Préambule

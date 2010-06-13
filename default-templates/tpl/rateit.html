@@ -1,5 +1,5 @@
 <tpl:rateIt>
-  <div class="rateit">
+  <div class="rateit rateit-classic">
     <h3>{{tpl:rateItTitle}}</h3>
 	<p>{{tpl:rateItFullnote}}</p>
 	{{tpl:rateItLinker}}
@@ -9,5 +9,20 @@
       <li>{{tpl:lang Higher:}} {{tpl:rateItMax}}</li>
       <li>{{tpl:lang Lower:}} {{tpl:rateItMin}}</li>
     </ul>
+  </div>
+</tpl:rateIt>
+
+<tpl:rateIt style="twin">
+  <div class="rateit rateit-twin">
+	<p>{{tpl:rateItMinCount}}</p>
+	{{tpl:rateItLinker}}
+	<p>{{tpl:rateItMaxCount}}</p>
+  </div>
+</tpl:rateIt>
+
+<tpl:rateIt style="simple">
+  <div class="rateit retait-simple">
+	{{tpl:rateItLinker}}
+	<p>{{tpl:rateItMaxCount}}</p>
   </div>
 </tpl:rateIt>

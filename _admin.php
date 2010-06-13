@@ -12,23 +12,19 @@
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
 
-if ($core->blog->settings->rateit_active === null) return;
-
 $_menu['Plugins']->addItem(
 	__('Rate it'),
 	'plugin.php?p=rateIt','index.php?pf=rateIt/icon.png',
 	preg_match('/plugin.php\?p=rateIt(&.*)?$/',$_SERVER['REQUEST_URI']),
-	$core->auth->check('usage,contentadmin',$core->blog->id));
+	$core->auth->check('usage,contentadmin',$core->blog->id)
+);
+
+$core->rateIt->loadModules();
 
 require dirname(__FILE__).'/_widgets.php';
 
-$core->addBehavior('adminBeforePostDelete',array('rateItAdmin','adminBeforePostDelete'));
-$core->addBehavior('adminPostsActionsCombo',array('rateItAdmin','adminPostsActionsCombo'));
-$core->addBehavior('adminPostsActions',array('rateItAdmin','adminPostsActions'));
-$core->addBehavior('adminPostsActionsContent',array('rateItAdmin','adminPostsActionsContent'));
-
-if ($core->blog->settings->rateit_importexport_active) {
-
+if ($core->blog->settings->rateit->rateit_importexport_active)
+{
 	$core->addBehavior('exportFull',array('rateitBackup','exportFull'));
 	$core->addBehavior('exportSingle',array('rateitBackup','exportSingle'));
 	$core->addBehavior('importInit',array('rateitBackup','importInit'));
@@ -36,67 +32,7 @@ if ($core->blog->settings->rateit_importexport_active) {
 	$core->addBehavior('importFull',array('rateitBackup','importFull'));
 }
 
-class rateItAdmin
-{
-	public static function adminBeforePostDelete($post_id)
-	{
-		$post_id = (integer) $post_id;
-		$rateIt = new rateIt($GLOBALS['core']);
-		$rateIt->del('post',$post_id);
-	}
-
-	public static function adminPostsActionsCombo($args)
-	{
-		global $core;
-		if ($core->blog->settings->rateit_active 
-		 && $core->auth->check('delete,contentadmin',$core->blog->id)) {
-			$args[0][__('Rate it')][__('delete rating')] = 'rateit_empty';
-		}
-	}
-
-	public static function adminPostsActions($core,$posts,$action,$redir)
-	{
-		if ($action != 'rateit_do_empty') return;
-
-		try {
-			$rateIt = new rateIt($core);
-			while ($posts->fetch()) {
-				$rateIt->del('post',$posts->post_id);
-			}
-			$core->blog->triggerBlog();
-			http::redirect($redir);
-		}
-		catch (Exception $e) {
-			$core->error->add($e->getMessage());
-		}
-	}
-
-	public static function adminPostsActionsContent($core,$action,$hidden_fields)
-	{
-		if ($action != 'rateit_empty') return;
-
-		echo 
-		'<div id="rateit-edit">'.
-		'<h3>'.__('delete rating').'</h3>'.
-		'<form action="posts_actions.php" method="post"><div>'.
-		'<p>'.__('Do you really want to delete all votes for these entries?').'</p>'.
-		'<ul>';
-		foreach($_POST['entries'] as $post) {
-			$rs = $core->blog->getPosts(array('post_id'=>$post,'no_content'=>true));
-			echo '<li><a href="post.php?id='.$rs->post_id.'">'.$rs->post_title.'</a></li>';
-		}
-		echo 
-		'</ul>'.
-		'<p>'.
-		$hidden_fields.
-		$core->formNonce().
-		form::hidden(array('action'),'rateit_do_empty').
-		'<input type="submit" value="'.__('Delete').'" /></p>'.
-		'</div></form>'.
-		'</div>';
-	}
-}
-
+// backup is not complete (missing cinecturlink, comment, ...)
 class rateItBackup
 {
 	public static function exportSingle($core,$exp,$blog_id)
@@ -107,50 +43,51 @@ class rateItBackup
 			"WHERE blog_id = '".$blog_id."'"
 		);
 	}
-
+	
 	public static function exportFull($core,$exp)
 	{
 		$exp->exportTable('rateit');
 	}
-
+	
 	public static function importInit($bk,$core)
 	{
 		$bk->cur_rateit = $core->con->openCursor($core->prefix.'rateit');
 	}
-
+	
 	public static function importSingle($line,$bk,$core)
 	{
 		if ($line->__name != 'rateit') return;
-
-		if ($line->rateit_type == 'post' && isset($bk->old_ids['post'][(integer) $line->rateit_id])) {
+		
+		if ($line->rateit_type == 'post' && isset($bk->old_ids['post'][(integer) $line->rateit_id]))
+		{
 			$line->rateit_id = $bk->old_ids['post'][(integer) $line->rateit_id];
 		}
-
-		elseif ($line->rateit_type == 'comment') {
+		elseif ($line->rateit_type == 'comment')
+		{
 			# Can't retreive old/new comment_id
 			# See: http://dev.dotclear.org/2.0/ticket/789#comment:1
 			return;
 		}
-
-		elseif ($line->rateit_type == 'category' && isset($bk->old_ids['category'][(integer) $line->rateit_id])) {
+		elseif ($line->rateit_type == 'category' && isset($bk->old_ids['category'][(integer) $line->rateit_id]))
+		{
 			$line->rateit_id = $bk->old_ids['category'][(integer) $line->rateit_id];
 		}
-
-		elseif ($line->rateit_type == 'gal' && isset($bk->old_ids['post'][(integer) $line->rateit_id])) {
+		elseif ($line->rateit_type == 'gal' && isset($bk->old_ids['post'][(integer) $line->rateit_id]))
+		{
 			$line->rateit_id = $bk->old_ids['post'][(integer) $line->rateit_id];
 		}
-
-		elseif ($line->rateit_type == 'galitem' && isset($bk->old_ids['post'][(integer) $line->rateit_id])) {
+		elseif ($line->rateit_type == 'galitem' && isset($bk->old_ids['post'][(integer) $line->rateit_id]))
+		{
 			$line->rateit_id = $bk->old_ids['post'][(integer) $line->rateit_id];
 		}
-
-		elseif ($line->rateit_type == 'tag') {
+		elseif ($line->rateit_type == 'tag')
+		{
 			$line->rateit_id = (string) $line->rateit_id;
 		}
-
-		else return;
-
-
+		else
+		{
+			return;
+		}
 		$bk->cur_rateit->clean();
 		$bk->cur_rateit->blog_id   = (string) $core->blog_id;
 		$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;
@@ -161,10 +98,11 @@ class rateItBackup
 		$bk->cur_rateit->rateit_time   = (string) $line->rateit_time;
 		$bk->cur_rateit->insert();
 	}
-
+	
 	public static function importFull($line,$bk,$core)
 	{
-		if ($line->__name == 'rateit') {
+		if ($line->__name == 'rateit')
+		{
 			$bk->cur_rateit->clean();
 			$bk->cur_rateit->blog_id   = (string) $line->blog_id;
 			$bk->cur_rateit->rateit_id   = (string) $line->rateit_id;

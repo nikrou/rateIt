@@ -10,10 +10,12 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # -- END LICENSE BLOCK ------------------------------------
 
-class libImagePath
-{
-	public static $version = '1.0';
+if (!defined('DC_RC_PATH')){return;}
 
+class rateItLibImagePath
+{
+	public static $version = '1.1';
+	
 	public static function getArray($core,$m='')
 	{
 		if (!$core->plugins->moduleExists($m)
@@ -24,15 +26,15 @@ class libImagePath
 				'module'=>array('dir'=>null,'url'=>null),
 			);
 		}
-
+		
 		return array(
 			'theme' => array(
-				'dir' => $core->blog->themes_path.'/'.$core->blog->settings->theme.'/img/'.$m.'-default-image.png',
-				'url' => $core->blog->settings->themes_url.$core->blog->settings->theme.'/img/'.$m.'-default-image.png'
+				'dir' => $core->blog->themes_path.'/'.$core->blog->settings->system->theme.'/img/'.$m.'-default-image.png',
+				'url' => $core->blog->settings->system->themes_url.$core->blog->settings->system->theme.'/img/'.$m.'-default-image.png'
 			),
 			'public' => array(
 				'dir' => $core->blog->public_path.'/'.$m.'-default-image.png',
-				'url' => $core->blog->host.path::clean($core->blog->settings->public_url).'/'.$m.'-default-image.png'
+				'url' => $core->blog->host.path::clean($core->blog->settings->system->public_url).'/'.$m.'-default-image.png'
 			),
 			'module' => array(
 				'dir' => $core->plugins->moduleRoot($m).'/default-templates/img/'.$m.'-default-image.png',
@@ -40,7 +42,7 @@ class libImagePath
 			)
 		);
 	}
-
+	
 	public static function getUrl($core,$m='')
 	{
 		$files = self::getArray($core,$m);
@@ -50,7 +52,7 @@ class libImagePath
 		}
 		return null;
 	}
-
+	
 	public static function getPath($core,$m='')
 	{
 		$files = self::getArray($core,$m);
@@ -60,7 +62,7 @@ class libImagePath
 		}
 		return null;
 	}
-
+	
 	public static function getSize($core,$m='')
 	{
 		if (!($img = self::getPath($core,$m)))

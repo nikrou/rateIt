@@ -1,6 +1,17 @@
 x.x.x xxxxxxxx
  - Not added ability to explode post type rating in subcategories
  - Not added other styles of rate (I love /I d'ont love)
+ - Not added public API
+ - Not completed modules behaviors (delete/edit category, tag...)
+
+2.0-alpha 20100613
+ * Switched to DC 2.2
+ * Added simple ratting mode
+ * Added double rating mode
+ * Fixed JS bug on multiple rating forms
+ * Fixed IE8 bug (by cleaning html errors!)
+ * Changed modules management (and behaviors)
+ * Included rating on plugin cinecturlink2
 
 1.1 20100307
  * Fixed bug for votes without javascript

@@ -14,26 +14,34 @@ if (!defined('DC_CONTEXT_ADMIN')){return;}
 
 $new_version = $core->plugins->moduleInfo('rateIt','version');
 $old_version = $core->getVersion('rateIt');
-//*
-if ($core->plugins->moduleExists('rateItComment') 
- || $core->plugins->moduleExists('rateItCategory')
- || $core->plugins->moduleExists('rateItTag')
- || $core->plugins->moduleExists('rateItGallery')) {
-	throw new Exception('You must uninstall rateItComment, rateItCategory, rateItTag, rateItGallery before installing rateIt '.$new_version);
-	return false;
-}
-//*/
 if (version_compare($old_version,$new_version,'>=')) return;
 
-try {
-	# Check DC version (dev on)
-	if (!version_compare(DC_VERSION,'2.1.6','>='))
+try
+{
+	# Check DC version
+	if (version_compare(DC_VERSION,'2.2-alpha','<'))
 	{
-		throw new Exception('Plugin called rateIt requires Dotclear 2.1.6 or higher.');
+		throw new Exception('Plugin called rateIt requires Dotclear 2.2 or higher.');
 	}
+	# Old addons (now included in rateIt)
+	if ($core->plugins->moduleExists('rateItComment') 
+	 || $core->plugins->moduleExists('rateItCategory')
+	 || $core->plugins->moduleExists('rateItTag')
+	 || $core->plugins->moduleExists('rateItGallery'))
+	{
+		throw new Exception('You must uninstall rateItComment, rateItCategory, rateItTag, rateItGallery before installing rateIt '.$new_version);
+		return false;
+	}
+	# Old version of cinecturlink2 (now included in rateIt)
+	if ($core->plugins->moduleExists('cinecturlink2') 
+	 && version_compare($core->plugins->moduleInfo('cinecturlink2','version'),'0.6.1','<'))
+	{
+		throw new Exception('Plugin called cinecturlink2 must be upgradded.');
+	}
+	
 	# Database
-	$s = new dbStruct($core->con,$core->prefix);
-	$s->rateit
+	$ts = new dbStruct($core->con,$core->prefix);
+	$ts->rateit
 		->blog_id ('varchar',32,false)
 		->rateit_id ('varchar',192,false)
 		->rateit_type('varchar',16,false)
@@ -46,19 +54,21 @@ try {
 		->index('idx_rateit_rateit_type','btree','rateit_type')
 		->index('idx_rateit_rateit_id','btree','rateit_id')
 		->index('idx_rateit_rateit_ip','btree','rateit_ip');
-
+	
 	$si = new dbStruct($core->con,$core->prefix);
-	$changes = $si->synchronize($s);
-	$s = null;
-
-	$s =& $core->blog->settings;
-	$s->setNameSpace('rateit');
-
+	$changes = $si->synchronize($ts);
+	
+	# Settings
+	$s = $core->blog->settings->rateit;
+	
 	# Settings main
 	$s->put('rateit_active',false,'boolean','rateit plugin enabled',false,true);
 	$s->put('rateit_importexport_active',true,'boolean','rateit import/export enabled',false,true);
+	$s->put('rateit_rating_style','classic','string','Style of rating',false,true);
 	$s->put('rateit_quotient',5,'integer','rateit maximum note',false,true);
 	$s->put('rateit_digit',1,'integer','rateit note digits number',false,true);
+	$s->put('rateit_msglike','I like','string','rateit message for the the Like button',false,true);
+	$s->put('rateit_msgnotlike',"I don't like",'string',"rateit message for the Don't like button",false,true);
 	$s->put('rateit_msgthanks','Thank you for having voted','string','rateit message when voted',false,true);
 	$s->put('rateit_userident',0,'integer','rateit use cookie and/or ip',false,true);
 	$s->put('rateit_dispubjs',false,'boolean','disable rateit public javascript',false,true);
@@ -84,15 +94,18 @@ try {
 	$s->put('rateit_galitem_active',false,'boolean','rateit addon gallery item enabled',false,true);
 	$s->put('rateit_galtpl',true,'boolean','rateit template galleries page',false,true);
 	$s->put('rateit_galitemtpl',true,'boolean','rateit template gallery items page',false,true);
-
-	$s->setNameSpace('system');
-
+	# Settings for cinecturlink2
+	$s->put('rateit_cinecturlink2_active',false,'boolean','Enabled cinecturlink2 rating',false,true);
+	$s->put('rateit_cinecturlink2_widget',false,'boolean','Enabled rating on cinecturlink2 widget',false,true);
+	$s->put('rateit_cinecturlink2_page',false,'boolean','Enabled rating on cinecturlink2 page',false,true);
+	
 	# Version
-	$core->setVersion('rateIt',$core->plugins->moduleInfo('rateIt','version'));
-
+	$core->setVersion('rateIt',$new_version);
+	
 	return true;
 }
-catch (Exception $e) {
+catch (Exception $e)
+{
 	$core->error->add($e->getMessage());
 }
 return false;

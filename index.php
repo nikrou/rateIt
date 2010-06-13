@@ -12,66 +12,77 @@
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
 
-require_once dirname(__FILE__).'/inc/lib.rateit.index.php';
+# Check user perms
+dcPage::check('admin');
 
-$requests = rateItTabs::requests($core);
-$combos = rateItTabs::combos($core);
-$params = rateItTabs::params($core,$requests,$combos);
+# Get modules
+$rateit_types = $core->rateIt->getModules();
 
+# Init some vars
+$s = $core->blog->settings->rateit;
+$p_url 	= 'plugin.php?p=rateIt';
+$msg = isset($_REQUEST['msg']) ? $_REQUEST['msg'] : '';
+$start_part = $s->rateit_active ? 'summary' : 'setting';
+$default_part = isset($_REQUEST['part']) ? $_REQUEST['part'] : $start_part;
+$section = isset($_REQUEST['section']) ? $_REQUEST['section'] : '';
+$tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : 'setting';
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+$action = isset($_POST['action']) ? $_POST['action'] : '';
+$combo_types = array_flip($rateit_types);
+$combo_types = array_merge(array('- '.__('select a module').' -'=>''),$combo_types);
+
+# Common page header
+$header = 
+'<link rel="stylesheet" type="text/css" href="index.php?pf=rateIt/style.css" />'.
+dcPage::jsLoad('index.php?pf=rateIt/js/main.js').
+'<script type="text/javascript">'."\n//<![CDATA[\n".
+dcPage::jsVar('jcToolsBox.prototype.text_wait',__('Please wait')).
+dcPage::jsVar('jcToolsBox.prototype.section',$section).
+"\n//]]>\n</script>\n";;
+
+# Common menu
+$menu = '
+<form action="'.$p_url.'" method="post" id="modules-menu">
+<h2 class="page-title"><a href="'.$p_url.'&amp;part=summary" title="'.__('Summary').'">'.__('Rate it').'</a> : '.
+form::combo(array('type'),$combo_types,$type).
+'<input type="submit" value="'.__('ok').'" />'.
+form::hidden(array('p'),'rateIt').
+form::hidden(array('part'),'modules').
+form::hidden(array('tab'),'setting').
+$core->formNonce().'
+</form></h2><hr class="clear" />';
+
+# Common page footer
+$footer = '<hr class="clear"/><p class="right">
+<a class="button" href="'.$p_url.'&amp;part=setting">'.__('Settings').'</a> - 
+rateIt - '.$core->plugins->moduleInfo('rateIt','version').'&nbsp;
+<img alt="'.__('Rate it').'" src="index.php?pf=rateIt/icon.png" />
+</p>';
+
+# succes_codes
+$succes = array(
+	'save_setting' => __('Configuration successfully saved'),
+	'del_records' => __('Records succesfully deleted')
+);
+
+# errors_codes
+$errors = array(
+	'save_setting' => __('Failed to save configuration: %s'),
+	'del_records' => __('Failed to delete records: %s')
+);
+
+# Messages
+if (isset($succes[$msg]))
+{
+	$msg = sprintf('<p class="message">%s</p>',$succes[$msg]);
+}
+
+# Pages
+if (!file_exists(dirname(__FILE__).'/inc/index.'.$default_part.'.php'))
+{
+	$default_part = 'setting';
+}
+define('DC_CONTEXT_RATEIT',$default_part);
+include dirname(__FILE__).'/inc/index.'.$default_part.'.php';
 ?>
-<html>
- <head>
-  <title><?php echo __('Rate it'); ?></title>
-  <?php echo dcPage::jsLoad('js/_posts_list.js').dcPage::jsToolBar().dcPage::jsPageTabs($requests->tab); ?>
-  <script type="text/javascript">
-    $(function() {
-		$('#post-options-title').toggleWithLegend($('#post-options-content'),{cookie:'dcx_rateit_admin_post_options'});
-		$('#post-entries-title').toggleWithLegend($('#post-entries-content'),{cookie:'dcx_rateit_admin_post_entries'});
-		$('#comment-options-title').toggleWithLegend($('#comment-options-content'),{cookie:'dcx_rateit_admin_comment_options'});
-		$('#comment-entries-title').toggleWithLegend($('#comment-entries-content'),{cookie:'dcx_rateit_admin_comment_entries'});
-		$('#gallery-options-title').toggleWithLegend($('#gallery-options-content'),{cookie:'dcx_rateit_admin_gallery_options'});
-		$('#gallery-gals-title').toggleWithLegend($('#gallery-gals-content'),{cookie:'dcx_rateit_admin_gals_entries'});
-		$('#gallery-galitems-title').toggleWithLegend($('#gallery-galitems-content'),{cookie:'dcx_rateit_galitems_gallery_entries'});
-    });
-  </script>
-<?php
-
-
-# --BEHAVIOR-- adminRateItHeader
-$core->callBehavior('adminRateItHeader',$core);
-
-
-?>
- </head>
-<body>
-<h2 style="padding:8px 0 8px 34px;background:url(index.php?pf=rateIt/icon-b.png) no-repeat;">
-<?php echo html::escapeHTML($core->blog->name).' &rsaquo; '.__('Rate it'); ?></h2>
-
-<?php if ('' != $requests->msg) :  ?>
- <p class="message"><?php echo $requests->msg; ?></p>
-<?php endif;
-
-rateItTabs::summaryTab($core);
-rateItTabs::detailTab($core,$requests);
-rateItTabs::postTab($core,$requests,$params,$combos);
-rateItTabs::commentTab($core,$requests);
-rateItTabs::categoryTab($core,$requests);
-rateItTabs::tagTab($core,$requests);
-rateItTabs::galleryTab($core,$requests);
-
-
-# --BEHAVIOR-- adminRateItTabs
-$core->callBehavior('adminRateItTabs',$core);
-
-
-rateItTabs::settingsTab($core,$requests,$combos);
-
-echo dcPage::helpBlock('rateIt'); ?>
-
-<hr class="clear"/>
-<p class="right">
-rateIt - <?php echo $core->plugins->moduleInfo('rateIt','version'); ?>&nbsp;
-<img alt="RateIt" src="index.php?pf=rateIt/icon.png" />
-</p>
-</body>
-</html>

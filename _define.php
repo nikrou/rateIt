@@ -16,8 +16,8 @@ $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your blogs",
 	/* Author */			"JC Denis",
-	/* Version */			'1.1',
+	/* Version */			'2.0-alpha',
 	/* Permissions */		'admin'
 );
-	/* date */		#20100307
+	/* date */		#20100613
 ?>

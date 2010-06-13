@@ -19,53 +19,51 @@ class rateItRest
 		$type = isset($post['voteType']) ? $post['voteType'] : null;
 		$id = isset($post['voteId']) ? $post['voteId'] : null;
 		$note = isset($post['voteNote']) ? $post['voteNote'] : null;
-
+		
 		$rsp = new xmlTag();
-
-		if (!$core->blog->settings->rateit_active)
+		
+		if (!$core->blog->settings->rateit->rateit_active)
+		{
 			throw new Exception(__('Rating is disabled on this blog'));
-
+		}
 		if ($type === null || $id === null || $note === null)
+		{
 			throw new Exception(__('Rating failed because of missing informations'));
-
-		$types = new ArrayObject();
-		$types[] = 'post';
-		$types[] = 'comment';
-		$types[] = 'category';
-		$types[] = 'tag';
-		$types[] = 'gal';
-		$types[] = 'galitem';
-
-
-		# --BEHAVIOR-- addRateItType
-		$core->callBehavior('addRateItType',$types);
-
-
-		$types = (array) $types;
-
-		if (!in_array($type,$types))
+		}
+		
+		$core->rateIt->loadModules();
+		$rateit_types = $core->rateIt->getModules();
+		
+		if (!isset($rateit_types[$type]))
+		{
 			throw new Exception(__('Rating failed because of a wrong type of entry'));
-
-		$rateIt = new rateIt($core);
-		$voted = $rateIt->voted($type,$id);
+		}
+		
+		$voted = $core->rateIt->voted($type,$id);
 		if ($voted)
+		{
 			throw new Exception(__('You have already voted'));
+		}
 		else
-			$rateIt->set($type,$id,$note);
-
-		$rs = $rateIt->get($type,$id);
+		{
+			$core->rateIt->set($type,$id,$note);
+		}
+		
+		$rs = $core->rateIt->get($type,$id);
 		$xv = new xmlTag('item');
 		$xv->type = $type;
 		$xv->id = $id;
-		$xv->ip = $rateIt->ip;
+		$xv->ip = $core->rateIt->ip;
 		$xv->sum = $rs->sum;
 		$xv->max = $rs->max;
 		$xv->min = $rs->min;
+		$xv->maxcount = $rs->maxcount;
+		$xv->mincount = $rs->mincount;
 		$xv->total = $rs->total;
 		$xv->note = $rs->note;
 		$xv->quotient = $rs->quotient;
 		$rsp->insertNode($xv);
-
+		
 		return $rsp;
 	}
 }
