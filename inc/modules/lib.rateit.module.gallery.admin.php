@@ -28,7 +28,7 @@ class galleryRateItModuleAdmin
 		
 		if ($action == 'save_moule_galitem')
 		{
-			$core->blog->settings->rateit->put('rateit_galitem_active'!empty(,$_POST['rateit_galitem_active']),'boolean','rateit addon gallery item enabled',true,false);
+			$core->blog->settings->rateit->put('rateit_galitem_active',!empty(,$_POST['rateit_galitem_active']),'boolean','rateit addon gallery item enabled',true,false);
 			$core->blog->settings->rateit->put('rateit_galitemtpl',!empty($_POST['rateit_galitemtpl']),'boolean','rateit template gallery items page',true,false);
 			
 			$core->blog->triggerBlog();
