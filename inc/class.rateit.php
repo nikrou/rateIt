@@ -288,10 +288,11 @@ class rateIt
 		else
 		{
 			$strReq =
-			'SELECT DISTINCT '.
+			'SELECT '.
 			'SUM(RI.rateit_note / RI.rateit_quotient) as rateit_sum, '.
 			'MAX(RI.rateit_note / RI.rateit_quotient) as rateit_max, '.
 			'MIN(RI.rateit_note / RI.rateit_quotient) as rateit_min, '.
+			'MAX(RI.rateit_time) as rateit_time, '.
 			'(SUM(RI.rateit_note / RI.rateit_quotient) / COUNT(RI.rateit_note)) as rateit_avg, ';
 			
 			if (!empty($params['columns']) && is_array($params['columns']))

@@ -52,9 +52,10 @@ class cinecturlink2RateItModulePublic
 		$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('cinecturlink2')."/'",'C.link_id').' AS url';
 		$p['columns'][] = 'C.link_title AS title';
 		$p['columns'][] = 'C.link_id AS id';
-		if (!isset($p['groups'])) $p['groups'] = array();
+		
 		$p['groups'][] = 'C.link_id';
 		$p['groups'][] = 'C.link_title';
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'cinecturlink2 C ON CAST(C.link_id as char)=RI.rateit_id ';
 	}
 }

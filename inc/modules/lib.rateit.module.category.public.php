@@ -65,9 +65,11 @@ class categoryRateItModulePublic
 		$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('category')."/'",'C.cat_url').' AS url';
 		$p['columns'][] = 'C.cat_title AS title';
 		$p['columns'][] = 'C.cat_id AS id';
-		if (!isset($p['groups'])) $p['groups'] = array();
+		
 		$p['groups'][] = 'C.cat_url';
 		$p['groups'][] = 'C.cat_title';
+		$p['groups'][] = 'C.cat_id';
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'category C ON CAST(C.cat_id as char)=RI.rateit_id ';
 /*
 		if ($w->catlimit)

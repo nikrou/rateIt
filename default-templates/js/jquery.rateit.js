@@ -44,7 +44,7 @@
 						callback:function(note,link){
 							$('input.rateit-'+type+'-'+id).rating({readOnly:true});
 							if ($('input.rateit-'+type+'-'+id).hasClass('rateit-loop-prevent')){
-								//$('input.rateit-'+type+'-'+id).rating('disable');
+								/*$('input.rateit-'+type+'-'+id).rating('disable');*/
 							}
 							else{
 								$.ajax({
@@ -72,9 +72,9 @@
 											$('*').find('.rateit-quotient-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('quotient'))});
 											$('*').find('.rateit-fullnote-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note')+'/'+data.find('item').attr('quotient'))});
 											
-											if (msg_thanks!='')
+											if (msg_thanks!=''){
 												$('*').find('.rateit-linker-'+type+'-'+id).each(function(){$(this).empty().append('<p>'+msg_thanks+'</p>')});
-
+											}
 										}else{
 											alert($(data).find('message').text());
 										}

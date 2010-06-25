@@ -665,7 +665,7 @@ msgstr "Inclure sur la page des catégories"
 
 #: inc/modules/lib.rateit.module.post.admin.php:68
 msgid "Limit to one category:"
-msgstr "Limiter à une caégorie :"
+msgstr "Limiter à une catégorie :"
 
 #: inc/modules/lib.rateit.module.post.admin.php:72
 msgid "Invert and exclude this category"

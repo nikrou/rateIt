@@ -50,11 +50,13 @@ class commentRateItModulePublic
 		if (!$core->blog->settings->rateit->rateit_comment_active) return;
 		
 		$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
-		$p['columns'][] = 'P.post_title AS title';
+		$p['columns'][] = 'C.comment_author AS title';
 		$p['columns'][] = 'C.comment_id AS id';
-		if (!isset($p['groups'])) $p['groups'] = array();
+		
+		$p['groups'][] = 'C.comment_id';
+		$p['groups'][] = 'C.comment_author';
 		$p['groups'][] = 'P.post_url';
-		$p['groups'][] = 'P.post_title';
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON C.comment_id = P.post_id ';
 		

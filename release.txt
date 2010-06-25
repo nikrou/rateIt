@@ -1,8 +1,13 @@
 x.x.x xxxxxxxx
  - Not added ability to explode post type rating in subcategories
- - Not added other styles of rate (I love /I d'ont love)
+ - Not added rating on other post_type (see plugin muppet)
  - Not added public API
  - Not completed modules behaviors (delete/edit category, tag...)
+
+2.0-alpha2 20100625
+ * Fixed (hope so) postgreSQL compatibility
+ * Fixed high note on 'double' style
+ * Fixed admin crash on non 2.2
 
 2.0-alpha 20100613
  * Switched to DC 2.2

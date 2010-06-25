@@ -66,8 +66,9 @@ class tagRateItModulePublic
 		$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->url->getBase('tag')."/'",'M.meta_id').' AS url';
 		$p['columns'][] = 'M.meta_id AS title';
 		$p['columns'][] = 'M.meta_id AS id';
-		if (!isset($p['groups'])) $p['groups'] = array();
+		
 		$p['groups'][] = 'M.meta_id';
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'meta M ON M.meta_id=RI.rateit_id ';
 		$p['sql'] .= "AND M.meta_type='tag' ";
 		

@@ -69,13 +69,13 @@ class postRateItModulePublic
 		if (!$core->blog->settings->rateit->rateit_post_active) return;
 		
 		$p['columns'][] = $core->con->concat("'".$core->blog->url.$core->getPostPublicUrl('post','')."'",'P.post_url').' AS url';
-		$p['columns'][] = 'P.post_url AS url';
 		$p['columns'][] = 'P.post_title AS title';
 		$p['columns'][] = 'P.post_id AS id';
-		if (!isset($p['groups'])) $p['groups'] = array();
+		
 		$p['groups'][] = 'P.post_url';
 		$p['groups'][] = 'P.post_title';
 		$p['groups'][] = 'P.post_id';
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
 		$p['sql'] .= " AND P.post_type='post' AND P.post_status = 1 AND P.post_password IS NULL ";
 		

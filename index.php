@@ -39,7 +39,7 @@ dcPage::jsLoad('index.php?pf=rateIt/js/main.js').
 '<script type="text/javascript">'."\n//<![CDATA[\n".
 dcPage::jsVar('jcToolsBox.prototype.text_wait',__('Please wait')).
 dcPage::jsVar('jcToolsBox.prototype.section',$section).
-"\n//]]>\n</script>\n";;
+"\n//]]>\n</script>\n";
 
 # Common menu
 $menu = '

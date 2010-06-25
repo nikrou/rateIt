@@ -269,7 +269,8 @@ class urlRateIt extends dcUrlHandlers
 			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rating.pack.js">'.
 		"</script> \n".
 		"<script type=\"text/javascript\" src=\"".
-			$core->blog->url.$core->url->getBase('rateItmodule')."/js/jquery.rateit.js\"></script> \n".
+			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rateit.js">'.
+		"</script> \n".
 		"<script type=\"text/javascript\"> \n".
 		"//<![CDATA[\n".
 		" \$(function(){if(!document.getElementById){return;} \n".
@@ -525,7 +526,7 @@ class rateItPublicWidget
 		
 		if ($w->show_fullnote && in_array($style,array('twin','simple')))
 		{
-			$res .= '<p>'.rateItContext::value('mincount',$type,$id,$rs->mincount).'</p>';
+			$res .= '<p>'.rateItContext::value('maxcount',$type,$id,$rs->maxcount).'</p>';
 		}
 		
 		if ($w->show_note || $w->show_vote || $w->show_higher || $w->show_lower)

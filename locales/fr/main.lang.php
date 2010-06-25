@@ -512,7 +512,7 @@ $GLOBALS['__l10n']['Include on tag page'] = 'Inclure sur la page d\'un tag';
 $GLOBALS['__l10n']['Include on categories page'] = 'Inclure sur la page des catégories';
 
 #inc/modules/lib.rateit.module.post.admin.php:68
-$GLOBALS['__l10n']['Limit to one category:'] = 'Limiter à une caégorie :';
+$GLOBALS['__l10n']['Limit to one category:'] = 'Limiter à une catégorie :';
 
 #inc/modules/lib.rateit.module.post.admin.php:72
 $GLOBALS['__l10n']['Invert and exclude this category'] = 'Inverser et exclure cette catégorie';
