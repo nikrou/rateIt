@@ -4,6 +4,13 @@ x.x.x xxxxxxxx
  - Not added public API
  - Not completed modules behaviors (delete/edit category, tag...)
 
+2.0-alpha4 20100703
+ * Fixed attributes 'type' and 'style' to rateIt in templates
+ * Added condition for 'style' to rateItIf in templates
+
+2.0-alpha3 20100701
+ * Fixed filename
+
 2.0-alpha2 20100625
  * Fixed (hope so) postgreSQL compatibility
  * Fixed high note on 'double' style

@@ -300,8 +300,8 @@ class tplRateIt
 	{
 		global $core;
 		
-		$style = isset($attr['style']) ? $attr['style'] : 'classic';
-		$type = isset($attr['type']) ? $attr['type'] : '';
+		$style = isset($attr['style']) ? html::escapeHTML($attr['style']) : '';
+		$type = isset($attr['type']) ? html::escapeHTML($attr['type']) : '';
 		$res = '';
 		
 		# --BEHAVIOR-- publicRateItTplBlockRateIt
@@ -311,8 +311,14 @@ class tplRateIt
 		
 		return
 		"<?php \n".
-		"if ('".$style."' == \$core->blog->settings->rateit->rateit_rating_style) { \n".
+		"\$rateit_style = \"".$style."\"; \n".
+		"if (empty(\$rateit_style)) { ".
+		" \$rateit_style = \$core->blog->settings->rateit->rateit_rating_style; ".
+		"} \n".
+		"if (empty(\$rateit_params)) { ".
+		"\$rateit_params = array('type'=>'','id'=>''); \n".
 		$res.
+		"} ".
 		"if (!empty(\$rateit_params['type'])) { \n".
 		" \$rateit_voted = \$core->rateIt->voted(\$rateit_params['type'],\$rateit_params['id']); \n".
 		" \$_ctx->rateIt = \$core->rateIt->get(\$rateit_params['type'],\$rateit_params['id']); \n".
@@ -323,7 +329,7 @@ class tplRateIt
 		" \$_ctx->rateIt = null; \n".
 		"} \n".
 		"unset(\$rateit_params); \n".
-		"} \n".
+		"unset(\$rateit_style); \n".
 		"?> \n";
 	}
 	
@@ -351,6 +357,17 @@ class tplRateIt
 			else
 			{
 				$if[] = '\''.$attr['type'].'\' == $_ctx->rateIt->type';
+			}
+		}
+		if (!empty($attr['style']))
+		{
+			if (substr($attr['style'],0,1) == '!')
+			{
+				$if[] = '\''.substr($attr['style'],1).'\' != $rateit_style';
+			}
+			else
+			{
+				$if[] = '\''.$attr['style'].'\' == $rateit_style';
 			}
 		}
 		
@@ -387,7 +404,7 @@ class tplRateIt
 	{
 		global $core;
 		$f = $core->tpl->getFilters($attr);
-		return '<?php echo rateItContext::linker($rateit_voted,$_ctx->rateIt->type,$_ctx->rateIt->id,$_ctx->rateIt->note,$_ctx->rateIt->quotient); ?>';
+		return '<?php echo rateItContext::linker($rateit_voted,$_ctx->rateIt->type,$_ctx->rateIt->id,$_ctx->rateIt->note,$_ctx->rateIt->quotient,$rateit_style); ?>';
 	}
 	
 	# Value: full note (ex: 2/5)

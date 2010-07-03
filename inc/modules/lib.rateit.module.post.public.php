@@ -28,7 +28,7 @@ class postRateItModulePublic
 	public static function publicRateItTplBlockRateIt($type,$attr,$content)
 	{
 		if ($type != '' && $type != 'post') return;
-		
+//utiliser $core->getPostType		
 		return 
 		"if (\$_ctx->exists('posts')".
 		" && \$_ctx->posts->post_type == 'post'".

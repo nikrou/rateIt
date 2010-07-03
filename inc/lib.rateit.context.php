@@ -15,10 +15,14 @@ if (!defined('DC_RC_PATH')){return;}
 class rateItContext
 {
 	# Form
-	public static function linker($enable,$type,$id,$note,$quotient)
+	public static function linker($enable,$type,$id,$note,$quotient,$style='')
 	{
 		global $core;
 		
+		if (!in_array($style,array('classic','simple','twin')))
+		{
+			$style = $core->blog->settings->rateit->rateit_rating_style;
+		}
 		$like = $core->blog->settings->rateit->rateit_msglike;
 		if (empty($like)) { $like = __('I like'); }
 		$notlike = $core->blog->settings->rateit->rateit_msgnotlike;
@@ -35,12 +39,12 @@ class rateItContext
 		'<input type="hidden" name="linkeruid" value="'.$uid.'" />';
 		
 		
-		if ($core->blog->settings->rateit->rateit_rating_style == 'simple')
+		if ($style == 'simple')
 		{
 			$chk = $enable ? ' checked="checked"' : '';
 			$res .= '<input title="'.$like.'" name="'.$uid.'" class="rateit-'.$type.'-'.$id.'" type="radio" value="'.$quotient.'" '.$chk.$dis.' />';
 		}
-		elseif ($core->blog->settings->rateit->rateit_rating_style == 'twin')
+		elseif ($style == 'twin')
 		{
 			$chk = $enable ? ' checked="checked"' : '';
 			$res .= '<input title="'.$notlike.'" name="'.$uid.'" class="rateit-'.$type.'-'.$id.'" type="radio" value="1" checked="checked"'.$dis.' />';
