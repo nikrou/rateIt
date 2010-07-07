@@ -219,7 +219,14 @@ class rateIt
 	{
 		$params['columns'][] = 'COUNT(rateit_id) as rateit_count';
 		
-		$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as char)=rateit_id ';
+		if ($this->con->driver() == 'mysql')
+		{
+			$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as char)=rateit_id ';
+		}
+		else
+		{
+			$params['from'] = 'INNER JOIN '.$this->table.' ON CAST(P.post_id as int)=CAST(rateit_id as int) ';
+		}
 		
 		if (!isset($params['sql'])) $params['sql'] = '';
 		

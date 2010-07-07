@@ -56,7 +56,14 @@ class cinecturlink2RateItModulePublic
 		$p['groups'][] = 'C.link_id';
 		$p['groups'][] = 'C.link_title';
 		
-		$p['from'] .= ' INNER JOIN '.$core->prefix.'cinecturlink2 C ON CAST(C.link_id as char)=RI.rateit_id ';
+		if ($core->con->driver() == 'mysql')
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'cinecturlink2 C ON CAST(C.link_id as char)=RI.rateit_id ';
+		}
+		else
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'cinecturlink2 C ON CAST(C.link_id as int)=CAST(RI.rateit_id as int) ';
+		}
 	}
 }
 

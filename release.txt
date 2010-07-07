@@ -4,6 +4,10 @@ x.x.x xxxxxxxx
  - Not added public API
  - Not completed modules behaviors (delete/edit category, tag...)
 
+2.0-alpha5 20100707
+ * Fixed core call in module post
+ * Fixed cast on pgsql vs mysql
+
 2.0-alpha4 20100703
  * Fixed attributes 'type' and 'style' to rateIt in templates
  * Added condition for 'style' to rateItIf in templates

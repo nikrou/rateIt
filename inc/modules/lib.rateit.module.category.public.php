@@ -70,7 +70,14 @@ class categoryRateItModulePublic
 		$p['groups'][] = 'C.cat_title';
 		$p['groups'][] = 'C.cat_id';
 		
-		$p['from'] .= ' INNER JOIN '.$core->prefix.'category C ON CAST(C.cat_id as char)=RI.rateit_id ';
+		if ($core->con->driver() == 'mysql')
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'category C ON CAST(C.cat_id as char)=RI.rateit_id ';
+		}
+		else
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'category C ON CAST(C.cat_id as int)=CAST(RI.rateit_id as int) ';
+		}
 /*
 		if ($w->catlimit)
 		{

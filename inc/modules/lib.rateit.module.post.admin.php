@@ -284,6 +284,10 @@ class postRateItAdmin
 	public static function adminBeforePostDelete($post_id)
 	{
 		$post_id = (integer) $post_id;
+		if (!$post_id) return;
+		
+		global $core;
+		
 		$core->rateIt->del('post',$post_id);
 	}
 	

@@ -108,7 +108,15 @@ class galleryRateItModulePublic
 			$p['groups'][] = 'P.post_title';
 			$p['groups'][] = 'P.post_id';
 			
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
+			if ($core->con->driver() == 'mysql')
+			{
+				$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
+			}
+			else
+			{
+				$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as int)=CAST(RI.rateit_id as int) ';
+			}
+			
 			$p['sql'] .= "AND post_type='gal' ";
 			
 			if ($w->catlimit)
@@ -129,7 +137,15 @@ class galleryRateItModulePublic
 			$p['groups'][] = 'P.post_title';
 			$p['groups'][] = 'P.post_id';
 			
-			$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
+			if ($core->con->driver() == 'mysql')
+			{
+				$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as char)=RI.rateit_id ';
+			}
+			else
+			{
+				$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON CAST(P.post_id as int)=CAST(RI.rateit_id as int) ';
+			}
+			
 			$p['sql'] .= "AND post_type='galitem' ";
 			
 			if ($w->catlimit)

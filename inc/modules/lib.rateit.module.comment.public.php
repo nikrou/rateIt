@@ -57,7 +57,15 @@ class commentRateItModulePublic
 		$p['groups'][] = 'C.comment_author';
 		$p['groups'][] = 'P.post_url';
 		
-		$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
+		if ($core->con->driver() == 'mysql')
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
+		}
+		else
+		{
+			$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as int)=CAST(RI.rateit_id as int) ';
+		}
+		
 		$p['from'] .= ' INNER JOIN '.$core->prefix.'post P ON C.comment_id = P.post_id ';
 		
 		if ($w->catlimit) {
