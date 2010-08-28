@@ -237,13 +237,13 @@ class rateIt
 			$params['sql'] .= "AND rateit_type = '".$this->con->escape($params['rateit_type'])."' ";
 			unset($params['rateit_type']);
 		}
-		
+/*		
 		if (!empty($params['post_type']))
 		{
 			$params['sql'] .= "AND post_type = '".$this->con->escape($params['post_type'])."' ";
 			unset($params['post_type']);
 		}
-		
+//*/		
 		$params['sql'] .= 'GROUP BY rateit_id, rateit_type ';
 		if (!$count_only)
 		{

@@ -4,6 +4,11 @@ x.x.x xxxxxxxx
  - Not added public API
  - Not completed modules behaviors (delete/edit category, tag...)
 
+2.0-alpha6 20100828
+ * Added rate on event (plugin eventHandler)
+ * Opened to other post_type
+ * Fixed bug on image path
+
 2.0-alpha5 20100707
  * Fixed core call in module post
  * Fixed cast on pgsql vs mysql

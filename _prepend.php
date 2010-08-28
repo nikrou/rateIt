@@ -212,4 +212,35 @@ function cinecturlink2RateItModule($core,$modules)
 	$core->addBehavior('importSingle',array('backupRateItCinecturlink2','importSingle'));
 }
 
+# Module "eventhandler"
+$__autoload['eventhandlerRateItModuleAdmin'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.eventhandler.admin.php';
+$__autoload['eventhandlerRateItModulePublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.eventhandler.public.php';
+$__autoload['eventhandlerRateItAdmin'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.eventhandler.admin.php';
+$__autoload['eventhandlerRateItPublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.eventhandler.public.php';
+
+$core->addBehavior('addRateItModule','eventhandlerRateItModule');
+function eventhandlerRateItModule($core,$modules)
+{
+	$modules['eventhandler'] = __('Events');
+
+	$core->addBehavior('adminRateItModuleUpdate',array('eventhandlerRateItModuleAdmin','adminRateItModuleUpdate'));
+	$core->addBehavior('adminRateItModuleSettingsTab',array('eventhandlerRateItModuleAdmin','adminRateItModuleSettingsTab'));
+	$core->addBehavior('adminRateItModuleRecordsTab',array('eventhandlerRateItModuleAdmin','adminRateItModuleRecordsTab'));
+	$core->addBehavior('publicRateItPageAfterVote',array('eventhandlerRateItModulePublic','publicRateItPageAfterVote'));
+	$core->addBehavior('publicRateItTplBlockRateIt',array('eventhandlerRateItModulePublic','publicRateItTplBlockRateIt'));
+	$core->addBehavior('publicRateItTplValueRateItTitle',array('eventhandlerRateItModulePublic','publicRateItTplValueRateItTitle'));
+	$core->addBehavior('adminRateItWidgetVote',array('eventhandlerRateItModuleAdmin','adminRateItWidgetVote'));
+	$core->addBehavior('adminRateItWidgetRank',array('eventhandlerRateItModuleAdmin','adminRateItWidgetRank'));
+	$core->addBehavior('publicRateItWidgetVote',array('eventhandlerRateItModulePublic','publicRateItWidgetVote'));
+	$core->addBehavior('publicRateItWidgetRank',array('eventhandlerRateItModulePublic','publicRateItWidgetRank'));
+	if ($core->blog->settings->rateit->rateit_active)
+	{
+		$core->addBehavior('adminBeforePostDelete',array('eventhandlerRateItAdmin','adminBeforePostDelete'));
+		$core->addBehavior('adminPostsActionsCombo',array('eventhandlerRateItAdmin','adminPostsActionsCombo'));
+		$core->addBehavior('adminPostsActions',array('eventhandlerRateItAdmin','adminPostsActions'));
+		$core->addBehavior('adminPostsActionsContent',array('eventhandlerRateItAdmin','adminPostsActionsContent'));
+		$core->addBehavior('publicEntryAfterContent',array('eventhandlerRateItPublic','publicEntryAfterContent'));
+	}
+}
+
 ?>

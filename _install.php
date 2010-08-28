@@ -98,6 +98,10 @@ try
 	$s->put('rateit_cinecturlink2_active',false,'boolean','Enabled cinecturlink2 rating',false,true);
 	$s->put('rateit_cinecturlink2_widget',false,'boolean','Enabled rating on cinecturlink2 widget',false,true);
 	$s->put('rateit_cinecturlink2_page',false,'boolean','Enabled rating on cinecturlink2 page',false,true);
+	# Settings for eventHandler
+	$s->put('rateit_eventhandler_active',true,'boolean','Enabled events rating',false,true);
+	$s->put('rateit_eventsinglestpl',false,'boolean','rateit template on single event page',false,true);
+	$s->put('rateit_eventslisttpl',false,'boolean','rateit template on events list page',false,true);
 	
 	# Version
 	$core->setVersion('rateIt',$new_version);
