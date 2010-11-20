@@ -4,6 +4,10 @@ x.x.x xxxxxxxx
  - Not added public API
  - Not completed modules behaviors (delete/edit category, tag...)
 
+2.0-beta1 20101120
+ * Fixed install on nightly build
+ * Added plural on rateItTotal (closes #605)
+
 2.0-alpha6 20100828
  * Added rate on event (plugin eventHandler)
  * Opened to other post_type

@@ -19,9 +19,9 @@ if (version_compare($old_version,$new_version,'>=')) return;
 try
 {
 	# Check DC version
-	if (version_compare(DC_VERSION,'2.2-alpha','<'))
+	if (version_compare(str_replace("-r","-p",DC_VERSION),'2.2-alpha','<'))
 	{
-		throw new Exception('Plugin called rateIt requires Dotclear 2.2 or higher.');
+		throw new Exception('rateIt requires Dotclear 2.2');
 	}
 	# Old addons (now included in rateIt)
 	if ($core->plugins->moduleExists('rateItComment') 
@@ -59,6 +59,7 @@ try
 	$changes = $si->synchronize($ts);
 	
 	# Settings
+	$core->blog->settings->addNamespace('rateit');
 	$s = $core->blog->settings->rateit;
 	
 	# Settings main

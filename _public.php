@@ -426,14 +426,29 @@ class tplRateIt
 	{
 		$r = '';
 		if (isset($attr['totaltext']) && $attr['totaltext'] == 1) {
+			
+			$none = 'no rate';
+			$one = 'one rate';
+			$more = '%d rates';
+			
+			if (isset($attr['none'])) {
+				$none = addslashes($attr['none']);
+			}
+			if (isset($attr['one'])) {
+				$one = addslashes($attr['one']);
+			}
+			if (isset($attr['more'])) {
+				$more = addslashes($attr['more']);
+			}
+			
 			$r = 
 			"<?php \n".
 			"if (\$_ctx->rateIt->total == 0) { \n".
-			"  \$total = sprintf(__('no rate'),\$_ctx->rateIt->total); \n".
+			"  \$total = sprintf(__('".$none."'),\$_ctx->rateIt->total); \n".
 			"} elseif (\$_ctx->rateIt->total == 1) {\n".
-			"  \$total = sprintf(__('one rate'),\$_ctx->rateIt->total); \n".
+			"  \$total = sprintf(__('".$one."'),\$_ctx->rateIt->total); \n".
 			"} else { \n".
-			"  \$total = sprintf(__('%d rates'),\$_ctx->rateIt->total); \n".
+			"  \$total = sprintf(__('".$more."'),\$_ctx->rateIt->total); \n".
 			"} \n".
 			"\$_ctx->rateIt->total = \$total; ?>\n";
 		}
