@@ -42,7 +42,6 @@ rateIt/inc/lib.rateit.list.php
 rateIt/inc/index.summary.php
 rateIt/_uninstall.php
 rateIt/index.php
-rateIt/release.txt
 rateIt/_define.php
 rateIt/js/main.js
 rateIt/default-templates/rateit.css
@@ -61,7 +60,7 @@ rateIt/default-templates/img/stars/star-30.png
 rateIt/default-templates/img/star_little.png
 rateIt/default-templates/img/rateIt-default-image.png
 rateIt/default-templates/img/delete.png
-rateIt/default-templates/js/jquery.rating.pack.js
+rateIt/default-templates/js/jquery.rating.js
 rateIt/default-templates/js/jquery.rateit.js
 rateIt/default-templates/tpl/rateit.html
 rateIt/MANIFEST

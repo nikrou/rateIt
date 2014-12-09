@@ -4,6 +4,7 @@ rateIt 2.0.0 - 2014-12-09
  * Not added rating on other post_type (see plugin muppet)
  * Not added public API
  * Not completed modules behaviors (delete/edit category, tag...)
+ * Update jquery.rating plugin
 
 2.0-beta1 20101120
  * Fixed install on nightly build

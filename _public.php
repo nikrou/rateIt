@@ -231,14 +231,14 @@ class urlRateIt extends dcUrlHandlers
 		echo
 		"\n<!-- JS for rateit --> \n".
 		"<script type=\"text/javascript\" src=\"".
-			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rating.pack.js">'.
+			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rating.js">'.
 		"</script> \n".
 		"<script type=\"text/javascript\" src=\"".
 			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rateit.js">'.
 		"</script> \n".
 		"<script type=\"text/javascript\"> \n".
 		"//<![CDATA[\n".
-		" \$(function(){if(!document.getElementById){return;} \n".
+		" \$(function(){ \n".
 		"  \$.fn.rateit.defaults.service_url = '".html::escapeJS($core->blog->url.$core->url->getBase('rateItservice').'/')."'; \n".
 		"  \$.fn.rateit.defaults.service_func = '".html::escapeJS('rateItVote')."'; \n".
 		"  \$.fn.rateit.defaults.image_size = '".$s['h']."'; \n".
@@ -246,7 +246,7 @@ class urlRateIt extends dcUrlHandlers
 		"  \$.fn.rateit.defaults.enable_cookie = '".($core->blog->settings->rateit->rateit_userident > 0 ? '1' : '0')."'; \n".
 		"  \$.fn.rateit.defaults.msg_thanks = '".html::escapeJS($core->blog->settings->rateit->rateit_msgthanks)."'; \n".
 		"  \$('.rateit').rateit(); \n".
-		" })\n".
+		" });\n".
 		"//]]>\n".
 		"</script>\n";
 	}

@@ -18,6 +18,6 @@ $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your blogs",
 	/* Author */			"JC Denis",
-	/* Version */			'2.0',
+	/* Version */			'2.0.0',
 	/* Permissions */		'admin'
 );

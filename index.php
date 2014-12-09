@@ -75,14 +75,12 @@ $errors = array(
 );
 
 # Messages
-if (isset($succes[$msg]))
-{
+if (isset($succes[$msg])) {
 	$msg = sprintf('<p class="message">%s</p>',$succes[$msg]);
 }
 
 # Pages
-if (!file_exists(dirname(__FILE__).'/inc/index.'.$default_part.'.php'))
-{
+if (!file_exists(dirname(__FILE__).'/inc/index.'.$default_part.'.php')) {
 	$default_part = 'setting';
 }
 define('DC_CONTEXT_RATEIT',$default_part);

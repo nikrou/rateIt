@@ -1,18 +1,16 @@
 /* -- BEGIN LICENSE BLOCK ----------------------------------
  * This file is part of rateIt, a plugin for Dotclear 2.
- * 
+ *
  * Copyright (c) 2009-2010 JC Denis and contributors
  * jcdenis@gdwd.com
- * 
+ *
  * Licensed under the GPL version 2.0 license.
  * A copy of this license is available in LICENSE file or at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * -- END LICENSE BLOCK ------------------------------------*/
 
-;if(window.jQuery) (function($) {
-
+(function($) {
 	$.fn.rateit = function(options) {
-
 		var opts = $.extend({}, $.fn.rateit.defaults, options);
 
 		return this.each(function() {
@@ -24,7 +22,7 @@
 
 		$.fn.rating.options.required = true;
 		$.fn.rating.options.starWidth = image_size;
-		
+
 		var bloc = target;
 
 		$(target).find('.rateit-linker').each(function(){
@@ -56,13 +54,13 @@
 									success:function(data){
 										data=$(data);
 										if(data.find('rsp').attr('status')=='ok'){
-										
+
 											$('input.rateit-'+type+'-'+id).addClass('rateit-loop-prevent');
-											
+
 											var n=Math.round(parseFloat(data.find('item').attr('note')))-1;
 											$('input.rateit-'+type+'-'+id).rating('select',n);
 											$('input.rateit-'+type+'-'+id).rating('disable');
-											
+
 											$('*').find('.rateit-total-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('total'))});
 											$('*').find('.rateit-max-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('max'))});
 											$('*').find('.rateit-min-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('min'))});
@@ -71,7 +69,7 @@
 											$('*').find('.rateit-note-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note'))});
 											$('*').find('.rateit-quotient-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('quotient'))});
 											$('*').find('.rateit-fullnote-'+type+'-'+id).each(function(){$(this).text(data.find('item').attr('note')+'/'+data.find('item').attr('quotient'))});
-											
+
 											if (msg_thanks!=''){
 												$('*').find('.rateit-linker-'+type+'-'+id).each(function(){$(this).empty().append('<p>'+msg_thanks+'</p>')});
 											}

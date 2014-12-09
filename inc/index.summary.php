@@ -17,8 +17,7 @@ if (!defined('DC_CONTEXT_RATEIT') || DC_CONTEXT_RATEIT != 'summary'){return;}
 $i = $total = 0;
 $last = $sort = array();
 
-foreach($rateit_types AS $type => $name)
-{
+foreach($rateit_types AS $type => $name){
 	$rs = $core->con->select(
 	'SELECT rateit_note,rateit_quotient,rateit_time,rateit_ip,rateit_id '.
 	'FROM '.$core->prefix.'rateit WHERE blog_id=\''.$core->blog->id.'\' '.
@@ -28,8 +27,7 @@ foreach($rateit_types AS $type => $name)
 	$count = $core->rateIt->getCount($type);
 	$total += $count;
 
-	if ($rs->isEmpty())
-	{
+	if ($rs->isEmpty()) {
 		$sort[] = $i;
 		$last[$i] = array(
 			'name' => $rateit_types[$type],
@@ -41,9 +39,7 @@ foreach($rateit_types AS $type => $name)
 			'id' => '-'
 		);
 		$i++;
-	}
-	else
-	{
+	} else {
 		$sort[] = strtotime($rs->rateit_time);
 		$last[strtotime($rs->rateit_time)] = array(
 			'name' => $rateit_types[$type],
@@ -69,16 +65,11 @@ echo
 '</head>
 <body>'.$menu.'
 <div id="summary"><h3>'.__('Summary').'</h3><p>';
-if ($total == 0)
-{
+if ($total == 0) {
 	echo __('There is no vote at this time.');
-}
-elseif ($total == 1)
-{
+} elseif ($total == 1) {
 	echo __('There is only one vote at this time.');
-}
-else
-{
+} else {
 	echo sprintf(__('There is a total of %s votes on this blog.'),$total);
 }
 echo '</p>
@@ -94,8 +85,7 @@ echo '</p>
 <th>'.__('Ip').'</th>
 <th>'.__('Id').'</th></tr>';
 rsort($sort);
-foreach($sort AS $k)
-{
+foreach($sort AS $k) {
 	echo
 	'<tr class="line">'.
 	'<td class="nowrap"><a href="'.$p_url.'&amp;part=modules&amp;type='.$last[$k]['type'].'&amp;tab=records">'.$last[$k]['name'].'</a></td>'.
