@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -22,10 +24,10 @@ foreach($rateit_types AS $type => $name)
 	'FROM '.$core->prefix.'rateit WHERE blog_id=\''.$core->blog->id.'\' '.
 	'AND rateit_type=\''.$core->con->escape($type).'\' '.
 	'ORDER BY rateit_time DESC '.$core->con->limit(1));
-	
+
 	$count = $core->rateIt->getCount($type);
 	$total += $count;
-	
+
 	if ($rs->isEmpty())
 	{
 		$sort[] = $i;
@@ -63,7 +65,7 @@ echo '
 # --BEHAVIOR-- adminRateItHeader
 $core->callBehavior('adminRateItHeader',$core);
 
-echo 
+echo
 '</head>
 <body>'.$menu.'
 <div id="summary"><h3>'.__('Summary').'</h3><p>';
@@ -94,7 +96,7 @@ echo '</p>
 rsort($sort);
 foreach($sort AS $k)
 {
-	echo 
+	echo
 	'<tr class="line">'.
 	'<td class="nowrap"><a href="'.$p_url.'&amp;part=modules&amp;type='.$last[$k]['type'].'&amp;tab=records">'.$last[$k]['name'].'</a></td>'.
 	'<td class="nowrap">'.$last[$k]['type'].'</td>'.
@@ -109,4 +111,3 @@ echo '</table></div>';
 
 dcPage::helpBlock('rateIt');
 echo $footer.'</body></html>';
-?>

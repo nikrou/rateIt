@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -20,46 +22,46 @@ class tagRateItModuleAdmin
 		if ($action == 'save_module_tag')
 		{
 			$core->blog->settings->rateit->put('rateit_tag_active',!empty($_POST['rateit_tag_active']),'boolean','Enable tags rating',true,false);
-			
+
 			$core->blog->triggerBlog();
 			return 'save_setting';
 		}
-		
+
 		if ($action == 'rateit_tag_empty' && isset($_POST['entries']))
 		{
 			foreach($_POST['entries'] as $comment_id)
 			{
 				$core->rateIt->del('tag',$comment_id);
 			}
-			
+
 			$core->blog->triggerBlog();
 			return 'del_records';
 		}
 		return;
 	}
-	
+
 	public static function adminRateItModuleSettingsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'tag') return;
-		
+
 		echo
 		'<form method="post" action="'.$page_url.'">'.
 		'<p><label class="classic">'.
 		form::checkbox(array('rateit_tag_active'),1,$core->blog->settings->rateit->rateit_tag_active).
 		__('Enable tags rating').'</label></p>'.
-		
+
 		'<p><input type="submit" name="save" value="'.__('save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_tag').
 		'</p></form>';
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItModuleRecordsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'tag') return;
-		
+
 		try
 		{
 			$metas = $core->meta->getMetadata(array('meta_type'=>'tag'));
@@ -68,13 +70,13 @@ class tagRateItModuleAdmin
 		{
 			$core->error->add($e->getMessage());
 		}
-		
+
 		$table = '';
 		while ($metas->fetch())
 		{
 			$rs = $core->rateIt->get('tag',$metas->meta_id);
 			if (!$rs->total) continue;
-			$table .= 
+			$table .=
 			'<tr class="line">'.
 			'<td class="nowrap">'.form::checkbox(array('entries[]'),$metas->meta_id,'','','',false).'</td>'.
 			'<td class="maximal"><a href="plugin.php?p=metadata&amp;m=tag_posts&amp;tag='.$metas->meta_id.'">
@@ -85,14 +87,14 @@ class tagRateItModuleAdmin
 			'<td class="nowrap">'.$rs->min.'</td>'.
 			'</tr>';
 		}
-		
+
 		if ($table=='')
 		{
 			echo '<p class="message">'.__('There is no tag rating at this time').'</p>';
 		}
 		else
 		{
-			echo 
+			echo
 			'<p>'.__('This is a list of all the tags having rating').'</p>'.
 			'<form method="post" action="'.$page_url.'">'.
 			'<table class="clear"><tr>'.
@@ -104,7 +106,7 @@ class tagRateItModuleAdmin
 			'</tr>'.
 			$table.
 			'</table>'.
-			
+
 			'<div class="two-cols">'.
 			'<p class="col checkboxes-helpers"></p>'.
 			'<p class="col right">'.__('Selected tags action:').' '.
@@ -115,10 +117,10 @@ class tagRateItModuleAdmin
 			'</div>'.
 			'</form>';
 		}
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItWidgetVote($w)
 	{
 		$w->rateit->setting('enable_tag',__('Enable vote for tags'),
@@ -126,7 +128,7 @@ class tagRateItModuleAdmin
 		$w->rateit->setting('title_tag',__('Title for tags:'),
 		__('Rate this tag'),'text');
 	}
-	
+
 	public static function adminRateItWidgetRank($types)
 	{
 		$types[] = array(__('tags') => 'tag');
@@ -135,5 +137,3 @@ class tagRateItModuleAdmin
 
 # DC admin behaviors
 //to do
-
-?>

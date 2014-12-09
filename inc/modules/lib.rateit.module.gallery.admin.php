@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -16,54 +18,54 @@ class galleryRateItModuleAdmin
 	public static function adminRateItModuleUpdate($core,$type,$action,$page_url,$hidden_fields)
 	{
 		if ($type != 'gal' || $type != 'galitem') return;
-		
+
 		if ($action == 'save_module_gal')
 		{
 			$core->blog->settings->rateit->put('rateit_gal_active',!empty($_POST['rateit_gal_active']),'boolean','rateit addon gallery enabled',true,false);
 			$core->blog->settings->rateit->put('rateit_galtpl',!empty($_POST['rateit_galtpl']),'boolean','rateit template galleries page',true,false);
-			
+
 			$core->blog->triggerBlog();
 			return 'save_setting';
 		}
-		
+
 		if ($action == 'save_moule_galitem')
 		{
 			$core->blog->settings->rateit->put('rateit_galitem_active',!empty($_POST['rateit_galitem_active']),'boolean','rateit addon gallery item enabled',true,false);
 			$core->blog->settings->rateit->put('rateit_galitemtpl',!empty($_POST['rateit_galitemtpl']),'boolean','rateit template gallery items page',true,false);
-			
+
 			$core->blog->triggerBlog();
 			return 'save_setting';
 		}
-		
+
 		if ($action == 'rateit_gal_empty' && isset($_POST['entries']))
 		{
 			foreach($_POST['entries'] as $gal_id)
 			{
 				$core->rateIt->del('gal',$gal_id);
 			}
-			
+
 			$core->blog->triggerBlog();
 			return 'del_records';
 		}
-		
+
 		if ($action == 'rateit_galitem_empty' && isset($_POST['entries']))
 		{
 			foreach($_POST['entries'] as $galitem_id)
 			{
 				$core->rateIt->del('galitem',$galitem_id);
 			}
-			
+
 			$core->blog->triggerBlog();
 			return 'del_records';
 		}
-		
+
 		return ;
 	}
-	
+
 	public static function adminRateItModuleSettingsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'gal' || $type != 'galitem') return;
-		
+
 		if ($type == 'gal')
 		{
 			echo
@@ -81,10 +83,10 @@ class galleryRateItModuleAdmin
 			'</p>'.
 			'</form>'.
 			'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>';
-			
+
 			return 1;
 		}
-		
+
 		if ($type == 'galitem')
 		{
 			echo
@@ -102,15 +104,15 @@ class galleryRateItModuleAdmin
 			'</p>'.
 			'</form>'.
 			'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>';
-			
+
 			return 1;
 		}
 	}
-	
+
 	public static function adminRateItModuleRecordsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'gal' || $type != 'galitem') return;
-		
+
 		if ($type == 'gal')
 		{
 			try
@@ -128,7 +130,7 @@ class galleryRateItModuleAdmin
 			{
 				$rs = $core->rateIt->get('gal',$galleries->post_id);
 				if (!$rs->total) continue;
-				$table .= 
+				$table .=
 				'<tr class="line">'.
 				'<td class="nowrap">'.form::checkbox(array('entries[]'),$galleries->post_id,'','','',false).'</td>'.
 				'<td class="maximal"><a href="plugin.php?p=gallery&amp;m=gal&amp;id='.$galleries->post_id.'">
@@ -139,14 +141,14 @@ class galleryRateItModuleAdmin
 				'<td class="nowrap">'.$rs->min.'</td>'.
 				'</tr>';
 			}
-			
+
 			if ($table=='')
 			{
 				echo '<p class="message">'.__('There is no gallery rating at this time').'</p>';
 			}
 			else
 			{
-				echo 
+				echo
 				'<p>'.__('This is a list of all the galleries having rating').'</p>'.
 				'<form method="post" action="'.$page_url.'">'.
 				'<table class="clear"><tr>'.
@@ -158,7 +160,7 @@ class galleryRateItModuleAdmin
 				'</tr>'.
 				$table.
 				'</table>'.
-				
+
 				'<div class="two-cols">'.
 				'<p class="col checkboxes-helpers"></p>'.
 				'<p class="col right">'.__('Selected galeries action:').' '.
@@ -168,10 +170,10 @@ class galleryRateItModuleAdmin
 				'</p></div>'.
 				'</form>';
 			}
-			
+
 			return 1;
 		}
-		
+
 		if ($type == 'galitem')
 		{
 			try
@@ -183,13 +185,13 @@ class galleryRateItModuleAdmin
 			{
 				$core->error->add($e->getMessage());
 			}
-			
+
 			$table = '';
 			while ($galleries_items->fetch())
 			{
 				$rs = $rateIt->get('galitem',$galleries_items->post_id);
 				if (!$rs->total) continue;
-				$table .= 
+				$table .=
 				'<tr class="line">'.
 				'<td class="nowrap">'.form::checkbox(array('entries[]'),$galleries_items->post_id,'','','',false).'</td>'.
 				'<td class="maximal"><a href="plugin.php?p=gallery&amp;m=item&amp;id='.$galleries_items->post_id.'">
@@ -200,14 +202,14 @@ class galleryRateItModuleAdmin
 				'<td class="nowrap">'.$rs->min.'</td>'.
 				'</tr>';
 			}
-			
+
 			if ($table=='')
 			{
 				echo '<p class="message">'.__('There is no gallery item rating at this time').'</p>';
 			}
 			else
 			{
-				echo 
+				echo
 				'<p>'.__('This is a list of all the galleries items having rating').'</p>'.
 				'<form method="post" action="'.$page_url.'">'.
 				'<table class="clear"><tr>'.
@@ -219,7 +221,7 @@ class galleryRateItModuleAdmin
 				'</tr>'.
 				$table.
 				'</table>'.
-				
+
 				'<div class="two-cols">'.
 				'<p class="col checkboxes-helpers"></p>'.
 				'<p class="col right">'.__('Selected galeries items action:').' '.
@@ -231,7 +233,7 @@ class galleryRateItModuleAdmin
 			}
 		}
 	}
-	
+
 	public static function adminRateItWidgetVote($w)
 	{
 		$w->rateit->setting('enable_gal',__('Enable vote for galleries'),
@@ -243,7 +245,7 @@ class galleryRateItModuleAdmin
 		$w->rateit->setting('title_galitem',__('Title for gallery items:'),
 			__('Rate this gallery item'),'text');
 	}
-	
+
 	public static function adminRateItWidgetRank($types)
 	{
 		$types[] = array(__('galleries') => 'gal');
@@ -253,4 +255,3 @@ class galleryRateItModuleAdmin
 
 # DC admin behaviors
 //todo
-?>

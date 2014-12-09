@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -22,18 +24,18 @@ class cinecturlink2RateItModuleAdmin
 			$core->blog->settings->rateit->put('rateit_cinecturlink2_active',!empty($_POST['rateit_cinecturlink2_active']),'boolean','Enabled cinecturlink2 rating',true,false);
 			$core->blog->settings->rateit->put('rateit_cinecturlink2_widget',!empty($_POST['rateit_cinecturlink2_widget']),'boolean','Enabled rating on cinecturlink2 widget',true,false);
 			$core->blog->settings->rateit->put('rateit_cinecturlink2_page',!empty($_POST['rateit_cinecturlink2_page']),'boolean','Enabled rating on cinecturlink2 page',true,false);
-			
+
 			$core->blog->triggerBlog();
 			return 'save_setting';
 		}
-		
+
 		return;
 	}
-	
+
 	public static function adminRateItModuleSettingsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'cinecturlink2') return;
-		
+
 		echo
 		'<form method="post" action="'.$page_url.'">'.
 		'<p><label class="classic">'.
@@ -45,19 +47,19 @@ class cinecturlink2RateItModuleAdmin
 		'<p><label class="classic">'.
 		form::checkbox(array('rateit_cinecturlink2_page'),1,$core->blog->settings->rateit->rateit_cinecturlink2_page).
 		__('Include on cinecturlinks page').'</label></p>'.
-		
+
 		'<p><input type="submit" name="save" value="'.__('save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_cinecturlink2').
 		'</p></form>';
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItModuleRecordsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'cinecturlink2') return;
-		
+
 		try
 		{
 			$C2 = new cinecturlink2($core);
@@ -73,7 +75,7 @@ class cinecturlink2RateItModuleAdmin
 		{
 			$rs = $core->rateIt->get('cinecturlink2',$links->link_id);
 			if (!$rs->total) continue;
-			$table .= 
+			$table .=
 			'<tr class="line">'.
 			'<td class="nowrap">'.form::checkbox(array('entries[]'),$links->link_id,'','','',false).'</td>'.
 			'<td class="maximal"><a href="plugin.php?p=cinecturlink2&amp;part=main&amp;tab=newlink&amp;link_id='.$links->link_id.'">'.html::escapeHTML($links->link_title).'</a></td>'.
@@ -86,14 +88,14 @@ class cinecturlink2RateItModuleAdmin
 			'<td class="nowrap">'.$links->link_note.'/10</td>'.
 			'</tr>';
 		}
-		
+
 		if ($table=='')
 		{
 			echo '<p class="message">'.__('There is no cinecturlink rating at this time').'</p>';
 		}
 		else
 		{
-			echo 
+			echo
 			'<p>'.__('This is a list of all the cinecturlink having rating').'</p>'.
 			'<form method="post" action="'.$page_url.'">'.
 			'<table class="clear"><tr>'.
@@ -118,10 +120,10 @@ class cinecturlink2RateItModuleAdmin
 			'</p></div>'.
 			'</form>';
 		}
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItWidgetRank($types)
 	{
 		$types[] = array(__('Cinecturlink') => 'cinecturlink2');
@@ -130,5 +132,3 @@ class cinecturlink2RateItModuleAdmin
 
 # DC admin behaviors
 //to do
-
-?>

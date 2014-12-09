@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -15,7 +17,7 @@ if (!defined('DC_RC_PATH')){return;}
 class rateItLibImagePath
 {
 	public static $version = '1.1';
-	
+
 	public static function getArray($core,$m='')
 	{
 		if (!$core->plugins->moduleExists($m)
@@ -26,7 +28,7 @@ class rateItLibImagePath
 				'module'=>array('dir'=>null,'url'=>null),
 			);
 		}
-		
+
 		return array(
 			'public' => array(
 				'dir' => $core->blog->public_path.'/'.$m.'-default-image.png',
@@ -42,7 +44,7 @@ class rateItLibImagePath
 			)
 		);
 	}
-	
+
 	public static function getUrl($core,$m='')
 	{
 		$files = self::getArray($core,$m);
@@ -52,7 +54,7 @@ class rateItLibImagePath
 		}
 		return null;
 	}
-	
+
 	public static function getPath($core,$m='')
 	{
 		$files = self::getArray($core,$m);
@@ -62,7 +64,7 @@ class rateItLibImagePath
 		}
 		return null;
 	}
-	
+
 	public static function getSize($core,$m='')
 	{
 		if (!($img = self::getPath($core,$m)))
@@ -73,4 +75,3 @@ class rateItLibImagePath
 		}
 	}
 }
-?>

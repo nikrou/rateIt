@@ -1,17 +1,18 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')){return;}
-if (version_compare(str_replace("-r","-p",DC_VERSION),'2.2-alpha','<')){return;}
 
 global $__autoload, $core;
 
@@ -27,12 +28,9 @@ $__autoload['rateItContext'] = dirname(__FILE__).'/inc/lib.rateit.context.php';
 $__autoload['rateItLibImagePath'] = dirname(__FILE__).'/inc/lib.image.path.php';
 
 # Put rateIt in core (against multiple instance of rateIt)
-try
-{
+try {
 	$core->rateIt = new rateIt($core);
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
 	return null;
 }
 
@@ -43,8 +41,7 @@ $core->url->register('rateItservice','rateitservice','^rateitservice/$',array('u
 //todo: public API
 
 # Add rateIt report on plugin activityReport
-if (defined('ACTIVITY_REPORT'))
-{
+if (defined('ACTIVITY_REPORT')) {
 	require_once dirname(__FILE__).'/inc/lib.rateit.activityreport.php';
 }
 
@@ -55,8 +52,7 @@ $__autoload['postRateItAdmin'] = dirname(__FILE__).'/inc/modules/lib.rateit.modu
 $__autoload['postRateItPublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.post.public.php';
 
 $core->addBehavior('addRateItModule','postRateItModule');
-function postRateItModule($core,$modules)
-{
+function postRateItModule($core,$modules) {
 	$modules['post'] = __('Entries');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('postRateItModuleAdmin','adminRateItModuleUpdate'));
@@ -69,8 +65,7 @@ function postRateItModule($core,$modules)
 	$core->addBehavior('adminRateItWidgetRank',array('postRateItModuleAdmin','adminRateItWidgetRank'));
 	$core->addBehavior('publicRateItWidgetVote',array('postRateItModulePublic','publicRateItWidgetVote'));
 	$core->addBehavior('publicRateItWidgetRank',array('postRateItModulePublic','publicRateItWidgetRank'));
-	if ($core->blog->settings->rateit->rateit_active)
-	{
+	if ($core->blog->settings->rateit->rateit_active) {
 		$core->addBehavior('adminBeforePostDelete',array('postRateItAdmin','adminBeforePostDelete'));
 		$core->addBehavior('adminPostsActionsCombo',array('postRateItAdmin','adminPostsActionsCombo'));
 		$core->addBehavior('adminPostsActions',array('postRateItAdmin','adminPostsActions'));
@@ -86,8 +81,7 @@ $__autoload['commentRateItModulePublic'] = dirname(__FILE__).'/inc/modules/lib.r
 $__autoload['commentRateItPublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.comment.public.php';
 
 $core->addBehavior('addRateItModule','commentRateItModule');
-function commentRateItModule($core,$modules)
-{
+function commentRateItModule($core,$modules) {
 	$modules['comment'] = __('Comments');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('commentRateItModuleAdmin','adminRateItModuleUpdate'));
@@ -98,8 +92,7 @@ function commentRateItModule($core,$modules)
 	$core->addBehavior('publicRateItTplValueRateItTitle',array('commentRateItModulePublic','publicRateItTplValueRateItTitle'));
 	$core->addBehavior('adminRateItWidgetRank',array('commentRateItModuleAdmin','adminRateItWidgetRank'));
 	$core->addBehavior('publicRateItWidgetRank',array('commentRateItModulePublic','publicRateItWidgetRank'));
-	if ($core->blog->settings->rateit->rateit_active)
-	{
+	if ($core->blog->settings->rateit->rateit_active) {
 		$core->addBehavior('publicCommentAfterContent',array('commentRateItPublic','publicCommentAfterContent'));
 	}
 }
@@ -110,8 +103,7 @@ $__autoload['categoryRateItModuleAdmin'] = dirname(__FILE__).'/inc/modules/lib.r
 $__autoload['categoryRateItModulePublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.category.public.php';
 
 $core->addBehavior('addRateItModule','categoryRateItModule');
-function categoryRateItModule($core,$modules)
-{
+function categoryRateItModule($core,$modules) {
 	$modules['category'] = __('Categories');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('categoryRateItModuleAdmin','adminRateItModuleUpdate'));
@@ -132,10 +124,9 @@ $__autoload['tagRateItModuleAdmin'] = dirname(__FILE__).'/inc/modules/lib.rateit
 $__autoload['tagRateItModulePublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.tag.public.php';
 
 $core->addBehavior('addRateItModule','tagRateItModule');
-function tagRateItModule($core,$modules)
-{
+function tagRateItModule($core,$modules) {
 	if (!$core->plugins->moduleExists('tags')) return;
-	
+
 	$modules['tag'] = __('Tags');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('tagRateItModuleAdmin','adminRateItModuleUpdate'));
@@ -157,10 +148,9 @@ $__autoload['galleryRateItModulePublic'] = dirname(__FILE__).'/inc/modules/lib.r
 $__autoload['galleryRateItPublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.gallery.public.php';
 
 $core->addBehavior('addRateItModule','galleryRateItModule');
-function galleryRateItModule($core,$modules)
-{
+function galleryRateItModule($core,$modules) {
 	if (!$core->plugins->moduleExists('gallery')) return;
-		
+
 	$modules['gal'] = __('Galleries');
 	$modules['galitem'] = __('Gallery items');
 
@@ -174,8 +164,7 @@ function galleryRateItModule($core,$modules)
 	$core->addBehavior('adminRateItWidgetRank',array('galleryRateItModuleAdmin','adminRateItWidgetRank'));
 	$core->addBehavior('publicRateItWidgetVote',array('galleryRateItModulePublic','publicRateItWidgetVote'));
 	$core->addBehavior('publicRateItWidgetRank',array('galleryRateItModulePublic','publicRateItWidgetRank'));
-	if ($core->blog->settings->rateit->rateit_active)
-	{
+	if ($core->blog->settings->rateit->rateit_active) {
 		$core->addBehavior('publicEntryAfterContent',array('galleryRateItPublic','publicEntryAfterContent'));
 	}
 }
@@ -188,10 +177,9 @@ $__autoload['cinecturlink2RateItPublic'] = dirname(__FILE__).'/inc/modules/lib.r
 $__autoload['cinecturlink2RateItBackup'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.cinecturlink2.backup.php';
 
 $core->addBehavior('addRateItModule','cinecturlink2RateItModule');
-function cinecturlink2RateItModule($core,$modules)
-{
+function cinecturlink2RateItModule($core,$modules) {
 	if (!$core->plugins->moduleExists('cinecturlink2')) return;
-		
+
 	$modules['cinecturlink2'] = __('Cinecturlink');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('cinecturlink2RateItModuleAdmin','adminRateItModuleUpdate'));
@@ -202,8 +190,7 @@ function cinecturlink2RateItModule($core,$modules)
 	$core->addBehavior('publicRateItTplValueRateItTitle',array('cinecturlink2RateItModulePublic','publicRateItTplValueRateItTitle'));
 	$core->addBehavior('adminRateItWidgetRank',array('cinecturlink2RateItModuleAdmin','adminRateItWidgetRank'));
 	$core->addBehavior('publicRateItWidgetRank',array('cinecturlink2RateItModulePublic','publicRateItWidgetRank'));
-	if ($core->blog->settings->rateit->rateit_active)
-	{
+	if ($core->blog->settings->rateit->rateit_active) {
 		$core->addBehavior('publicC2EntryAfterContent',array('cinecturlink2RateItPublic','publicC2EntryAfterContent'));
 		$core->addBehavior('cinecturlink2WidgetLinks',array('cinecturlink2RateItPublic','cinecturlink2WidgetLinks'));
 	}
@@ -219,8 +206,7 @@ $__autoload['eventhandlerRateItAdmin'] = dirname(__FILE__).'/inc/modules/lib.rat
 $__autoload['eventhandlerRateItPublic'] = dirname(__FILE__).'/inc/modules/lib.rateit.module.eventhandler.public.php';
 
 $core->addBehavior('addRateItModule','eventhandlerRateItModule');
-function eventhandlerRateItModule($core,$modules)
-{
+function eventhandlerRateItModule($core,$modules) {
 	$modules['eventhandler'] = __('Events');
 
 	$core->addBehavior('adminRateItModuleUpdate',array('eventhandlerRateItModuleAdmin','adminRateItModuleUpdate'));
@@ -233,8 +219,7 @@ function eventhandlerRateItModule($core,$modules)
 	$core->addBehavior('adminRateItWidgetRank',array('eventhandlerRateItModuleAdmin','adminRateItWidgetRank'));
 	$core->addBehavior('publicRateItWidgetVote',array('eventhandlerRateItModulePublic','publicRateItWidgetVote'));
 	$core->addBehavior('publicRateItWidgetRank',array('eventhandlerRateItModulePublic','publicRateItWidgetRank'));
-	if ($core->blog->settings->rateit->rateit_active)
-	{
+	if ($core->blog->settings->rateit->rateit_active) {
 		$core->addBehavior('adminBeforePostDelete',array('eventhandlerRateItAdmin','adminBeforePostDelete'));
 		$core->addBehavior('adminPostsActionsCombo',array('eventhandlerRateItAdmin','adminPostsActionsCombo'));
 		$core->addBehavior('adminPostsActions',array('eventhandlerRateItAdmin','adminPostsActions'));
@@ -242,5 +227,3 @@ function eventhandlerRateItModule($core,$modules)
 		$core->addBehavior('publicEntryAfterContent',array('eventhandlerRateItPublic','publicEntryAfterContent'));
 	}
 }
-
-?>

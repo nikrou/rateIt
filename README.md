@@ -1,11 +1,7 @@
-!!! This document is not up to date !!!
-
-rateIt 0.5 (2009/07/09) plugin for Dotclear 2
-
 Préambule
 =========
 
-Cette extension pour Dotclear 2 permet d'ajouter un système complet 
+Cette extension pour Dotclear 2 permet d'ajouter un système complet
 de notation pour les billets (et plus avec ses addons).
 
 Cette documentation est en cours d'écriture...
@@ -32,7 +28,7 @@ is licensed under the MIT License and the GPL License.
 http://www.opensource.org/licenses/mit-license.php
 http://www.gnu.org/licenses/gpl.html
 
-The javascript Star Rating Plugin by Fyneworks.com 
+The javascript Star Rating Plugin by Fyneworks.com
 Copyright (c) 2008 Fyneworks.com
 is licensed under the MIT License and the GPL License.
 http://www.opensource.org/licenses/mit-license.php
@@ -57,9 +53,9 @@ Pour information, le plugin rateIt crée la table "rateit".
 IV. Désintallation
 ==================
 
-Une procédure est disponible à partir du gestionnaire d'extensions 
+Une procédure est disponible à partir du gestionnaire d'extensions
 ou depuis l'onglet "désinstallation" de l'extension "RateIt".
-Si la désintallation est impossible par cette procédure, 
+Si la désintallation est impossible par cette procédure,
 il faut supprimer les fichiers et la table rateit manuellement.
 
 
@@ -70,8 +66,8 @@ V.1 Extension
 -------------
 
 "Activer l'extension"
-Permet d'activer ou non l'extension sur un blog. 
-Avec une configuration d'origine, la désactivation de l'extension 
+Permet d'activer ou non l'extension sur un blog.
+Avec une configuration d'origine, la désactivation de l'extension
 masquera toutes les balise en rapport avec le plugin coté public.
 
 "Identifier l'utilisateur par"
@@ -94,12 +90,12 @@ Si le message est vide, l'interface ne sera pas modifiée.
 V.2 Image
 ---------
 
-Vous pouvez modifier l'apparence de l'interface de vote avec 
+Vous pouvez modifier l'apparence de l'interface de vote avec
 un choix prédéfini d'image ou en en ajoutant une nouvelle.
-La nouvelle image doit obligatoirement être au format "png" 
+La nouvelle image doit obligatoirement être au format "png"
 et avec trois parties égales en hauteur :
-- une partie haute représentant "un non vote", 
-- une partie centrale représentant un vote positif et 
+- une partie haute représentant "un non vote",
+- une partie centrale représentant un vote positif et
 - une partie basse représentant le survol par la souris.
 La largeur et la hauteur sont à votre convenance.
 
@@ -132,7 +128,7 @@ VIII.1 Options
 "Inclure dans les pages des billets"
 Utilisé pour le template post.html.
 Permet d'inclure l'outil de vote directement à la fin d'un billet sans modifier les templates.
-La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit être présente 
+La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit être présente
 dans le thème utilisé pour que cette option fonctionne.
 
 "Inclure sur la page d'accueil"
@@ -148,7 +144,7 @@ Permet de limiter les votes aux billets d'une seule catégorie.
 IX. Autres onlgets
 ==================
 
-D'autres onglets peuvent être présents si d'autres plugins 
+D'autres onglets peuvent être présents si d'autres plugins
 utilisent l'interface "rateIt".
 ...
 
@@ -164,7 +160,7 @@ X.1 Evaluation
 Ce widget (de class "rateitwidget") permet d'afficher une interface de vote sur la page d'un billet.
 
 "Autoriser le vote pour les billets"
-Si cette option est cochée et qu'on est sur la page d'un billet, 
+Si cette option est cochée et qu'on est sur la page d'un billet,
 le widget affichera un formulaire de vote.
 
 "Titre pour les billets"
@@ -266,7 +262,7 @@ Voici la structure type de ce widget :
 </div>
 
 La structure de la balise "form" est modifiée par le javascript de notation.
-La structure CSS en rapport avec ce javascript est directement générée dans 
+La structure CSS en rapport avec ce javascript est directement générée dans
 le code source de la page.
 
 b) Widget "Top évaluation":
@@ -287,7 +283,7 @@ XI.3 Formulaires inclus dans la page
 ------------------------------------
 
 Son emplacement dépend du thème utilisé sur le blog.
-Par défaut il se situe après le contenu d'un billet 
+Par défaut il se situe après le contenu d'un billet
 et utilise le behavior {{tpl:SysBehavior behavior="publicEntryAfterContent"}}.
 Son apparence dépend également du thème.
 Par défaut il utilise le fichier "default-templates/tpl/rateit.html" de l'extension.
@@ -454,6 +450,3 @@ XVIII. Remerciements:
 
 Je tiens à remercier les personnes qui ont eu la patience de tester toutes les versions d'essai
 et de donner un coup de main. Je remercie également toute l'équipe de Dotclear.
-
------------
-End of file

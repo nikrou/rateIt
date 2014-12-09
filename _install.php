@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -16,29 +18,7 @@ $new_version = $core->plugins->moduleInfo('rateIt','version');
 $old_version = $core->getVersion('rateIt');
 if (version_compare($old_version,$new_version,'>=')) return;
 
-try
-{
-	# Check DC version
-	if (version_compare(str_replace("-r","-p",DC_VERSION),'2.2-alpha','<'))
-	{
-		throw new Exception('rateIt requires Dotclear 2.2');
-	}
-	# Old addons (now included in rateIt)
-	if ($core->plugins->moduleExists('rateItComment') 
-	 || $core->plugins->moduleExists('rateItCategory')
-	 || $core->plugins->moduleExists('rateItTag')
-	 || $core->plugins->moduleExists('rateItGallery'))
-	{
-		throw new Exception('You must uninstall rateItComment, rateItCategory, rateItTag, rateItGallery before installing rateIt '.$new_version);
-		return false;
-	}
-	# Old version of cinecturlink2 (now included in rateIt)
-	if ($core->plugins->moduleExists('cinecturlink2') 
-	 && version_compare($core->plugins->moduleInfo('cinecturlink2','version'),'0.6.1','<'))
-	{
-		throw new Exception('Plugin called cinecturlink2 must be upgradded.');
-	}
-	
+try {
 	# Database
 	$ts = new dbStruct($core->con,$core->prefix);
 	$ts->rateit
@@ -54,14 +34,14 @@ try
 		->index('idx_rateit_rateit_type','btree','rateit_type')
 		->index('idx_rateit_rateit_id','btree','rateit_id')
 		->index('idx_rateit_rateit_ip','btree','rateit_ip');
-	
+
 	$si = new dbStruct($core->con,$core->prefix);
 	$changes = $si->synchronize($ts);
-	
+
 	# Settings
 	$core->blog->settings->addNamespace('rateit');
 	$s = $core->blog->settings->rateit;
-	
+
 	# Settings main
 	$s->put('rateit_active',false,'boolean','rateit plugin enabled',false,true);
 	$s->put('rateit_importexport_active',true,'boolean','rateit import/export enabled',false,true);
@@ -103,15 +83,12 @@ try
 	$s->put('rateit_eventhandler_active',true,'boolean','Enabled events rating',false,true);
 	$s->put('rateit_eventsinglestpl',false,'boolean','rateit template on single event page',false,true);
 	$s->put('rateit_eventslisttpl',false,'boolean','rateit template on events list page',false,true);
-	
+
 	# Version
 	$core->setVersion('rateIt',$new_version);
-	
+
 	return true;
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
 	$core->error->add($e->getMessage());
 }
 return false;
-?>

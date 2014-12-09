@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -33,7 +35,7 @@ $combo_types = array_flip($rateit_types);
 $combo_types = array_merge(array('- '.__('select a module').' -'=>''),$combo_types);
 
 # Common page header
-$header = 
+$header =
 '<link rel="stylesheet" type="text/css" href="index.php?pf=rateIt/style.css" />'.
 dcPage::jsLoad('index.php?pf=rateIt/js/main.js').
 '<script type="text/javascript">'."\n//<![CDATA[\n".
@@ -55,7 +57,7 @@ $core->formNonce().'
 
 # Common page footer
 $footer = '<hr class="clear"/><p class="right">
-<a class="button" href="'.$p_url.'&amp;part=setting">'.__('Settings').'</a> - 
+<a class="button" href="'.$p_url.'&amp;part=setting">'.__('Settings').'</a> -
 rateIt - '.$core->plugins->moduleInfo('rateIt','version').'&nbsp;
 <img alt="'.__('Rate it').'" src="index.php?pf=rateIt/icon.png" />
 </p>';
@@ -85,4 +87,3 @@ if (!file_exists(dirname(__FILE__).'/inc/index.'.$default_part.'.php'))
 }
 define('DC_CONTEXT_RATEIT',$default_part);
 include dirname(__FILE__).'/inc/index.'.$default_part.'.php';
-?>

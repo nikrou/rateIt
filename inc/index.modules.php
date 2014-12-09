@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -20,7 +22,7 @@ if (!empty($type) && !isset($rateit_types[$type]))
 
 # Init some requests
 $page_url = $p_url.'&amp;part=modules&type='.$type;
-$hidden_fields = 
+$hidden_fields =
 form::hidden(array('p'),'rateIt').
 form::hidden(array('part'),'modules').
 form::hidden(array('type'),$type).
@@ -69,22 +71,21 @@ echo $msg;
 if (!$core->error->flag() && !empty($type))
 {
 	echo '<div class="multi-part" id="setting" title="'.__('Settings').'">';
-	
+
 	if ('' == $core->callBehavior('adminRateItModuleSettingsTab',$core,$type,$page_url.'&amp;tab=setting',$hidden_fields.form::hidden(array('tab'),'setting')))
 	{
 		echo '<p>'.__('There is no setting for this module').'</p>';
 	}
-	
+
 	echo '</div><div class="multi-part" id="records" title="'.__('Records').'">';
-	
+
 	if ('' == $core->callBehavior('adminRateItModuleRecordsTab',$core,$type,$page_url.'&amp;tab=records',$hidden_fields.form::hidden(array('tab'),'records')))
 	{
 		echo '<p>'.__('There is no record for this module').'</p>';
 	}
-	
+
 	echo '</div>';
 }
 
 dcPage::helpBlock('rateIt');
 echo $footer.'</body></html>';
-?>

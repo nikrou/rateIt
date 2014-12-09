@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -48,7 +50,7 @@ function rateItPictureshow($star)
 	'	height:'.(floor($s[1] /3)-1).'px;'.
 	'">&nbsp;</div></td><td>'.$s[0].'x'.floor($s[1] /3).'</td>';
 }
-	
+
 # Update settings
 if ($action == 'save_setting')
 {
@@ -65,15 +67,15 @@ if ($action == 'save_setting')
 		$s->put('rateit_msgnotlike',$_POST['rateit_msgnotlike']);
 		$s->put('rateit_msgthanks',$_POST['rateit_msgthanks']);
 		$s->put('rateit_firstimage_size',$_POST['rateit_firstimage_size']);
-		
+
 		# Destination image according to rateItLibImagePath()
 		$dest_file = DC_ROOT.'/'.$core->blog->settings->system->public_path.'/rateIt-default-image.png';
-		
+
 		# Change rate image
 		if (isset($_POST['starsimage']) && preg_match('/^star-[0-9]+.png$/',$_POST['starsimage']))
 		{
 			$source = dirname(__FILE__).'/../default-templates/img/stars/'.$_POST['starsimage'];
-			
+
 			if (file_exists($source))
 			{
 				file_put_contents($dest_file,file_get_contents($source));
@@ -97,7 +99,7 @@ if ($action == 'save_setting')
 			move_uploaded_file($_FILES['starsuserfile']['tmp_name'],$dest_file);
 		}
 		$core->blog->triggerBlog();
-		
+
 		http::redirect($p_url.'&part=setting&msg='.$action.'&section='.$section);
 	}
 	catch (Exception $e)
@@ -138,7 +140,7 @@ echo '
 # --BEHAVIOR-- adminRateItHeader
 $core->callBehavior('adminRateItHeader',$core);
 
-echo 
+echo
 '</head>
 <body>'.$menu.
 '<h3>'.__('Settings').'</h3>'.
@@ -152,11 +154,11 @@ __('Enable plugin').'</label></p>
 <p><label class="classic">'.
 form::checkbox(array('rateit_dispubjs'),1,$s->rateit_dispubjs).
 __('Disable public javascript').'</label></p>
-<p class="form-note">'.__('This disables all image effects, shows standard form and reloads page on vote.').'</p> 
+<p class="form-note">'.__('This disables all image effects, shows standard form and reloads page on vote.').'</p>
 <p><label class="classic">'.
 form::checkbox(array('rateit_dispubcss'),1,$s->rateit_dispubcss).
 __('Disable public css').'</label></p>
-<p class="form-note">'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p> 
+<p class="form-note">'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p>
 <p><label>'.__('Identify users by:').' '.
 form::combo(array('rateit_userident'),$combo_userident,$s->rateit_userident).'</label></p>
 <p><a>'.__('Note it:').'</a><br />'.__('In order to change url of public page you can use plugin myUrlHandlers.').'</p>
@@ -202,7 +204,7 @@ $stars = rateItLibImagePath::getArray($core,'rateIt');
 if (file_exists($stars['theme']['dir']))
 {
 	# Theme dir
-	echo 
+	echo
 	'<p>'.__('Rating image exists on theme it will be used:').'</p>'.
 	form::hidden(array('starsimage'),'theme').
 	'<table><tr><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>'.
@@ -210,38 +212,38 @@ if (file_exists($stars['theme']['dir']))
 }
 else
 {
-	echo 
+	echo
 	'<p>'.__('Rating image not exists on theme choose one to use:').'</p>'.
 	'<table><tr><th>&nbsp;</th><th>'.__('negative').'</th><th>'.__('positive').'</th><th>'.__('hover').'</th><th>'.__('size').'</th></tr>';
-	
+
 	# Public dir
 	if (file_exists($stars['public']['dir']))
 	{
-		echo 
+		echo
 		'<tr><td><label class="classic">'.form::radio(array('starsimage'),'default',1).' '.__('current').'</label></td>'.
 		rateItPictureshow($stars['public']).'</tr>';
 	}
 	# rateIt plugin dir
 	elseif (file_exists($stars['module']['dir']))
 	{
-		echo 
+		echo
 		'<tr><td><label class="classic">'.form::radio(array('starsimage'),'default',1).' '.__('current').'</label></td>'.
 		rateItPictureshow($stars['module']).'</tr>';
 	}
-	
+
 	sort($stars_rateit_files);
 	foreach($stars_rateit_files AS $f)
 	{
 		if (!preg_match('/star-[0-9]+.png/',$f)) continue;
 
-		echo 
+		echo
 		'<tr class="line"><td><label class="classic">'.form::radio(array('starsimage'),$f).' '.$f.'</label></td>'.
 		rateItPictureshow(array(
 			'dir'=>dirname(__FILE__).'/../default-templates/img/stars/'.$f,
 			'url'=>'index.php?pf=rateIt/default-templates/img/stars/'.$f)
 		).'</tr>';
 	}
-	echo 
+	echo
 	'<tr class="line"><td>'.form::radio(array('starsimage'),'user').'</td>'.
 	'<td colspan="4">'.form::hidden(array('MAX_FILE_SIZE'),30000).'<input type="file" name="starsuserfile" /></td></tr>'.
 	'</table>'.
@@ -261,4 +263,3 @@ $core->formNonce().'</p></div>'.
 
 dcPage::helpBlock('rateIt');
 echo $footer.'</body></html>';
-?>

@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -16,7 +18,7 @@ class postRateItModuleAdmin
 	public static function adminRateItModuleUpdate($core,$type,$action,$page_url,$hidden_fields)
 	{
 		if ($type != 'post' || $action != 'save_module_post') return;
-		
+
 		$core->blog->settings->rateit->put('rateit_post_active',!empty($_POST['rateit_post_active']),'boolean','Enabled post rating',true,false);
 		$core->blog->settings->rateit->put('rateit_poststpl',!empty($_POST['rateit_poststpl']),'boolean','rateit template on post on post page',true,false);
 		$core->blog->settings->rateit->put('rateit_homepoststpl',!empty($_POST['rateit_homepoststpl']),'boolean','rateit template on post on home page',true,false);
@@ -24,15 +26,15 @@ class postRateItModuleAdmin
 		$core->blog->settings->rateit->put('rateit_categorypoststpl',!empty($_POST['rateit_categorypoststpl']),'boolean','rateit template on post on category page',true,false);
 		$core->blog->settings->rateit->put('rateit_categorylimitposts',$_POST['rateit_categorylimitposts'],'integer','rateit limit post vote only to one category',true,false);
 		$core->blog->settings->rateit->put('rateit_categorylimitinvert',!empty($_POST['rateit_categorylimitinvert']),'boolean','rateit limit post vote only to other categories',true,false);
-		
+
 		$core->blog->triggerBlog();
 		return 'save_setting';
 	}
-	
+
 	public static function adminRateItModuleSettingsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'post') return;
-		
+
 		$combo_categories = array('-'=>'');
 		try
 		{
@@ -77,14 +79,14 @@ class postRateItModuleAdmin
 		'</p>'.
 		'</form>'.
 		'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>';
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItModuleRecordsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'post') return;
-		
+
 		# Combos
 		$combo_action = array();
 		$combo_action[__('Reviews')][__('Delete')] = 'rateit_empty';
@@ -191,7 +193,7 @@ class postRateItModuleAdmin
 			if ($order !== '' && in_array($order,$combo_order))
 			{
 				$params['order'] = $sortby.' '.$order;
-			}	
+			}
 			if ($sortby != 'post_dt' || $order != 'desc')
 			{
 				$params['show_filters'] = true;
@@ -210,13 +212,13 @@ class postRateItModuleAdmin
 			$core->error->add($e->getMessage());
 		}
 
-		echo 
+		echo
 		'<p>'.__('This is the list of all entries having rating').'</p>';
 		if (!$params['show_filters'])
-		{ 
+		{
 			echo dcPage::jsLoad('js/filter-controls.js').'<p><a id="filter-control" class="form-control" href="#">'.__('Filters').'</a></p>';
 		}
-		echo 
+		echo
 		'<form action="'.$page_url.'" method="get" id="filters-form">'.
 		'<fieldset><legend>'.__('Filters').'</legend>'.
 		'<div class="three-cols">'.
@@ -260,10 +262,10 @@ class postRateItModuleAdmin
 			'</div>'.
 			'</form>'
 		);
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItWidgetVote($w)
 	{
 		$w->rateit->setting('enable_post',__('Enable vote for entries'),
@@ -271,7 +273,7 @@ class postRateItModuleAdmin
 		$w->rateit->setting('title_post',__('Title for entries:'),
 			__('Rate this entry'),'text');
 	}
-	
+
 	public static function adminRateItWidgetRank($types)
 	{
 		$types[] = array(__('entries') => 'post');
@@ -285,22 +287,22 @@ class postRateItAdmin
 	{
 		$post_id = (integer) $post_id;
 		if (!$post_id) return;
-		
+
 		global $core;
-		
+
 		$core->rateIt->del('post',$post_id);
 	}
-	
+
 	public static function adminPostsActionsCombo($args)
 	{
 		global $core;
-		if ($core->blog->settings->rateit->rateit_active 
+		if ($core->blog->settings->rateit->rateit_active
 		 && $core->auth->check('admin',$core->blog->id))
 		{
 			$args[0][__('Reviews')][__('Remove ratings')] = 'rateit_empty';
 		}
 	}
-	
+
 	public static function adminPostsActions($core,$posts,$action,$redir)
 	{
 		if ($action != 'rateit_do_empty') return;
@@ -319,12 +321,12 @@ class postRateItAdmin
 			$core->error->add($e->getMessage());
 		}
 	}
-	
+
 	public static function adminPostsActionsContent($core,$action,$hidden_fields)
 	{
 		if ($action != 'rateit_empty') return;
-		
-		echo 
+
+		echo
 		'<div id="rateit-edit">'.
 		'<h3>'.__('delete rating').'</h3>'.
 		'<form action="posts_actions.php" method="post"><div>'.
@@ -335,7 +337,7 @@ class postRateItAdmin
 			$rs = $core->blog->getPosts(array('post_id'=>$post,'no_content'=>true));
 			echo '<li><a href="post.php?id='.$rs->post_id.'">'.$rs->post_title.'</a></li>';
 		}
-		echo 
+		echo
 		'</ul>'.
 		'<p>'.
 		$hidden_fields.
@@ -354,7 +356,7 @@ class rateItPostsList extends rateItExtList
 	protected $rs;
 	protected $rs_count;
 	protected $base_url;
-	
+
 	public function init()
 	{
 		self::headline(array(
@@ -368,7 +370,7 @@ class rateItPostsList extends rateItExtList
 			__('Author') => '',
 			__('Status') => ''));
 	}
-	
+
 	public function setLine()
 	{
 		if ($this->rs->cat_title)
@@ -383,27 +385,27 @@ class rateItPostsList extends rateItExtList
 			case -1: $img_status = sprintf($img,__('scheduled'),'scheduled.png'); break;
 			case -2: $img_status = sprintf($img,__('pending'),'check-wrn.png'); break;
 		}
-		
+
 		$protected = '';
 		if ($this->rs->post_password)
 			$protected = sprintf($img,__('protected'),'locker.png');
-		
+
 		$selected = '';
 		if ($this->rs->post_selected)
 			$selected = sprintf($img,__('selected'),'selected.png');
-		
+
 		$attach = '';
 		$nb_media = $this->rs->countMedia();
 		if ($nb_media > 0) {
 			$attach_str = $nb_media == 1 ? __('%d attachment') : __('%d attachments');
 			$attach = sprintf($img,sprintf($attach_str,$nb_media),'attach.png');
 		}
-		
+
 		$q = $this->core->blog->settings->rateit->rateit_quotient;
 		$d = $this->core->blog->settings->rateit->rateit_digit;
-		
+
 		$r = $this->core->rateIt->get('post',$this->rs->post_id);
-		
+
 		self::line(
 			array(
 				# Title
@@ -430,4 +432,3 @@ class rateItPostsList extends rateItExtList
 		);
 	}
 }
-?>

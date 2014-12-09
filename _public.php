@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -18,8 +20,7 @@ require dirname(__FILE__).'/_widgets.php';
 
 $core->addBehavior('publicHeadContent',array('urlRateIt','publicHeadContent'));
 
-if (!$core->blog->settings->rateit->rateit_active)
-{
+if (!$core->blog->settings->rateit->rateit_active) {
 	$core->tpl->addBlock('rateIt',array('tplRateIt','disable'));
 	$core->tpl->addBlock('rateItIf',array('tplRateIt','disable'));
 	$core->tpl->addValue('rateItLinker',array('tplRateIt','disable'));
@@ -32,12 +33,9 @@ if (!$core->blog->settings->rateit->rateit_active)
 	$core->tpl->addValue('rateItNote',array('tplRateIt','disable'));
 	$core->tpl->addValue('rateItFullnote',array('tplRateIt','disable'));
 	$core->tpl->addValue('rateItQuotient',array('tplRateIt','disable'));
-
-}
-else
-{
+} else {
 	$core->tpl->setPath($core->tpl->getPath(),dirname(__FILE__).'/default-templates/tpl/');
-	
+
 	$core->tpl->addBlock('rateIt',array('tplRateIt','rateIt'));
 	$core->tpl->addBlock('rateItIf',array('tplRateIt','rateItIf'));
 	$core->tpl->addValue('rateItLinker',array('tplRateIt','rateItLinker'));
@@ -55,215 +53,182 @@ else
 class urlRateIt extends dcUrlHandlers
 {
 	# Search rateit files like JS, CSS in default-templates subdirectories
-	private static function searchRateItTplFiles($file)
-	{
-		if (strstr($file,"..") !== false)
-		{
+	private static function searchRateItTplFiles($file) {
+		if (strstr($file,"..") !== false) {
 			return false;
 		}
 		$paths = $GLOBALS['core']->tpl->getPath();
-		
-		foreach($paths as $path)
-		{
-			if (preg_match('/tpl(\/|)$/',$path))
-			{
+
+		foreach($paths as $path) {
+			if (preg_match('/tpl(\/|)$/',$path)) {
 				$path = path::real($path.'/..');
 			}
-			if (file_exists($path.'/'.$file))
-			{
+			if (file_exists($path.'/'.$file)) {
 				return $path.'/'.$file;
 			}
 		}
 		return false;
 	}
-	
+
 	# Call rateIt service from public for ajax vote
-	public static function service($args)
-	{
+	public static function service($args) {
 		global $core;
 		$core->rest->addFunction('rateItVote',array('rateItRest','vote'));
 		$core->rest->serve();
 		exit;
 	}
-	
+
 	# If javascript is disabled, vote through page
-	public static function postform($args)
-	{
+	public static function postform($args) {
 		global $core;
-		
-		if (!$core->blog->settings->rateit->rateit_active)
-		{
+
+		if (!$core->blog->settings->rateit->rateit_active) {
 			self::p404();
 			return;
 		}
-		if (!preg_match('#([^/]+)/([^/]+)$#',$args,$m))
-		{
+		if (!preg_match('#([^/]+)/([^/]+)$#',$args,$m)) {
 			self::p404();
 			return;
 		}
 		if (empty($_POST['linkertype']) || empty($_POST['linkerid']) || empty($_POST['linkeruid'])
-		 || $_POST['linkertype'] != $m[1] || $_POST['linkerid'] != $m[2] || !isset($_POST[$_POST['linkeruid']]))
-		{
+            || $_POST['linkertype'] != $m[1] || $_POST['linkerid'] != $m[2] || !isset($_POST[$_POST['linkeruid']])) {
 			self::p404();
 			return;
 		}
-		
+
 		$voted = false;
 		$type = $_POST['linkertype'];
 		$id = $_POST['linkerid'];
 		$note = $_POST[$_POST['linkeruid']];
 
 		# Get know modules
-		try
-		{
+		try {
 			$rateit_types = $core->rateIt->getModules();
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			self::p404();
 			return;
 		}
-		
+
 		# Is know module?
-		if (!isset($rateit_types[$type]))
-		{
+		if (!isset($rateit_types[$type])) {
 			self::p404();
 			return;
 		}
-		
+
 		# Check if user has allready voted for this item
-		try
-		{
+		try {
 			$voted = $core->rateIt->voted($type,$id);
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			self::p404();
 			return;
 		}
-		
+
 		# Not voted yet, do it
-		if (!$voted)
-		{
+		if (!$voted) {
 			$core->rateIt->set($type,$id,$note);
 			$voted = true;
 		}
-		
+
 		# --BEHAVIOR-- publicRateItPageAfterVote
 		$core->callbehavior('publicRateItPageAfterVote',$core,$type,$id,$note,$voted);
-		
+
 		http::redirect($core->blog->url);
 		return;
 	}
-	
+
 	# Serve rateIt files
-	public static function files($args)
-	{
+	public static function files($args) {
 		global $core;
-		
-		if (!$core->blog->settings->rateit->rateit_active)
-		{
+
+		if (!$core->blog->settings->rateit->rateit_active) {
 			self::p404();
 			return;
 		}
-		
+
 		# Use no cache to fix bug on image size (on settings change)
-		if ($args == 'linker.css')
-		{
-			$s = rateItLibImagePath::getSize($core,'rateIt');	
-			
+		if ($args == 'linker.css') {
+			$s = rateItLibImagePath::getSize($core,'rateIt');
+
 			$style = $core->blog->settings->rateit->rateit_rating_style;
-			if ($style == 'twin')
-			{
+			if ($style == 'twin') {
 				$high = '-'.$s['h'].'px';
 				$medium = '0px';
 				$low = '-'.($s['h']*2).'px';
-			}
-			elseif ($style == 'simple')
-			{
+			} elseif ($style == 'simple') {
 				$high = '-'.$s['h'].'px';
 				$medium = '0px';
 				$low = '-'.($s['h']*2).'px';
-			}
-			else //classic
-			{
+			} else { //classic
 				$high = '0px';
 				$medium = '-'.$s['h'].'px';
 				$low = '-'.($s['h']*2).'px';
 			}
-			
-			$content = 
-			"div.rating-cancel,div.star-rating{float:left;width:".($s['w']+1)."px;height:".($s['h']-1)."px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden} \n".
-			"div.rating-cancel,div.rating-cancel a{background:url(".$core->blog->url.$core->url->getBase('rateItmodule')."/img/delete.png) no-repeat 0 -16px} \n". // not used
-			"div.star-rating,div.star-rating a{background:url(".rateItLibImagePath::getUrl($core,'rateIt').") no-repeat 0 ".$high."} \n".
-			"div.rating-cancel a,div.star-rating a{display:block;width:".$s['w']."px;height:100%;background-position:0 ".$high.";border:0} \n".
-			"div.star-rating-on a{background-position:0 ".$medium."!important} \n".
-			"div.star-rating-hover a{background-position:0 ".$low."} \n".
-			"div.star-rating-readonly a{cursor:default !important} \n".
-			"div.star-rating{background:transparent!important;overflow:hidden!important} \n";
+
+			$content =
+                "div.rating-cancel,div.star-rating{float:left;width:".($s['w']+1)."px;height:".($s['h']-1)."px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden} \n".
+                "div.rating-cancel,div.rating-cancel a{background:url(".$core->blog->url.$core->url->getBase('rateItmodule')."/img/delete.png) no-repeat 0 -16px} \n". // not used
+                "div.star-rating,div.star-rating a{background:url(".rateItLibImagePath::getUrl($core,'rateIt').") no-repeat 0 ".$high."} \n".
+                "div.rating-cancel a,div.star-rating a{display:block;width:".$s['w']."px;height:100%;background-position:0 ".$high.";border:0} \n".
+                "div.star-rating-on a{background-position:0 ".$medium."!important} \n".
+                "div.star-rating-hover a{background-position:0 ".$low."} \n".
+                "div.star-rating-readonly a{cursor:default !important} \n".
+                "div.star-rating{background:transparent!important;overflow:hidden!important} \n";
 
 			header('Content-Type: text/css; charset=UTF-8');
 			header('Content-Length: '.strlen($content));
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-			
+
 			echo $content;
 			exit;
 		}
-		
-		if (!($f = self::searchRateItTplFiles($args)))
-		{
+
+		if (!($f = self::searchRateItTplFiles($args))) {
 			self::p404();
 			return;
 		}
-		
+
 		$allowed_types = array('png','jpg','jpeg','gif','css','js','swf');
-		if (!file_exists($f) || !in_array(files::getExtension($f),$allowed_types))
-		{
+		if (!file_exists($f) || !in_array(files::getExtension($f),$allowed_types)) {
 			self::p404();
 			return;
 		}
 		$type = files::getMimeType($f);
-		
+
 		header('Content-Type: '.$type.'; charset=UTF-8');
 		header('Content-Length: '.filesize($f));
 		//header("Cache-Control: no-cache, must-revalidate");
 		//header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-		
-		if ($type != "text/css" || $core->blog->settings->system->url_scan == 'path_info')
-		{
+
+		if ($type != "text/css" || $core->blog->settings->system->url_scan == 'path_info') {
 			readfile($f);
-		}
-		else
-		{
+		} else {
 			echo preg_replace('#url\((?!(http:)|/)#','url('.$core->blog->url.$core->url->getBase('rateItmodule').'/',file_get_contents($f));
 		}
 		exit;
 	}
-	
+
 	# Include rateIt javascript and CSS to public pages
-	public static function publicHeadContent($core)
-	{
+	public static function publicHeadContent($core) {
 		if (!$core->blog->settings->rateit->rateit_active) return;
-		
+
 		$s = rateItLibImagePath::getSize($core,'rateIt');
-		
-		echo 
-		"<style type=\"text/css\"> \n @import url(".
+
+		echo
+            "<style type=\"text/css\"> \n @import url(".
 			$core->blog->url.$core->url->getBase('rateItmodule')."/linker.css); \n".
-		"</style> \n";
-		
-		if (!$core->blog->settings->rateit->rateit_dispubcss)
-		{
+            "</style> \n";
+
+		if (!$core->blog->settings->rateit->rateit_dispubcss) {
 			echo
 			"<style type=\"text/css\"> \n @import url(".
 				$core->blog->url.$core->url->getBase('rateItmodule')."/rateit.css); \n".
 			"</style> \n";
 		}
-		
+
 		if ($core->blog->settings->rateit->rateit_dispubjs) return;
-		
-		echo 
+
+		echo
 		"\n<!-- JS for rateit --> \n".
 		"<script type=\"text/javascript\" src=\"".
 			$core->blog->url.$core->url->getBase('rateItmodule').'/js/jquery.rating.pack.js">'.
@@ -290,25 +255,23 @@ class urlRateIt extends dcUrlHandlers
 class tplRateIt
 {
 	# Remove all rateIt items from public if not active
-	public static function disable($a,$b=null)
-	{
+	public static function disable($a,$b=null) {
 		return '';
 	}
-	
+
 	# Block: init rateIt items
-	public static function rateIt($attr,$content)
-	{
+	public static function rateIt($attr,$content) {
 		global $core;
-		
+
 		$style = isset($attr['style']) ? html::escapeHTML($attr['style']) : '';
 		$type = isset($attr['type']) ? html::escapeHTML($attr['type']) : '';
 		$res = '';
-		
+
 		# --BEHAVIOR-- publicRateItTplBlockRateIt
 		$res .= $core->callbehavior('publicRateItTplBlockRateIt',$type,$attr,$content);
-		
+
 		if (!$res) return;
-		
+
 		return
 		"<?php \n".
 		"\$rateit_style = \"".$style."\"; \n".
@@ -332,12 +295,12 @@ class tplRateIt
 		"unset(\$rateit_style); \n".
 		"?> \n";
 	}
-	
+
 	# Block: some rateIt conditions
 	public static function rateItIf($attr,$content)
 	{
 		$operator = isset($attr['operator']) ? self::getOperator($attr['operator']) : '&&';
-		
+
 		if (isset($attr['has_vote']))
 		{
 			$sign = (boolean) $attr['has_vote'] ? '' : '!';
@@ -370,26 +333,26 @@ class tplRateIt
 				$if[] = '\''.$attr['style'].'\' == $rateit_style';
 			}
 		}
-		
+
 		if (empty($if)) return $content;
-		
-		return 
+
+		return
 		"<?php if(".implode(' '.$operator.' ',$if).") : ?>\n".
 		$content.
 		"<?php endif; ?>\n";
 	}
-	
+
 	# Value: title of rateIt item
 	public static function rateItTitle($attr)
 	{
 		global $core;
 		$type = isset($attr['type']) ? $attr['type'] : '';
 		$f = $core->tpl->getFilters($attr);
-		
+
 		# --BEHAVIOR-- publicRateItTplValueRateItTitle
 		$res = $core->callbehavior('publicRateItTplValueRateItTitle',$type,$attr);
-		
-		return 
+
+		return
 		"<?php \n".
 		"\$title = ''; \n".
 		$res.
@@ -398,7 +361,7 @@ class tplRateIt
 		"?> \n";
 
 	}
-	
+
 	# Value: built-in rating form
 	public static function rateItLinker($attr)
 	{
@@ -406,7 +369,7 @@ class tplRateIt
 		$f = $core->tpl->getFilters($attr);
 		return '<?php echo rateItContext::linker($rateit_voted,$_ctx->rateIt->type,$_ctx->rateIt->id,$_ctx->rateIt->note,$_ctx->rateIt->quotient,$rateit_style); ?>';
 	}
-	
+
 	# Value: full note (ex: 2/5)
 	public static function rateItFullnote($attr)
 	{
@@ -414,23 +377,23 @@ class tplRateIt
 		$f = $core->tpl->getFilters($attr);
 		return '<?php echo '.sprintf($f,'rateItContext::value("fullnote",$_ctx->rateIt->type,$_ctx->rateIt->id,$_ctx->rateIt->note."/".$_ctx->rateIt->quotient)').'; ?>';
 	}
-	
+
 	# Value: quotient (note on)
 	public static function rateItQuotient($attr)
 	{
 		return self::rateItValue($attr,'quotient');
 	}
-	
+
 	# Value: total number of votes
 	public static function rateItTotal($attr)
 	{
 		$r = '';
 		if (isset($attr['totaltext']) && $attr['totaltext'] == 1) {
-			
+
 			$none = 'no rate';
 			$one = 'one rate';
 			$more = '%d rates';
-			
+
 			if (isset($attr['none'])) {
 				$none = addslashes($attr['none']);
 			}
@@ -440,8 +403,8 @@ class tplRateIt
 			if (isset($attr['more'])) {
 				$more = addslashes($attr['more']);
 			}
-			
-			$r = 
+
+			$r =
 			"<?php \n".
 			"if (\$_ctx->rateIt->total == 0) { \n".
 			"  \$total = sprintf(__('".$none."'),\$_ctx->rateIt->total); \n".
@@ -454,37 +417,37 @@ class tplRateIt
 		}
 		return $r.self::rateItValue($attr,'total');
 	}
-	
+
 	# Value: higher note
 	public static function rateItMax($attr)
 	{
 		return self::rateItValue($attr,'max');
 	}
-	
+
 	# Value: lower note
 	public static function rateItMin($attr)
 	{
 		return self::rateItValue($attr,'min');
 	}
-	
+
 	# Value: number of note higher than the average
 	public static function rateItMaxCount($attr)
 	{
 		return self::rateItValue($attr,'maxcount');
 	}
-	
+
 	# Value: number of note lower than the average
 	public static function rateItMinCount($attr)
 	{
 		return self::rateItValue($attr,'mincount');
 	}
-	
+
 	# Value: final note
 	public static function rateItNote($attr)
 	{
 		return self::rateItValue($attr,'note');
 	}
-	
+
 	# Generic value
 	private static function rateItValue($a,$r)
 	{
@@ -492,7 +455,7 @@ class tplRateIt
 		$f = $core->tpl->getFilters($a);
 		return '<?php echo '.sprintf($f,'rateItContext::value("'.$r.'",$_ctx->rateIt->type,$_ctx->rateIt->id,$_ctx->rateIt->'.$r.')').'; ?>';
 	}
-	
+
 	# Operator for condition (see: rateItIf)
 	protected static function getOperator($op)
 	{
@@ -514,34 +477,34 @@ class rateItPublicWidget
 	# Vote form on a public page of an item
 	public static function vote($w)
 	{
-		global $core, $_ctx; 
-		
+		global $core, $_ctx;
+
 		if (!$core->blog->settings->rateit->rateit_active) return;
-		
+
 		$style = $core->blog->settings->rateit->rateit_rating_style;
 		$rateit_types = $core->rateIt->getModules();
-		
+
 		if (empty($rateit_types)) return;
-		
+
 		# --BEHAVIOR-- publicRateItWidgetVote
 		$core->callbehavior('publicRateItWidgetVote',$w,$_ctx);
-		
+
 		$type = $w->type;
 		$id = $w->id;
 		$title = $w->title;
-		
+
 		if (empty($type)) return;
-		
+
 		$rs = $core->rateIt->get($type,$id);
 		$voted = $core->rateIt->voted($type,$id);
-		
+
 		$res = '<div class="rateit '.$style.'">';
-		
+
 		if (!empty($title))
 		{
 			$res .= '<h2>'.html::escapeHTML($title).'</h2>';
 		}
-		
+
 		if ($w->show_fullnote)
 		{
 			if ($style == 'classic')
@@ -553,14 +516,14 @@ class rateItPublicWidget
 				$res .= '<p>'.rateItContext::value('mincount',$type,$id,$rs->mincount).'</p>';
 			}
 		}
-		
+
 		$res .= rateItContext::linker($voted,$type,$id,$rs->note,$rs->quotient);
-		
+
 		if ($w->show_fullnote && in_array($style,array('twin','simple')))
 		{
 			$res .= '<p>'.rateItContext::value('maxcount',$type,$id,$rs->maxcount).'</p>';
 		}
-		
+
 		if ($w->show_note || $w->show_vote || $w->show_higher || $w->show_lower)
 		{
 			$res .=	'<ul>';
@@ -584,15 +547,15 @@ class rateItPublicWidget
 		}
 		return $res.'<p>&nbsp;</p></div>';
 	}
-	
+
 	# Ranking
 	public static function rank($w)
 	{
-		global $core, $_ctx; 
-		
-		if (!$core->blog->settings->rateit->rateit_active 
+		global $core, $_ctx;
+
+		if (!$core->blog->settings->rateit->rateit_active
 		 || $w->homeonly && $core->url->type != 'default') return;
-		
+
 		$p = New arrayObject();
 		$p['from'] = '';
 		$p['sql'] = '';
@@ -605,11 +568,11 @@ class rateItPublicWidget
 		}
 		else
 		{
-			$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total','rateit_time'))) ? 
+			$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total','rateit_time'))) ?
 				$w->sortby.' ' : 'rateit_total ';
 		}
 		$p['order'] .= $w->sort == 'desc' ? 'DESC' : 'ASC';
-		
+
 		if (!in_array($w->sortby,array('POSITIVE','rateit_total')))
 		{
 			$p['order'] .= ',rateit_total DESC ';
@@ -618,26 +581,26 @@ class rateItPublicWidget
 		{
 			$p['order'] .= ',rateit_time DESC ';
 		}
-		
+
 		$p['limit'] = abs((integer) $w->limit);
 		$p['rateit_type'] = $w->type;
-		
+
 		$rateit_types = $core->rateIt->getModules();
-		
+
 		if (!isset($rateit_types[$w->type])) return;
-		
+
 		# --BEHAVIOR-- publicRateItWidgetRank
 		$core->callbehavior('publicRateItWidgetRank',$w,$p,$_ctx);
-		
+
 		$p = $p->getArrayCopy();
-		
+
 		$rs = $core->rateIt->getRates($p);
-		
+
 		if ($rs->isEmpty()) return;
-		
+
 		$q = $core->blog->settings->rateit->rateit_quotient;
 		$d = $core->blog->settings->rateit->rateit_digit;
-		
+
 		$res =
 		'<div class="rateitpostsrank rateittype'.$w->type.'">'.
 		($w->title ? '<h2>'.html::escapeHTML($w->title).'</h2>' : '').
@@ -646,7 +609,7 @@ class rateItPublicWidget
 		while ($rs->fetch())
 		{
 			$title = html::escapeHTML($rs->title);
-			
+
 			$cut_len = abs((integer) $w->titlelen);
 			if (strlen($title) > $cut_len)
 			{
@@ -664,7 +627,7 @@ class rateItPublicWidget
 			{
 				$totaltext = sprintf(__('%d rates'),$rs->rateit_total);
 			}
-			
+
 			# Fixed issue with plugin planet
 			if ($w->type == 'post')
 			{
@@ -675,7 +638,7 @@ class rateItPublicWidget
 			{
 				$url = $rs->url;
 			}
-			
+
 			$i++;
 			$res .= '<li>'.str_replace(
 				array(
@@ -702,35 +665,35 @@ class rateItPublicWidget
 			).'</li>';
 		}
 		$res .= '</ul></div>';
-		
+
 		return $res;
 	}
-	
+
 	# Extra (for ranking) could retrieve first image of a post
 	private static function entryFirstImage($core,$type,$id)
 	{
 		if (!in_array($type,array('post','gal','galitem'))) return '';
-		
+
 		$rs = $core->blog->getPosts(array('post_id'=>$id,'post_type'=>$type));
-		
+
 		if ($rs->isEmpty()) return '';
-		
+
 		$size = $core->blog->settings->rateit->rateit_firstimage_size;
 		if (!preg_match('/^sq|t|s|m|o$/',$size))
 		{
 			$size = 's';
 		}
-		
+
 		$p_url = $core->blog->settings->system->public_url;
 		$p_site = preg_replace('#^(.+?//.+?)/(.*)$#','$1',$core->blog->url);
 		$p_root = $core->blog->public_path;
-		
+
 		$pattern = '(?:'.preg_quote($p_site,'/').')?'.preg_quote($p_url,'/');
 		$pattern = sprintf('/<img.+?src="%s(.*?\.(?:jpg|gif|png))"[^>]+/msu',$pattern);
-		
+
 		$src = '';
 		$alt = '';
-		
+
 		$subject = $rs->post_excerpt_xhtml.$rs->post_content_xhtml.$rs->cat_desc;
 		if (preg_match_all($pattern,$subject,$m) > 0)
 		{
@@ -748,28 +711,28 @@ class rateItPublicWidget
 			}
 		}
 		if (!$src) return '';
-		
-		return 
-		'<div class="img-box">'.				
+
+		return
+		'<div class="img-box">'.
 		'<div class="img-thumbnail">'.
 		'<a title="'.html::escapeHTML($rs->post_title).'" href="'.$rs->getURL().'">'.
 		'<img alt="'.$alt.'" src="'.$src.'" />'.
 		'</a></div>'.
 		"</div>\n";
 	}
-	
+
 	# Extra (for ranking) (see entryFirstImage)
 	private static function ContentFirstImageLookup($root,$img,$size)
 	{
 		# Get base name and extension
 		$info = path::info($img);
 		$base = $info['base'];
-		
+
 		if (preg_match('/^\.(.+)_(sq|t|s|m)$/',$base,$m))
 		{
 			$base = $m[1];
 		}
-		
+
 		$res = false;
 		if ($size != 'o' && file_exists($root.'/'.$info['dirname'].'/.'.$base.'_'.$size.'.jpg'))
 		{
@@ -795,10 +758,9 @@ class rateItPublicWidget
 				$res = $base.'.gif';
 			}
 		}
-		
+
 		if ($res) return $res;
-		
+
 		return false;
 	}
 }
-?>

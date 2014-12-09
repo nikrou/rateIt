@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -16,18 +18,18 @@ class eventhandlerRateItModuleAdmin
 	public static function adminRateItModuleUpdate($core,$type,$action,$page_url,$hidden_fields)
 	{
 		if ($type != 'eventhandler' || $action != 'save_module_eventhandler') return;
-		
+
 		$core->blog->settings->rateit->put('rateit_eventhandler_active',!empty($_POST['rateit_eventhandler_active']),'boolean','Enabled eventhandler rating',true,false);
 		$core->blog->settings->rateit->put('rateit_eventsingletpl',!empty($_POST['rateit_eventsingletpl']),'boolean','rateit template on single event page',true,false);
 		$core->blog->settings->rateit->put('rateit_eventslisttpl',!empty($_POST['rateit_eventslisttpl']),'boolean','rateit template on events list page',true,false);
 		$core->blog->triggerBlog();
 		return 'save_setting';
 	}
-	
+
 	public static function adminRateItModuleSettingsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'eventhandler') return;
-		
+
 		echo
 		'<form method="post" action="'.$page_url.'">'.
 		'<p><label class="classic">'.
@@ -39,21 +41,21 @@ class eventhandlerRateItModuleAdmin
 		'<p><label class="classic">'.
 		form::checkbox(array('rateit_eventslisttpl'),1,$core->blog->settings->rateit->rateit_eventslisttpl).
 		__('Include on events page').' *</label></p>'.
-		
+
 		'<p><input type="submit" name="save" value="'.__('save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_eventhandler').
 		'</p>'.
 		'</form>'.
 		'<p class="form-note">* '.__('To use this option you must have behavior "publicEntryAfterContent" in your theme').'</p>';
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItModuleRecordsTab($core,$type,$page_url,$hidden_fields)
 	{
 		if ($type != 'eventhandler') return;
-		
+
 		# Combos
 		$combo_action = array();
 		$combo_action[__('Reviews')][__('Delete')] = 'eventhandler_rateit_empty';
@@ -151,7 +153,7 @@ class eventhandlerRateItModuleAdmin
 			if ($order !== '' && in_array($order,$combo_order))
 			{
 				$params['order'] = $sortby.' '.$order;
-			}	
+			}
 			if ($sortby != 'post_dt' || $order != 'desc')
 			{
 				$params['show_filters'] = true;
@@ -170,13 +172,13 @@ class eventhandlerRateItModuleAdmin
 			$core->error->add($e->getMessage());
 		}
 
-		echo 
+		echo
 		'<p>'.__('This is the list of all events having rating').'</p>';
 		if (!$params['show_filters'])
-		{ 
+		{
 			echo dcPage::jsLoad('js/filter-controls.js').'<p><a id="filter-control" class="form-control" href="#">'.__('Filters').'</a></p>';
 		}
-		echo 
+		echo
 		'<form action="'.$page_url.'" method="get" id="filters-form">'.
 		'<fieldset><legend>'.__('Filters').'</legend>'.
 		'<div class="three-cols">'.
@@ -220,10 +222,10 @@ class eventhandlerRateItModuleAdmin
 			'</div>'.
 			'</form>'
 		);
-		
+
 		return 1;
 	}
-	
+
 	public static function adminRateItWidgetVote($w)
 	{
 		$w->rateit->setting('enable_eventhandler',__('Enable vote for events'),
@@ -231,7 +233,7 @@ class eventhandlerRateItModuleAdmin
 		$w->rateit->setting('title_eventhandler',__('Title for events:'),
 			__('Rate this event'),'text');
 	}
-	
+
 	public static function adminRateItWidgetRank($types)
 	{
 		$types[] = array(__('events') => 'eventhandler');
@@ -245,22 +247,22 @@ class eventhandlerRateItAdmin
 	{
 		$post_id = (integer) $post_id;
 		if (!$post_id) return;
-		
+
 		global $core;
-		
+
 		$core->rateIt->del('eventhandler',$post_id);
 	}
-	
+
 	public static function adminEventHandlerActionsCombo($args)
 	{
 		global $core;
-		if ($core->blog->settings->rateit->rateit_active 
+		if ($core->blog->settings->rateit->rateit_active
 		 && $core->auth->check('admin',$core->blog->id))
 		{
 			$args[0][__('Reviews')][__('Remove ratings')] = 'eventhandler_rateit_empty';
 		}
 	}
-	
+
 	public static function adminPostsActions($core,$posts,$action,$redir)
 	{
 		if ($action != 'eventhandler_rateit_do_empty') return;
@@ -279,12 +281,12 @@ class eventhandlerRateItAdmin
 			$core->error->add($e->getMessage());
 		}
 	}
-	
+
 	public static function adminPostsActionsContent($core,$action,$hidden_fields)
 	{
 		if ($action != 'eventhandler_rateit_empty') return;
-		
-		echo 
+
+		echo
 		'<div id="rateit-edit">'.
 		'<h3>'.__('delete rating').'</h3>'.
 		'<form action="posts_actions.php" method="post"><div>'.
@@ -295,7 +297,7 @@ class eventhandlerRateItAdmin
 			$rs = $core->blog->getPosts(array('post_type'=>'eventhandler','post_id'=>$post,'no_content'=>true));
 			echo '<li><a href="plugin.php?pf=eventHandler&amp;part=event&amp;id='.$rs->post_id.'">'.$rs->post_title.'</a></li>';
 		}
-		echo 
+		echo
 		'</ul>'.
 		'<p>'.
 		$hidden_fields.
@@ -314,7 +316,7 @@ class rateItEventhandlerList extends rateItExtList
 	protected $rs;
 	protected $rs_count;
 	protected $base_url;
-	
+
 	public function init()
 	{
 		self::headline(array(
@@ -328,7 +330,7 @@ class rateItEventhandlerList extends rateItExtList
 			__('Author') => '',
 			__('Status') => ''));
 	}
-	
+
 	public function setLine()
 	{
 		if ($this->rs->cat_title)
@@ -343,27 +345,27 @@ class rateItEventhandlerList extends rateItExtList
 			case -1: $img_status = sprintf($img,__('scheduled'),'scheduled.png'); break;
 			case -2: $img_status = sprintf($img,__('pending'),'check-wrn.png'); break;
 		}
-		
+
 		$protected = '';
 		if ($this->rs->post_password)
 			$protected = sprintf($img,__('protected'),'locker.png');
-		
+
 		$selected = '';
 		if ($this->rs->post_selected)
 			$selected = sprintf($img,__('selected'),'selected.png');
-		
+
 		$attach = '';
 		$nb_media = $this->rs->countMedia();
 		if ($nb_media > 0) {
 			$attach_str = $nb_media == 1 ? __('%d attachment') : __('%d attachments');
 			$attach = sprintf($img,sprintf($attach_str,$nb_media),'attach.png');
 		}
-		
+
 		$q = $this->core->blog->settings->rateit->rateit_quotient;
 		$d = $this->core->blog->settings->rateit->rateit_digit;
-		
+
 		$r = $this->core->rateIt->get('eventhandler',$this->rs->post_id);
-		
+
 		self::line(
 			array(
 				# Title
@@ -390,4 +392,3 @@ class rateItEventhandlerList extends rateItExtList
 		);
 	}
 }
-?>

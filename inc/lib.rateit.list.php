@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -19,7 +21,7 @@ class rateItExtList
 	protected $rs;
 	protected $rs_count;
 	protected $base_url;
-	
+
 	public function __construct($core,$rs,$rs_count,$base_url=null)
 	{
 		$this->core =& $core;
@@ -28,7 +30,7 @@ class rateItExtList
 		$this->base_url = $base_url;
 		$this->html_prev = __('&#171;prev.');
 		$this->html_next = __('next&#187;');
-		
+
 		$this->html_none = '<p><strong>'.__('No entry').'</strong></p>';
 		$this->html = '%1$s';
 		$this->html_pager =  '<p>'.__('Page(s)').' : %1$s</p>';
@@ -41,10 +43,10 @@ class rateItExtList
 		$this->headcells = '';
 		$this->lines = '';
 		$this->cells = '';
-				
+
 		$this->init();
 	}
-	
+
 	public function headline($cells,$head='')
 	{
 		$line = '';
@@ -54,7 +56,7 @@ class rateItExtList
 		}
 		$this->headlines .= sprintf($this->html_headline,$line,$head);
 	}
-	
+
 	public function line($cells,$head='')
 	{
 		$line = '';
@@ -64,7 +66,7 @@ class rateItExtList
 		}
 		$this->lines .= sprintf($this->html_line,$line,$head);
 	}
-	
+
 	public function display($page,$nb_per_page,$enclose_block='')
 	{
 		if ($this->rs->isEmpty())
@@ -78,12 +80,12 @@ class rateItExtList
 			$pager->html_prev = $this->html_prev;
 			$pager->html_next = $this->html_next;
 			$pager->var_page = 'page';
-			
+
 			while ($this->rs->fetch())
 			{
 				$this->setLine();
 			}
-			
+
 			echo
 			sprintf($this->html,
 				sprintf($enclose_block,
@@ -95,4 +97,3 @@ class rateItExtList
 		}
 	}
 }
-?>

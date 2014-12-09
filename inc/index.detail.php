@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -21,7 +23,7 @@ if ($action == 'rateit_del_entry' && !empty($_POST['entries']))
 			$val = explode('|',$entry);
 			$core->rateIt->del($val[0],$val[1],$val[2]);
 		}
-		
+
 		$core->blog->triggerBlog();
 		http::redirect($p_url.'&part=detail&type='.$type.'&id='.$id.'&done=1');
 	}
@@ -43,7 +45,7 @@ catch (Exception $e)
 $lines = '';
 while ($rs->fetch())
 {
-	$lines .= 
+	$lines .=
 	'<tr class="line">'.
 	'<td class="nowrap">'.form::checkbox(array('entries[]'),$rs->rateit_type.'|'.$rs->rateit_id.'|'.$rs->rateit_ip,'','','',false).'</td>'.
 	'<td class="nowrap">'.dt::dt2str(__('%Y-%m-%d %H:%M'),$rs->rateit_time,$core->auth->getInfo('user_tz')).'</td>'.
@@ -64,7 +66,7 @@ dcPage::jsLoad('js/_posts_list.js');
 # --BEHAVIOR-- adminRateItHeader
 $core->callBehavior('adminRateItHeader',$core);
 
-echo 
+echo
 '</head>
 <body>'.$menu.'
 <div id="detail"><h3>'.__('Detail').'</h3>
@@ -77,7 +79,7 @@ if ($lines == '')
 }
 else
 {
-	echo 
+	echo
 	'<table class="clear"><tr>'.
 	'<th colspan="2">'.__('Date').'</th>'.
 	'<th>'.__('Note').'</th>'.
@@ -88,7 +90,7 @@ else
 	'</tr>'.
 	$lines.
 	'</table>'.
-	
+
 	'<div class="two-cols">'.
 	'<p class="col checkboxes-helpers"></p>'.
 	'<p class="col right">'.__('Selected lines action:').' '.
@@ -106,4 +108,3 @@ echo '</form></div>';
 
 dcPage::helpBlock('rateIt');
 echo $footer.'</body></html>';
-?>

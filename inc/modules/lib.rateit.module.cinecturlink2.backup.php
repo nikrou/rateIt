@@ -1,10 +1,12 @@
 <?php
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
-# 
+#
+# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+#
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
-# 
+#
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -22,18 +24,18 @@ class cinecturlink2RateItBackup
 			"AND C.blog_id = '".$blog_id."'"
 		);
 	}
-	
+
 	public static function importInit(&$bk,&$core)
 	{
 		$bk->cur_rateitcinecturlink2 = $core->con->openCursor($core->prefix.'rateit');
 	}
-	
+
 	# limit to category type
 	public static function importSingle(&$line,&$bk,&$core)
 	{
 		if ($line->__name == 'rateitcinecturlink2' && $line->rateit_type == 'cinecturlink2' && isset($bk->old_ids['cinecturlink2'][(integer) $line->rateit_id])) {
 			$line->rateit_id = $bk->old_ids['cinecturlink2'][(integer) $line->rateit_id];
-			
+
 			$bk->cur_rateitcategory->clean();
 			$bk->cur_rateitcategory->blog_id   = (string) $line->blog_id;
 			$bk->cur_rateitcategory->rateit_id   = (string) $line->rateit_id;
@@ -46,4 +48,3 @@ class cinecturlink2RateItBackup
 		}
 	}
 }
-?>
