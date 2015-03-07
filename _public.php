@@ -226,7 +226,10 @@ class urlRateIt extends dcUrlHandlers
 			"</style> \n";
 		}
 
-		if ($core->blog->settings->rateit->rateit_dispubjs) return;
+        if ($core->blog->settings->rateit->rateit_dispubjs
+            || version_compare($core->blog->settings->system->jquery_version, '1.10')<0) {
+            return;
+        }
 
 		echo
 		"\n<!-- JS for rateit --> \n".

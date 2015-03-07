@@ -1,3 +1,8 @@
+rateIt 2.1.0 - 2015-03-07
+=========================
+* Upgrade jquery rating plugin
+* Add test to be sure to have jquery 1.10 at least
+
 rateIt 2.0.0 - 2014-12-09
 =========================
  * Not added ability to explode post type rating in subcategories
