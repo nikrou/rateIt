@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -32,7 +32,7 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $combo_types = array_flip($rateit_types);
-$combo_types = array_merge(array('- '.__('select a module').' -'=>''),$combo_types);
+$combo_types = array_merge(array('-'=>''),$combo_types);
 
 # Common page header
 $header =
@@ -45,15 +45,20 @@ dcPage::jsVar('jcToolsBox.prototype.section',$section).
 
 # Common menu
 $menu = '
-<form action="'.$p_url.'" method="post" id="modules-menu">
-<h2 class="page-title"><a href="'.$p_url.'&amp;part=summary" title="'.__('Summary').'">'.__('Rate it').'</a> : '.
+<form action="'.$p_url.'" method="post" id="modules-menu">'.
+dcPage::breadcrumb(
+		array(
+			html::escapeHTML($core->blog->name) => '',
+			'<span class="page-title">'.__('Rate it').'</span>' => ''
+		)).
+'<p class="field"><label>'.__('Select a module:').'</label>'.
 form::combo(array('type'),$combo_types,$type).
 '<input type="submit" value="'.__('ok').'" />'.
 form::hidden(array('p'),'rateIt').
 form::hidden(array('part'),'modules').
 form::hidden(array('tab'),'setting').
 $core->formNonce().'
-</form></h2><hr class="clear" />';
+</p></form><hr class="clear" />';
 
 # Common page footer
 $footer = '<hr class="clear"/><p class="right">

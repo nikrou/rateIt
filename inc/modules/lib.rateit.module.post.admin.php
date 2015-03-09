@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -67,7 +67,7 @@ class postRateItModuleAdmin
             form::checkbox(array('rateit_categorylimitinvert'),1,$core->blog->settings->rateit->rateit_categorylimitinvert).
             __('Invert and exclude this category').'</label></p>'.
 
-            '<p><input type="submit" name="save" value="'.__('save').'" />'.
+            '<p><input type="submit" name="save" value="'.__('Save').'" />'.
             $hidden_fields.
             form::hidden(array('action'),'save_module_post').
             '</p>'.
@@ -192,7 +192,7 @@ class postRateItModuleAdmin
 			$core->error->add($e->getMessage());
 		}
 
-		echo '<p>'.__('This is the list of all entries having rating').'</p>';
+		echo '<h3>'.__('List of all entries having rating').'</h3>';
 		if (!$params['show_filters']) {
 			echo
                 dcPage::jsLoad('js/filter-controls.js').

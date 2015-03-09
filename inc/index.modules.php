@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -21,7 +21,7 @@ if (!empty($type) && !isset($rateit_types[$type]))
 }
 
 # Init some requests
-$page_url = $p_url.'&amp;part=modules&type='.$type;
+$page_url = $p_url.'&amp;part=modules&amp;type='.$type;
 $hidden_fields =
 form::hidden(array('p'),'rateIt').
 form::hidden(array('part'),'modules').
@@ -29,18 +29,13 @@ form::hidden(array('type'),$type).
 $core->formNonce();
 
 # Call post actions
-if (!$core->error->flag() && !empty($type) && !empty($action))
-{
-	try
-	{
+if (!$core->error->flag() && !empty($type) && !empty($action)) {
+	try {
 		$m = $core->callBehavior('adminRateItModuleUpdate',$core,$type,$action,$page_url,$hidden_fields);
-		if (!empty($m))
-		{
+		if (!empty($m)) {
 			http::redirect($p_url.'&part=modules&type='.$type.'&msg='.$m);
 		}
-	}
-	catch (Exception $e)
-	{
+	} catch (Exception $e) {
 		$core->error->add($e->getMessage());
 	}
 }
@@ -87,5 +82,5 @@ if (!$core->error->flag() && !empty($type))
 	echo '</div>';
 }
 
-dcPage::helpBlock('rateIt');
+dcPage::helpBlock('rateIt_modules');
 echo $footer.'</body></html>';

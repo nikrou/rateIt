@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -42,7 +42,7 @@ class eventhandlerRateItModuleAdmin
 		form::checkbox(array('rateit_eventslisttpl'),1,$core->blog->settings->rateit->rateit_eventslisttpl).
 		__('Include on events page').' *</label></p>'.
 
-		'<p><input type="submit" name="save" value="'.__('save').'" />'.
+		'<p><input type="submit" name="save" value="'.__('Save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_eventhandler').
 		'</p>'.
@@ -61,23 +61,18 @@ class eventhandlerRateItModuleAdmin
 		$combo_action[__('Reviews')][__('Delete')] = 'eventhandler_rateit_empty';
 
 		$combo_categories = array('-'=>'');
-		try
-		{
+		try {
 			$categories = $core->blog->getCategories(array('post_type'=>'eventhandler'));
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			$core->error->add($e->getMessage());
 		}
-		while ($categories->fetch())
-		{
+		while ($categories->fetch()) {
 			$combo_categories[str_repeat('&nbsp;&nbsp;',$categories->level-1).'&bull; '.
 				html::escapeHTML($categories->cat_title)] = $categories->cat_id;
 		}
 
 		$combo_status = array('-' => '');
-		foreach ($core->blog->getAllPostStatus() as $k => $v)
-		{
+		foreach ($core->blog->getAllPostStatus() as $k => $v) {
 			$status_combo[$v] = (string) $k;
 		}
 
@@ -110,8 +105,7 @@ class eventhandlerRateItModuleAdmin
 		$order = !empty($_GET['order']) ? $_GET['order'] : 'desc';
 		$page = !empty($_GET['page']) ? (integer) $_GET['page'] : 1;
 		$nb_per_page =  30;
-		if (!empty($_GET['nb']) && (integer) $_GET['nb'] > 0)
-		{
+		if (!empty($_GET['nb']) && (integer) $_GET['nb'] > 0) {
 			$nb_per_page = (integer) $_GET['nb'];
 		}
 
@@ -133,74 +127,70 @@ class eventhandlerRateItModuleAdmin
 		$params['rateit_type'] = 'eventhandler';
 		$params['post_type'] = 'eventhandler';
 
-		if ($cat_id !== '' && in_array($cat_id,$combo_categories))
-		{
+		if ($cat_id !== '' && in_array($cat_id,$combo_categories)) {
 			$params['cat_id'] = $cat_id;
 			$params['show_filters'] = true;
 		}
-		if ($status !== '' && in_array($status,$combo_status))
-		{
+		if ($status !== '' && in_array($status,$combo_status)) {
 			$params['post_status'] = $status;
 			$params['show_filters'] = true;
 		}
-		if ($selected !== '' && in_array($selected,$combo_selected))
-		{
+		if ($selected !== '' && in_array($selected,$combo_selected)) {
 			$params['post_selected'] = $selected;
 			$params['show_filters'] = true;
 		}
-		if ($sortby !== '' && in_array($sortby,$combo_sortby))
-		{
-			if ($order !== '' && in_array($order,$combo_order))
-			{
+		if ($sortby !== '' && in_array($sortby,$combo_sortby)) {
+			if ($order !== '' && in_array($order,$combo_order)) {
 				$params['order'] = $sortby.' '.$order;
 			}
-			if ($sortby != 'post_dt' || $order != 'desc')
-			{
+			if ($sortby != 'post_dt' || $order != 'desc') {
 				$params['show_filters'] = true;
 			}
 		}
 
 		# Get records
-		try
-		{
+		try {
 			$posts = $core->rateIt->getPostsByRate($params);
 			$counter = $core->rateIt->getPostsByRate($params,true);
 			$post_list = new rateItEventhandlerList($core,$posts,$counter->f(0),$pager_base_url);
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			$core->error->add($e->getMessage());
 		}
 
 		echo
-		'<p>'.__('This is the list of all events having rating').'</p>';
-		if (!$params['show_filters'])
-		{
-			echo dcPage::jsLoad('js/filter-controls.js').'<p><a id="filter-control" class="form-control" href="#">'.__('Filters').'</a></p>';
-		}
-		echo
-		'<form action="'.$page_url.'" method="get" id="filters-form">'.
-		'<fieldset><legend>'.__('Filters').'</legend>'.
-		'<div class="three-cols">'.
-		'<div class="col">'.
-		'<label>'.__('Category:').form::combo('cat_id',$combo_categories,$cat_id).'</label> '.
-		'<label>'.__('Status:').form::combo('status',$combo_status,$status).'</label> '.
-		'<label>'.__('Selected:').form::combo('selected',$combo_selected,$selected).'</label> '.
-		'</div>'.
-		'<div class="col">'.
-		'<label>'.__('Order by:').form::combo('sortby',$combo_sortby,$sortby).'</label> '.
-		'<label>'.__('Sort:').form::combo('order',$combo_order,$order).'</label>'.
-		'</div>'.
-		'<div class="col">'.
-		'<p><label class="classic">'.form::field('nb',3,3,$nb_per_page).' '.__('Entries per page').'</label> '.
-		'<input type="submit" value="'.__('filter').'" />'.
-		$hidden_fields.
-		'</p>'.
-		'</div>'.
-		'</div>'.
-		'<br class="clear" />'.
-		'</fieldset>'.
-		'</form>';
+		'<h3>'.__('List of all events having rating').'</h3>';
+        echo '<script type="text/javascript">';
+        echo dcPage::jsVar('dotclear.msg.show_filters', $params['show_filters'] ? 'true':'false');
+        echo dcPage::jsVar('dotclear.msg.filter_posts_list',__('Show filters and display options'));
+        echo dcPage::jsVar('dotclear.msg.cancel_the_filter',__('Cancel filters and display options'));
+        echo '</script>';
+        echo dcPage::jsLoad('js/filter-controls.js');
+        echo
+            '<form action="'.$page_url.'" method="get" id="filters-form">'.
+            '<h3 class="out-of-screen-if-js">'.__('Filters').'</h3>'.
+            '<div class="table">'.
+            '<div class="cell">'.
+            '<h4>'.__('Filters').'</h4>'.
+            '<p><label class="ib">'.__('Category:').'</label>'.form::combo('cat_id',$combo_categories,$cat_id).'</p>'.
+            '<p><label class="ib">'.__('Status:').'</label>'.form::combo('status',$combo_status,$status).'</p>'.
+            '<p><label class="ib">'.__('Selected:').'</label>'.form::combo('selected',$combo_selected,$selected).'</p>'.
+            '</div>'.
+            '<div class="cell">'.
+            '<h4>'.__('Display options').'</h4>'.
+            '<p><label class="ib">'.__('Order by:').'</label>'.form::combo('sortby',$combo_sortby,$sortby).'</p>'.
+            '<p><label class="ib">'.__('Sort:').'</label>'.form::combo('order',$combo_order,$order).'</p>'.
+            '</div>'.
+            '<div class="cell filters-options">'.
+            '<p><span class="label ib">'.__('Show').'&nbsp;</span>'.
+            '<label class="classic">'.
+            form::field('nb',3,3,$nb_per_page).' '.__('Events per page').'</label> '.
+            '</p>'.
+            '</div>'.
+            '</div>'.
+            '<p>'.$hidden_fields.
+            '<input class="clearfix" type="submit" value="'.__('Apply filters and display options').'"/>'.
+            '</p>'.
+            '</form>';
 
 		$post_list->display($page,$nb_per_page,
 			'<form action="posts_actions.php" method="post" id="form-actions">'.

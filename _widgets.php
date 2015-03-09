@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -27,7 +27,10 @@ class rateItAdminWidget
 
 		if (empty($rateit_types)) return;
 
-		$w->create('rateit',__('Rating'),array('rateItPublicWidget','vote'));
+		$w->create('rateit',__('Rate It: rating'),array('rateItPublicWidget','vote'),
+			null,
+			__('Module to vote in the pages')
+		);
 
 		# --BEHAVIOR-- adminRateItWidgetVote
 		$core->callbehavior('adminRateItWidgetVote',$w);
@@ -45,6 +48,9 @@ class rateItAdminWidget
 		$w->rateit->setting('type','type','','hidden');
 		$w->rateit->setting('id','id','0','hidden');
 		$w->rateit->setting('title','title','rateIt','hidden');
+    $w->rateit->setting('content_only',__('Content only'),0,'check');
+    $w->rateit->setting('class',__('CSS class:'),'');
+		$w->rateit->setting('offline',__('Offline'),0,'check');
 	}
 
 	public static function rank($w)
@@ -58,7 +64,10 @@ class rateItAdminWidget
 
 		if (empty($rateit_types)) return;
 
-		$w->create('rateitrank',__('Top rating'),array('rateItPublicWidget','rank'));
+		$w->create('rateitrank',__('Rate It: top rating'),array('rateItPublicWidget','rank'),
+			null,
+			__('List of top rated entries')
+		);
 		$w->rateitrank->setting('title',__('Title:'),__('Top rated entries'),'text');
 
 		# --BEHAVIOR-- adminRateItWidgetRank
@@ -88,7 +97,7 @@ class rateItAdminWidget
 		}
 
 		$w->rateitrank->setting('type',__('Type:'),'post','combo',$combo_types);
-		$w->rateitrank->setting('catlimit',__('Category limit: (if possible)'),'','combo',$combo_categories);
+		$w->rateitrank->setting('catlimit',__('Category limit (if possible):'),'','combo',$combo_categories);
 		$w->rateitrank->setting('limit',__('Length:'),3,'combo',array(
 			1=>1,2=>2,3=>3,4=>4,5=>5,10=>10,15=>15,20=>20)
 		);
@@ -102,9 +111,18 @@ class rateItAdminWidget
 			__('Ascending') => 'asc',
 			__('Descending') => 'desc')
 		);
-		$w->rateitrank->setting('text',sprintf(__('Text: Use wildcards %s'),$wildcards),'%rank% %title% (%note%/%quotient%)','text');
-		$w->rateitrank->setting('titlelen',__('Title length: (if truncate)'),100);
-		$w->rateitrank->setting('homeonly',__('Home page only'),1,'check');
+		$w->rateitrank->setting('text',sprintf(__('Text (use wildcards %s):'),$wildcards),'%rank% %title% (%note%/%quotient%)','text');
+		$w->rateitrank->setting('titlelen',__('Title length (if truncate):'),100);
 		$w->rateitrank->setting('sql','sql','','hidden');
+		$w->rateitrank->setting('homeonly',__('Display on:'),0,'combo',
+			array(
+				__('All pages') => 0,
+				__('Home page only') => 1,
+				__('Except on home page') => 2
+				)
+		);
+        $w->rateitrank->setting('content_only',__('Content only'),0,'check');
+        $w->rateitrank->setting('class',__('CSS class:'),'');
+		$w->rateitrank->setting('offline',__('Offline'),0,'check');
 	}
 }

@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -478,16 +478,23 @@ class tplRateIt
 class rateItPublicWidget
 {
 	# Vote form on a public page of an item
-	public static function vote($w)
-	{
+	public static function vote($w) {
 		global $core, $_ctx;
 
-		if (!$core->blog->settings->rateit->rateit_active) return;
+		if (!$core->blog->settings->rateit->rateit_active) {
+            return;
+        }
+
+		if ($w->offline) {
+			return;
+        }
 
 		$style = $core->blog->settings->rateit->rateit_rating_style;
 		$rateit_types = $core->rateIt->getModules();
 
-		if (empty($rateit_types)) return;
+		if (empty($rateit_types)) {
+            return;
+        }
 
 		# --BEHAVIOR-- publicRateItWidgetVote
 		$core->callbehavior('publicRateItWidgetVote',$w,$_ctx);
@@ -496,34 +503,26 @@ class rateItPublicWidget
 		$id = $w->id;
 		$title = $w->title;
 
-		if (empty($type)) return;
+		if (empty($type)) {
+            return;
+        }
 
 		$rs = $core->rateIt->get($type,$id);
 		$voted = $core->rateIt->voted($type,$id);
 
-		$res = '<div class="rateit '.$style.'">';
+		$res = ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '');
 
-		if (!empty($title))
-		{
-			$res .= '<h2>'.html::escapeHTML($title).'</h2>';
-		}
-
-		if ($w->show_fullnote)
-		{
-			if ($style == 'classic')
-			{
+		if ($w->show_fullnote) {
+			if ($style == 'classic') {
 				$res .= '<p>'.rateItContext::value('fullnote',$type,$id,$rs->note.'/'.$rs->quotient).'</p>';
-			}
-			elseif ($style == 'twin')
-			{
+			} elseif ($style == 'twin') {
 				$res .= '<p>'.rateItContext::value('mincount',$type,$id,$rs->mincount).'</p>';
 			}
 		}
 
 		$res .= rateItContext::linker($voted,$type,$id,$rs->note,$rs->quotient);
 
-		if ($w->show_fullnote && in_array($style,array('twin','simple')))
-		{
+		if ($w->show_fullnote && in_array($style,array('twin','simple'))) {
 			$res .= '<p>'.rateItContext::value('maxcount',$type,$id,$rs->maxcount).'</p>';
 		}
 
@@ -548,7 +547,8 @@ class rateItPublicWidget
 			}
 			$res .= '</ul>';
 		}
-		return $res.'<p>&nbsp;</p></div>';
+
+		return $w->renderDiv($w->content_only,'rateit '.$w->class,'',$res);
 	}
 
 	# Ranking
@@ -556,32 +556,36 @@ class rateItPublicWidget
 	{
 		global $core, $_ctx;
 
-		if (!$core->blog->settings->rateit->rateit_active
-		 || $w->homeonly && $core->url->type != 'default') return;
+        if (!$core->blog->settings->rateit->rateit_active) {
+            return;
+        }
+
+		if ($w->offline)
+			return;
+
+		if (($w->homeonly == 1 && $core->url->type != 'default') ||
+            ($w->homeonly == 2 && $core->url->type == 'default')) {
+			return;
+        }
 
 		$p = New arrayObject();
 		$p['from'] = '';
 		$p['sql'] = '';
 		$p['columns'] = array();
 		$p['groups'] = array();
-		if ($w->sortby == 'POSITIVE')
-		{
+		if ($w->sortby == 'POSITIVE') {
 			$p['order'] = 'rateit_total ';
 			$p['sql'] .= 'AND (RI.rateit_note / rateit_quotient)*2 >= 1 ';
-		}
-		else
-		{
+		} else {
 			$p['order'] = ($w->sortby && in_array($w->sortby,array('rateit_avg','rateit_total','rateit_time'))) ?
 				$w->sortby.' ' : 'rateit_total ';
 		}
 		$p['order'] .= $w->sort == 'desc' ? 'DESC' : 'ASC';
 
-		if (!in_array($w->sortby,array('POSITIVE','rateit_total')))
-		{
+		if (!in_array($w->sortby,array('POSITIVE','rateit_total'))) {
 			$p['order'] .= ',rateit_total DESC ';
 		}
-		if ($w->sorby != 'rateit_time')
-		{
+		if ($w->sorby != 'rateit_time') {
 			$p['order'] .= ',rateit_time DESC ';
 		}
 
@@ -604,41 +608,29 @@ class rateItPublicWidget
 		$q = $core->blog->settings->rateit->rateit_quotient;
 		$d = $core->blog->settings->rateit->rateit_digit;
 
-		$res =
-		'<div class="rateitpostsrank rateittype'.$w->type.'">'.
-		($w->title ? '<h2>'.html::escapeHTML($w->title).'</h2>' : '').
-		'<ul>';
+		$res = ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '').'<ul>';
 		$i=0;
-		while ($rs->fetch())
-		{
+
+		while ($rs->fetch()) {
 			$title = html::escapeHTML($rs->title);
 
 			$cut_len = abs((integer) $w->titlelen);
-			if (strlen($title) > $cut_len)
-			{
+			if (strlen($title) > $cut_len) {
 				$title = text::cutString($title,$cut_len).'...';
 			}
-			if ($rs->rateit_total == 0)
-			{
+			if ($rs->rateit_total == 0) {
 				$totaltext = __('no rate');
-			}
-			elseif ($rs->rateit_total == 1)
-			{
+			} elseif ($rs->rateit_total == 1) {
 				$totaltext = __('one rate');
-			}
-			else
-			{
+			} else {
 				$totaltext = sprintf(__('%d rates'),$rs->rateit_total);
 			}
 
 			# Fixed issue with plugin planet
-			if ($w->type == 'post')
-			{
+			if ($w->type == 'post') {
 				$post = $core->blog->getPosts(array('post_id'=>$rs->id));
 				$url = $post->getURL();
-			}
-			else
-			{
+			} else {
 				$url = $rs->url;
 			}
 
@@ -667,23 +659,25 @@ class rateItPublicWidget
 				$w->text
 			).'</li>';
 		}
-		$res .= '</ul></div>';
+		$res .= '</ul>';
 
-		return $res;
+		return $w->renderDiv($w->content_only,'rateitpostsrank rateittype '.$w->class,'',$res);
 	}
 
 	# Extra (for ranking) could retrieve first image of a post
-	private static function entryFirstImage($core,$type,$id)
-	{
-		if (!in_array($type,array('post','gal','galitem'))) return '';
+	private static function entryFirstImage($core,$type,$id) {
+		if (!in_array($type,array('post','gal','galitem'))) {
+            return '';
+        }
 
 		$rs = $core->blog->getPosts(array('post_id'=>$id,'post_type'=>$type));
 
-		if ($rs->isEmpty()) return '';
+		if ($rs->isEmpty()) {
+            return '';
+        }
 
 		$size = $core->blog->settings->rateit->rateit_firstimage_size;
-		if (!preg_match('/^sq|t|s|m|o$/',$size))
-		{
+		if (!preg_match('/^sq|t|s|m|o$/',$size)) {
 			$size = 's';
 		}
 
@@ -698,71 +692,59 @@ class rateItPublicWidget
 		$alt = '';
 
 		$subject = $rs->post_excerpt_xhtml.$rs->post_content_xhtml.$rs->cat_desc;
-		if (preg_match_all($pattern,$subject,$m) > 0)
-		{
-			foreach ($m[1] as $i => $img)
-			{
-				if (($src = self::ContentFirstImageLookup($p_root,$img,$size)) !== false)
-				{
+		if (preg_match_all($pattern,$subject,$m) > 0) {
+			foreach ($m[1] as $i => $img) {
+				if (($src = self::ContentFirstImageLookup($p_root,$img,$size)) !== false) {
 					$src = $p_url.(dirname($img) != '/' ? dirname($img) : '').'/'.$src;
-					if (preg_match('/alt="([^"]+)"/',$m[0][$i],$malt))
-					{
+					if (preg_match('/alt="([^"]+)"/',$m[0][$i],$malt)) {
 						$alt = $malt[1];
 					}
 					break;
 				}
 			}
 		}
-		if (!$src) return '';
+		if (!$src) {
+            return '';
+        }
 
 		return
-		'<div class="img-box">'.
-		'<div class="img-thumbnail">'.
-		'<a title="'.html::escapeHTML($rs->post_title).'" href="'.$rs->getURL().'">'.
-		'<img alt="'.$alt.'" src="'.$src.'" />'.
-		'</a></div>'.
-		"</div>\n";
+            '<div class="img-box">'.
+            '<div class="img-thumbnail">'.
+            '<a title="'.html::escapeHTML($rs->post_title).'" href="'.$rs->getURL().'">'.
+            '<img alt="'.$alt.'" src="'.$src.'" />'.
+            '</a></div>'.
+            "</div>\n";
 	}
 
 	# Extra (for ranking) (see entryFirstImage)
-	private static function ContentFirstImageLookup($root,$img,$size)
-	{
+	private static function ContentFirstImageLookup($root,$img,$size) {
 		# Get base name and extension
 		$info = path::info($img);
 		$base = $info['base'];
 
-		if (preg_match('/^\.(.+)_(sq|t|s|m)$/',$base,$m))
-		{
+		if (preg_match('/^\.(.+)_(sq|t|s|m)$/',$base,$m)) {
 			$base = $m[1];
 		}
 
 		$res = false;
-		if ($size != 'o' && file_exists($root.'/'.$info['dirname'].'/.'.$base.'_'.$size.'.jpg'))
-		{
+		if ($size != 'o' && file_exists($root.'/'.$info['dirname'].'/.'.$base.'_'.$size.'.jpg')) {
 			$res = '.'.$base.'_'.$size.'.jpg';
-		}
-		else
-		{
+		} else {
 			$f = $root.'/'.$info['dirname'].'/'.$base;
-			if (file_exists($f.'.'.$info['extension']))
-			{
+			if (file_exists($f.'.'.$info['extension'])) {
 				$res = $base.'.'.$info['extension'];
-			}
-			elseif (file_exists($f.'.jpg'))
-			{
+			} elseif (file_exists($f.'.jpg')) {
 				$res = $base.'.jpg';
-			}
-			elseif (file_exists($f.'.png'))
-			{
+			} elseif (file_exists($f.'.png')) {
 				$res = $base.'.png';
-			}
-			elseif (file_exists($f.'.gif'))
-			{
+			} elseif (file_exists($f.'.gif')) {
 				$res = $base.'.gif';
 			}
 		}
 
-		if ($res) return $res;
+		if ($res) {
+            return $res;
+        }
 
 		return false;
 	}

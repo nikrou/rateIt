@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -149,7 +149,7 @@ class galleryRateItModuleAdmin
 			else
 			{
 				echo
-				'<p>'.__('This is a list of all the galleries having rating').'</p>'.
+				'<h3>'.__('List of all the galleries having rating').'</h3>'.
 				'<form method="post" action="'.$page_url.'">'.
 				'<table class="clear"><tr>'.
 				'<th colspan="2">'.__('Title').'</th>'.

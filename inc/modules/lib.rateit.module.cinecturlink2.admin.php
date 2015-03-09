@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -48,7 +48,7 @@ class cinecturlink2RateItModuleAdmin
 		form::checkbox(array('rateit_cinecturlink2_page'),1,$core->blog->settings->rateit->rateit_cinecturlink2_page).
 		__('Include on cinecturlinks page').'</label></p>'.
 
-		'<p><input type="submit" name="save" value="'.__('save').'" />'.
+		'<p><input type="submit" name="save" value="'.__('Save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_cinecturlink2').
 		'</p></form>';
@@ -96,7 +96,7 @@ class cinecturlink2RateItModuleAdmin
 		else
 		{
 			echo
-			'<p>'.__('This is a list of all the cinecturlink having rating').'</p>'.
+			'<h3>'.__('List of all the cinecturlink having rating').'</h3>'.
 			'<form method="post" action="'.$page_url.'">'.
 			'<table class="clear"><tr>'.
 			'<th colspan="2">'.__('Title').'</th>'.

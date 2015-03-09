@@ -38,7 +38,7 @@ jcToolsBox.prototype={
 		$(form).children('fieldset').each(function(){
 			var Fieldset=this;
 			$(Fieldset).hide();
-			var title=$(Fieldset).children('legend').text();
+			var title=$(Fieldset).children('h4').text();
 			var menu=$('<a></a>').text(title).addClass('button').attr('tabindex','2').click(
 				function(){
 					var fieldset_visible=$(form).children('fieldset:visible');

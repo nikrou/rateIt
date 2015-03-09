@@ -49,14 +49,24 @@
  display: inline;
  white-space: nowrap;
  list-style: none;
- padding-left: 12px;
- background: transparent url(img/star_little.png) no-repeat 0 0;
+ padding-left: 14px;
+ background: transparent url(img/star_little.png) no-repeat 0 center;
+}
+#sidebar .rateit h3 {
+ border-width: 0;
+ border-style: solid;
+ border-color: transparent;
+ background: none;
+ padding: 5px;
+ margin: 0;
+ font-size: 1em;
 }
 #sidebar div .rateit li {
  white-space: nowrap;
  list-style: none;
  padding-left: 16px;
  background: transparent url(img/star_little.png) no-repeat 0 center;
+ display: block;
 }
 
 .rateit-rank {

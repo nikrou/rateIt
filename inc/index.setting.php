@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -147,7 +147,7 @@ echo
 $msg.'
 <form id="setting-form" method="post" action="'.$p_url.'" enctype="multipart/form-data">
 
-<fieldset id="setting-plugin"><legend>'.__('Extension').'</legend>
+<div class="fieldset" id="setting-plugin"><h3>'.__('Extension').'</h3>
 <p><label class="classic">'.
 form::checkbox(array('rateit_active'),1,$s->rateit_active).
 __('Enable plugin').'</label></p>
@@ -161,10 +161,10 @@ __('Disable public css').'</label></p>
 <p class="form-note">'.__('This disables the file "rateit.css" if you want to include your styles directly in the CSS file of the theme.').'</p>
 <p><label>'.__('Identify users by:').' '.
 form::combo(array('rateit_userident'),$combo_userident,$s->rateit_userident).'</label></p>
-<p><a>'.__('Note it:').'</a><br />'.__('In order to change url of public page you can use plugin myUrlHandlers.').'</p>
-</fieldset>
+<p class="info">'.__('In order to change url of public page you can use plugin myUrlHandlers.').'</p>
+</div>
 
-<fieldset id="setting-note"><legend>'.__('Note').'</legend>
+<div class="fieldset" id="setting-note"><h3>'.__('Note').'</h3>
 <p><label>'.__('Note out of:').' '.
 form::combo(array('rateit_quotient'),$combo_quotient,$s->rateit_quotient).'</label></p>
 <p><label>'.__('Number of digits:').' '.
@@ -188,14 +188,14 @@ __('Twin rating mode').' </label></p>
 form::radio(array('rateit_rating_style'),'simple',$s->rateit_rating_style=='simple').
 __('Simple rating mode').' </label></p>
 <p class="form-note">'.__('User just says if he like an item.').'</p>
-</fieldset>
+</div>
 
-<fieldset id="settings-widget"><legend>'.__('Widget').'</legend>
+<div class="fieldset" id="settings-widget"><h3>'.__('Widget').'</h3>
 <p class="field"><label>'.__('Widget entry image size').' '.
 form::combo(array('rateit_firstimage_size'),$combo_firstimage_size,$s->rateit_firstimage_size).'</label></p>
-</fieldset>'.
+</div>'.
 
-'<fieldset id="setting-image"><legend>'.__('Image').'</legend>';
+'<div class="fieldset" id="setting-image"><h3>'.__('Image').'</h3>';
 
 $stars_rateit_files = files::scandir(dirname(__FILE__).'/../default-templates/img/stars');
 $stars = rateItLibImagePath::getArray($core,'rateIt');
@@ -250,7 +250,7 @@ else
 	'<p class="form-note">'.__('Image must be in png format and having three equal height.').'</p>';
 }
 echo
-'</fieldset>
+'</div>
 
 <div class="clear">
 <p><input type="submit" name="save" value="'.__('Save').'" />'.
@@ -261,5 +261,5 @@ form::hidden(array('action'),'save_setting').
 $core->formNonce().'</p></div>'.
 '</form>';
 
-dcPage::helpBlock('rateIt');
+dcPage::helpBlock('rateIt_settings');
 echo $footer.'</body></html>';

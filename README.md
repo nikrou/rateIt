@@ -1,10 +1,10 @@
-Préambule
+PrÃ©ambule
 =========
 
-Cette extension pour Dotclear 2 permet d'ajouter un système complet
+Ce plugin pour Dotclear 2 permet d'ajouter un systÃ¨me complet
 de notation pour les billets (et plus avec ses addons).
 
-Cette documentation est en cours d'écriture...
+Cette documentation est en cours d'Ã©criture...
 
 
 I. Licence
@@ -46,137 +46,130 @@ http://lab.dotclear.org/wiki/plugin/rateIt
 III. Installation
 =================
 
-Voir la procédure d'installation des plugins Dotclear 2.
-Pour information, le plugin rateIt crée la table "rateit".
+Voir la procÃ©dure d'installation des plugins Dotclear 2.
+Pour information, le plugin rateIt crÃ©e la table "rateit".
 
 
-IV. Désintallation
+IV. DÃ©sintallation
 ==================
 
-Une procédure est disponible à partir du gestionnaire d'extensions
-ou depuis l'onglet "désinstallation" de l'extension "RateIt".
-Si la désintallation est impossible par cette procédure,
+Une procÃ©dure est disponible Ã  partir du gestionnaire des plugins
+ou depuis l'onglet "dÃ©sinstallation" du plugin "RateIt".
+Si la dÃ©sintallation est impossible par cette procÃ©dure,
 il faut supprimer les fichiers et la table rateit manuellement.
 
 
-V. Onglet "Administration"
+V. Onglet "ParamÃ¨tres"
 ==========================
 
-V.1 Extension
+V.1 Plugin
 -------------
 
-"Activer l'extension"
-Permet d'activer ou non l'extension sur un blog.
-Avec une configuration d'origine, la désactivation de l'extension
-masquera toutes les balise en rapport avec le plugin coté public.
+"Activer le plugin"
+Permet d'activer ou non le plugin sur un blog.
+Avec une configuration d'origine, la dÃ©sactivation du plugin
+masquera toutes les balise en rapport avec le plugin cotÃ© public.
 
 "Identifier l'utilisateur par"
-Méthode de gestion des votes, soit par Ip, soit par cookie, soit les deux.
-Chaque méthode a ses avantages et ses inconvénients.
+MÃ©thode de gestion des votes, soit par IP, soit par cookie, soit les deux.
+Chaque mÃ©thode a ses avantages et ses inconvÃ©nients.
 
 V.2 Note
 --------
 
 "Note sur"
-Permet de modifier le quotient de la note de 2 à 20 (exemple de note 5/20).
+Permet de modifier le quotient de la note de 2 Ã  20 (exemple de note 5/20).
 
-"Nombre de décimales"
-Permet d'arrondir le résultat affiché à x chiffres après la virgule (de 0 à 4).
+"Nombre de dÃ©cimales"
+Permet d'arrondir le rÃ©sultat affichÃ© Ã  x chiffres aprÃ¨s la virgule (de 0 Ã  4).
 
 "Message de remerciement"
-Après un vote l'interface peut être modifiée en affichant un message au votant.
-Si le message est vide, l'interface ne sera pas modifiée.
+AprÃ¨s un vote l'interface peut Ãªtre modifiÃ©e en affichant un message au votant.
+Si le message est vide, l'interface ne sera pas modifiÃ©e.
 
 V.2 Image
 ---------
 
 Vous pouvez modifier l'apparence de l'interface de vote avec
-un choix prédéfini d'image ou en en ajoutant une nouvelle.
-La nouvelle image doit obligatoirement être au format "png"
-et avec trois parties égales en hauteur :
-- une partie haute représentant "un non vote",
-- une partie centrale représentant un vote positif et
-- une partie basse représentant le survol par la souris.
-La largeur et la hauteur sont à votre convenance.
+un choix prÃ©dÃ©fini d'image ou en en ajoutant une nouvelle.
+La nouvelle image doit obligatoirement Ãªtre au format "png"
+et avec trois parties Ã©gales en hauteur :
+- une partie haute reprÃ©sentant "un non vote",
+- une partie centrale reprÃ©sentant un vote positif et
+- une partie basse reprÃ©sentant le survol par la souris.
+La largeur et la hauteur sont Ã  votre convenance.
 
 L'ordre de recherche de l'image est :
-1) dans le thème utilisé par le blog, fichier : /img/rateit-stars.png
-2) dans le répertoire public du blog, fichier : /rateit/rateit-stars.png
-3) dans le répertoire de l'extension, fichier : /default-template/img/rateit-stars.png
+1) dans le thÃ¨me utilisÃ© par le blog, fichier : /img/rateit-stars.png
+2) dans le rÃ©pertoire public du blog, fichier : /rateit/rateit-stars.png
+3) dans le rÃ©pertoire du plugin, fichier : /default-template/img/rateit-stars.png
 
 
-VI. Onglet "Désintallation"
+VI. Onglet "DÃ©sintallation"
 ===========================
 
 ...
 
 
-VII. Onglet "A propos"
-======================
-
-Donne des indications sur l'extension.
-La version, les droits, des liens vers le support...
-
-
-VIII. Onlget "Billets"
+VII. Onglet "Billets"
 =====================
 
 
-VIII.1 Options
+VII.1 Options
 --------------
 
 "Inclure dans les pages des billets"
-Utilisé pour le template post.html.
-Permet d'inclure l'outil de vote directement à la fin d'un billet sans modifier les templates.
-La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit être présente
-dans le thème utilisé pour que cette option fonctionne.
+UtilisÃ© pour le template post.html.
+Permet d'inclure l'outil de vote directement Ã  la fin d'un billet sans modifier les templates.
+La balise {{tpl:SysBehavior behavior="publicEntryAfterContent"}} doit Ãªtre prÃ©sente
+dans le thÃ¨me utilisÃ© pour que cette option fonctionne.
 
 "Inclure sur la page d'accueil"
-Utilisé pour le template home.html. Idem que ci-dessus.
+UtilisÃ© pour le template home.html. Idem que ci-dessus.
 
-"Inclure sur la page des catégories"
-Utilisé pour le template category.html. Idem que ci-dessus.
+"Inclure sur la page des catÃ©gories"
+UtilisÃ© pour le template category.html. Idem que ci-dessus.
 
-"Limiter à une catégorie"
-Permet de limiter les votes aux billets d'une seule catégorie.
+"Limiter Ã  une catÃ©gorie"
+Permet de limiter les votes aux billets d'une seule catÃ©gorie.
 
 
-IX. Autres onlgets
+VIII. Autres onglets
 ==================
 
-D'autres onglets peuvent être présents si d'autres plugins
+D'autres onglets peuvent Ãªtre prÃ©sents si d'autres plugins
 utilisent l'interface "rateIt".
 ...
 
 
-X. Widgets
+IX. Widgets
 ==========
 
 2 widgets sont disponibles:
 
-X.1 Evaluation
+IX.1 Evaluation
 --------------
 
 Ce widget (de class "rateitwidget") permet d'afficher une interface de vote sur la page d'un billet.
 
 "Autoriser le vote pour les billets"
-Si cette option est cochée et qu'on est sur la page d'un billet,
+Si cette option est cochÃ©e et qu'on est sur la page d'un billet,
 le widget affichera un formulaire de vote.
 
 "Titre pour les billets"
 Permet de modifier le titre du widget pour le vote sur les billets.
-Si ce champ est vide alors la balise de titre ne sera pas présente.
+Si ce champ est vide alors la balise de titre ne sera pas prÃ©sente.
 
 "..."
-D'autres options sont possibles ici si d'autres plugins utilisent la même interface.
-Par exemple le vote pour des catégories, des tags...
+D'autres options sont possibles ici si d'autres plugins utilisent la mÃªme interface.
+Par exemple le vote pour des catÃ©gories, des mots-clÃ©s...
 Un behavior "parseWidgetRateItVote" est disponible ici.
 
-"Afficher la note complète"
+"Afficher la note complÃ¨te"
 Ajoute l'affichage d'une balise de class "rateit-fullnote" contenant :
-- soit la note complète, exemple : 5/20,
+- soit la note complÃ¨te, exemple : 5/20,
 - soit la note en pourcentage, exemple : 25%
-- soit la balise n'est pas présente si "cacher" est sélectionné.
+- soit la balise n'est pas prÃ©sente si "cacher" est sÃ©lectionnÃ©.
 
 "Afficher la note"
 Affiche la note dans une liste d'items,
@@ -191,31 +184,31 @@ Idem ci-dessus.
 Idem ci-dessus.
 
 
-X.2 Top évaluation
+IX.2 Top Ã©valuation
 ------------------
 
 Ce widget (de class "rateitpostsrank") permet d'afficher un classement des votes.
 
 "Titre"
 Permet de modifier le titre du widget.
-Si ce champ est vide la balise de titre ne sera pas présente.
+Si ce champ est vide la balise de titre ne sera pas prÃ©sente.
 
 "Type"
-Par défaut seul le type "Billets" est présent.
-D'autres types sont possibles ici si d'autres plugins utilisent la même interface.
+Par dÃ©faut seul le type "Billets" est prÃ©sent.
+D'autres types sont possibles ici si d'autres plugins utilisent la mÃªme interface.
 Un behavior "parseWidgetRateItRank" est disponible ici.
 
 "Longueur"
-Nombre de billets à afficher.
+Nombre de billets Ã  afficher.
 
 "Trier par"
-Il est possible de trier les résultats par nombre de votes ou par note.
+Il est possible de trier les rÃ©sultats par nombre de votes ou par note.
 
 "Trier"
-Permet de modifier l'ordre. Croissant ou décroissant.
+Permet de modifier l'ordre. Croissant ou dÃ©croissant.
 
 "Texte"
-Permet de mettre en forme le résultat avec comme options :
+Permet de mettre en forme le rÃ©sultat avec comme options :
 - %rank% : le rang (1, 2, 3...)
 - %title% : le titre du billet,
 - %note% : la note
@@ -227,15 +220,15 @@ Permet de mettre en forme le résultat avec comme options :
 Affiche le widget uniquement sur la page d'accueil du blog.
 
 
-XI. Comment modifier l'apparence de l'extension ?
+X. Comment modifier l'apparence du plugin ?
 =================================================
 
-XI.1 Emplacement des fichiers
+X.1 Emplacement des fichiers
 -----------------------------
 
 ...
 
-XI.2 Les widgets
+X.2 Les widgets
 ----------------
 
 a) Widget "Evaluation":
@@ -261,11 +254,11 @@ Voici la structure type de ce widget :
  </ul>
 </div>
 
-La structure de la balise "form" est modifiée par le javascript de notation.
-La structure CSS en rapport avec ce javascript est directement générée dans
+La structure de la balise "form" est modifiÃ©e par le javascript de notation.
+La structure CSS en rapport avec ce javascript est directement gÃ©nÃ©rÃ©e dans
 le code source de la page.
 
-b) Widget "Top évaluation":
+b) Widget "Top Ã©valuation" :
 
 Voici la structure type de ce widget :
 
@@ -279,26 +272,26 @@ Voici la structure type de ce widget :
  </ul>
 </div>
 
-XI.3 Formulaires inclus dans la page
+X.3 Formulaires inclus dans la page
 ------------------------------------
 
-Son emplacement dépend du thème utilisé sur le blog.
-Par défaut il se situe après le contenu d'un billet
+Son emplacement dÃ©pend du thÃ¨me utilisÃ© sur le blog.
+Par dÃ©faut il se situe aprÃ¨s le contenu d'un billet
 et utilise le behavior {{tpl:SysBehavior behavior="publicEntryAfterContent"}}.
-Son apparence dépend également du thème.
-Par défaut il utilise le fichier "default-templates/tpl/rateit.html" de l'extension.
+Son apparence dÃ©pend Ã©galement du thÃ¨me.
+Par dÃ©faut il utilise le fichier "default-templates/tpl/rateit.html" du plugin.
 
 
-XII. Comment étendre cette extension à d'autres types de notation ?
+XI. Comment Ã©tendre cet plugin Ã  d'autres types de notation ?
 ===================================================================
 
 ...
 
 
-XIII. Behaviors:
+XII. Behaviors:
 ================
 
-XIII.1 callBehavior:
+XII.1 callBehavior:
 ---------------------
 
 "addRateItType":
@@ -324,7 +317,7 @@ XIII.1 callBehavior:
 "parseWidgetRateItRank":
 
 
-XIII.2 addBehavior:
+XII.2 addBehavior:
 --------------------
 
 "pluginsBeforeDelete":
@@ -354,10 +347,10 @@ XIII.2 addBehavior:
 "initWidgets":
 
 
-XIV. Public Urls, values, blocks :
+XIII. Public Urls, values, blocks :
 ==================================
 
-XIV.1 Urls:
+XIII.1 Urls:
 -----------
 
 "rateit":
@@ -367,7 +360,7 @@ XIV.1 Urls:
 "rateitservice":
 
 
-XIV.2 blocks:
+XIII.2 blocks:
 -------------
 
 "rateIt":
@@ -375,7 +368,7 @@ XIV.2 blocks:
 "rateItIf":
 
 
-XIV.3 values:
+XIII.3 values:
 -------------
 
 "rateItLinker":
@@ -395,16 +388,16 @@ XIV.3 values:
 "rateItQuotient":
 
 
-XV. Javascripts
+XIV. Javascripts
 ===============
 
 ...
 
 
-XVI. Base de données
+XV. Base de donnÃ©es
 ====================
 
-XVI.1 Structure
+XV.1 Structure
 ---------------
 
 CREATE TABLE `dc_rateit` (
@@ -423,7 +416,7 @@ CREATE TABLE `dc_rateit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-XVII. Arborescence:
+XVI. Arborescence:
 ===================
 
 /rateIt
@@ -445,8 +438,8 @@ XVII. Arborescence:
 /rateIt/locales/fr
 
 
-XVIII. Remerciements:
+XVII. Remerciements:
 =====================
 
-Je tiens à remercier les personnes qui ont eu la patience de tester toutes les versions d'essai
-et de donner un coup de main. Je remercie également toute l'équipe de Dotclear.
+Je tiens Ã  remercier les personnes qui ont eu la patience de tester toutes les versions d'essai
+et de donner un coup de main. Je remercie Ã©galement toute l'Ã©quipe de Dotclear.

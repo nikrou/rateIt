@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -27,10 +27,9 @@ class postRateItModulePublic
 		}
 	}
 
-	public static function publicRateItTplBlockRateIt($type,$attr,$content)
-	{
+	public static function publicRateItTplBlockRateIt($type,$attr,$content) {
 		if ($type != '' && $type != 'post') return;
-//utiliser $core->getPostType
+        //utiliser $core->getPostType
 		return
 		"if (\$_ctx->exists('posts')".
 		" && \$_ctx->posts->post_type == 'post'".

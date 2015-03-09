@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -49,7 +49,7 @@ class categoryRateItModuleAdmin
 		form::checkbox(array('rateit_category_active'),1,$core->blog->settings->rateit->rateit_category_active).
 		__('Enable categories rating').'</label></p>'.
 
-		'<p><input type="submit" name="save" value="'.__('save').'" />'.
+		'<p><input type="submit" name="save" value="'.__('Save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_category').
 		'</p></form>';
@@ -97,7 +97,7 @@ class categoryRateItModuleAdmin
 		else
 		{
 			echo
-			'<p>'.__('This is a list of all the categories having rating').'</p>'.
+			'<h3>'.__('List of all the categories having rating').'</h3>'.
 			'<form action="plugin.php" method="post" id="form-categories">'.
 			'<table class="clear"><tr>'.
 			'<th colspan="2">'.__('Title').'</th>'.

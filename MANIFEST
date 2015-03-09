@@ -1,6 +1,10 @@
 rateIt/locales/en/help/help.html
+rateIt/locales/en/help/rateIt_settings.html
+rateIt/locales/en/help/rateIt_modules.html
 rateIt/locales/en/resources.php
 rateIt/locales/fr/help/help.html
+rateIt/locales/fr/help/rateIt_settings.html
+rateIt/locales/fr/help/rateIt_modules.html
 rateIt/locales/fr/main.lang.php
 rateIt/locales/fr/resources.php
 rateIt/locales/fr/main.po
@@ -28,7 +32,6 @@ rateIt/inc/modules/lib.rateit.module.gallery.admin.php
 rateIt/inc/modules/lib.rateit.module.eventhandler.admin.php
 rateIt/inc/modules/lib.rateit.module.tag.public.php
 rateIt/inc/modules/lib.rateit.module.gallery.public.php
-rateIt/inc/modules/lib.rateit.module.cinecturlink2.backup.php
 rateIt/inc/modules/lib.rateit.module.cinecturlink2.admin.php
 rateIt/inc/modules/lib.rateit.module.post.admin.php
 rateIt/inc/modules/lib.rateit.module.eventhandler.public.php

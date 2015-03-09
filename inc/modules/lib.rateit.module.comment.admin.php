@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -55,7 +55,7 @@ class commentRateItModuleAdmin
 		__('Include on comments').'</label></p>'.
 		'<p class="form-note">'.__('To use this option you must have behavior "publicCommentAfterContent" in your theme').'</p>'.
 
-		'<p><input type="submit" name="save" value="'.__('save').'" />'.
+		'<p><input type="submit" name="save" value="'.__('Save').'" />'.
 		$hidden_fields.
 		form::hidden(array('action'),'save_module_comment').
 		'</p></form>';
@@ -103,7 +103,7 @@ class commentRateItModuleAdmin
 		else
 		{
 			echo
-			'<p>'.__('This is a list of all the comments having rating').'</p>'.
+			'<h3>'.__('List of all the comments having rating').'</h3>'.
 			'<form method="post" action="'.$page_url.'">'.
 			'<table class="clear"><tr>'.
 			'<th colspan="2">'.__('Title').'</th>'.

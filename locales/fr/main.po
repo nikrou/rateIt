@@ -1,8 +1,3 @@
-# Language: Français
-# Module: rateIt - 2.0-alpha
-# Date: 2010-06-13 12:53:34
-# Translated with translater 1.4
-
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,9 +15,9 @@ msgstr ""
 #: inc/index.setting.php:136
 #: inc/index.summary.php:61
 #: index.php:47
-#: index.php:60
+#: index.php:53
 msgid "Rate it"
-msgstr "Évaluer ça"
+msgstr "Evaluer ça"
 
 #: _public.php:378
 #: inc/modules/lib.rateit.module.cinecturlink2.public.php:41
@@ -64,47 +59,55 @@ msgstr "Plus haute :"
 msgid "Lower:"
 msgstr "Plus basse :"
 
-#: _widgets.php:28
-msgid "Rating"
-msgstr "Évaluation"
+#: _widget.php:30
+msgid "Rate It: rating"
+msgstr "Evaluer ça : évaluations"
 
-#: _widgets.php:33
+#: _widget.php:32
+msgid "Module to vote in the pages"
+msgstr "Module de vote dans les pages"
+
+#: _widgets.php:38
 msgid "Show notes next to images"
-msgstr "Afficher la note à coté des images"
+msgstr "Afficher la note à côté des images"
 
-#: _widgets.php:35
+#: _widgets.php:40
 msgid "Show note"
 msgstr "Afficher la note"
 
-#: _widgets.php:37
+#: _widgets.php:42
 msgid "Show the count of vote"
 msgstr "Afficher le nombre de votes"
 
-#: _widgets.php:39
+#: _widgets.php:44
 msgid "Show the highest rate"
 msgstr "Afficher la note la plus haute"
 
-#: _widgets.php:41
+#: _widgets.php:46
 msgid "Show the lowest rate"
 msgstr "Afficher la note la plus basse"
 
-#: _widgets.php:59
-msgid "Top rating"
-msgstr "Top évaluation"
+#: _widgets.php:67
+msgid "Rate It: top rating"
+msgstr "Evaluer ça : top évaluation"
 
-#: _widgets.php:60
+#: _widget.php:69
+msgid "List of top rated entries"
+msgstr "Liste des billets les mieux notés"
+
+#: _widgets.php:71
 msgid "Top rated entries"
 msgstr "Billets les mieux notés"
 
-#: _widgets.php:89
-msgid "Category limit: (if possible)"
-msgstr "Limiter à une catégorie: (si possible)"
+#: _widgets.php:100
+msgid "Category limit (if possible):"
+msgstr "Limiter à une catégorie (si possible) :"
 
-#: _widgets.php:90
+#: _widgets.php:101
 msgid "Length:"
 msgstr "Longueur :"
 
-#: _widgets.php:94
+#: _widgets.php:105
 #: inc/index.detail.php:83
 #: inc/index.setting.php:165
 #: inc/index.summary.php:91
@@ -118,7 +121,7 @@ msgstr "Longueur :"
 msgid "Note"
 msgstr "Note"
 
-#: _widgets.php:95
+#: _widgets.php:106
 #: inc/index.summary.php:89
 #: inc/modules/lib.rateit.module.category.admin.php:103
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:102
@@ -131,17 +134,17 @@ msgstr "Note"
 msgid "Votes"
 msgstr "Votes"
 
-#: _widgets.php:97
+#: _widgets.php:108
 msgid "Positive votes (for simple/twin mode)"
 msgstr "Votes positifs (pour les modes simple/double)"
 
-#: _widgets.php:103
-msgid "Text: Use wildcards %s"
-msgstr "Texte: (Utiliser les jokers %s)"
+#: _widgets.php:114
+msgid "Text (use wildcards %s):"
+msgstr "Texte (utiliser les jokers %s) :"
 
-#: _widgets.php:104
-msgid "Title length: (if truncate)"
-msgstr "Longueur de titre: (si tronqué)"
+#: _widgets.php:115
+msgid "Title length (if truncate):"
+msgstr "Longueur de titre (si tronqué) :"
 
 #: inc/class.rateit.rest.php:27
 msgid "Rating is disabled on this blog"
@@ -180,7 +183,7 @@ msgstr "Quotient"
 #: inc/index.setting.php:121
 #: inc/index.summary.php:92
 msgid "Ip"
-msgstr "Ip"
+msgstr "IP"
 
 #: inc/index.detail.php:87
 #: inc/index.summary.php:93
@@ -235,7 +238,7 @@ msgstr "Cookie"
 
 #: inc/index.setting.php:123
 msgid "Both ip and cookie"
-msgstr "Ip et cookie"
+msgstr "IP et cookie"
 
 #: inc/index.setting.php:126
 msgid "square"
@@ -255,11 +258,11 @@ msgstr "moyenne"
 
 #: inc/index.setting.php:148
 msgid "Extension"
-msgstr "Extension"
+msgstr "Plugin"
 
 #: inc/index.setting.php:151
 msgid "Enable plugin"
-msgstr "Activer l'extension"
+msgstr "Activer le plugin"
 
 #: inc/index.setting.php:154
 msgid "Disable public javascript"
@@ -295,7 +298,7 @@ msgstr "Note sur :"
 
 #: inc/index.setting.php:168
 msgid "Number of digits:"
-msgstr "Nombre de chiffres après la virgule :"
+msgstr "Nombre de décimales après la virgule :"
 
 #: inc/index.setting.php:170
 msgid "Text for Like button:"
@@ -319,7 +322,7 @@ msgstr "Mode de vote classic"
 
 #: inc/index.setting.php:180
 msgid "User attributes a note to an item."
-msgstr "L'utilisateur attribut une note à l'élément."
+msgstr "L'utilisateur attribue une note à l'élément."
 
 #: inc/index.setting.php:183
 msgid "Twin rating mode"
@@ -327,7 +330,7 @@ msgstr "Mode de vote double"
 
 #: inc/index.setting.php:184
 msgid "User says if he likes or not an item."
-msgstr "Utilisateur dit si il aime ou pas l'élément"
+msgstr "L'utilisateur dit si il aime ou pas l'élément."
 
 #: inc/index.setting.php:187
 msgid "Simple rating mode"
@@ -347,7 +350,7 @@ msgstr "Image"
 
 #: inc/index.setting.php:206
 msgid "Rating image exists on theme it will be used:"
-msgstr "L'image d'évaluation existe dans le thème, elle sera utilisée"
+msgstr "L'image d'évaluation existe dans le thème, elle sera utilisée :"
 
 #: inc/index.setting.php:208
 #: inc/index.setting.php:215
@@ -362,7 +365,7 @@ msgstr "positif"
 #: inc/index.setting.php:208
 #: inc/index.setting.php:215
 msgid "hover"
-msgstr "survole"
+msgstr "survol"
 
 #: inc/index.setting.php:208
 #: inc/index.setting.php:215
@@ -380,7 +383,7 @@ msgstr "actuel"
 
 #: inc/index.setting.php:248
 msgid "Image must be in png format and having three equal height."
-msgstr "L'image doit être au format png et être séparé en trois hauteurs égales."
+msgstr "L'image doit être au format png et être séparée en trois hauteurs égales."
 
 #: inc/index.summary.php:61
 #: inc/index.summary.php:69
@@ -390,7 +393,7 @@ msgstr "Résumé"
 
 #: inc/index.summary.php:72
 msgid "There is no vote at this time."
-msgstr "I ln'y a pas de vote pour l'instant."
+msgstr "Il n'y a pas de vote pour l'instant."
 
 #: inc/index.summary.php:76
 msgid "There is only one vote at this time."
@@ -418,7 +421,7 @@ msgstr "J'aime"
 
 #: inc/lib.rateIt.context.php:25
 msgid "I don't like"
-msgstr "J'aime pas"
+msgstr "Je n'aime pas"
 
 #: inc/lib.rateIt.context.php:61
 msgid "Vote"
@@ -426,7 +429,7 @@ msgstr "Vote"
 
 #: inc/lib.rateit.activityreport.php:16
 msgid "Plugin rateIt"
-msgstr "Extension \"Évaluer ça\""
+msgstr "Plugin \"Évaluer ça\""
 
 #: inc/lib.rateit.activityreport.php:22
 msgid "new vote"
@@ -454,9 +457,9 @@ msgstr "Voir le détail des votes"
 msgid "There is no category rating at this time"
 msgstr "Il n'y a pas de vote sur les catégories pour l'instant"
 
-#: inc/modules/lib.rateit.module.category.admin.php:98
-msgid "This is a list of all the categories having rating"
-msgstr "Ceci est la liste des toutes les catégories ayant reçu des votes"
+#: inc/modules/lib.rateit.module.category.admin.php:100
+msgid "List of all the categories having rating"
+msgstr "Liste de toutes les catégories ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.category.admin.php:104
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:103
@@ -498,11 +501,11 @@ msgstr "Effacer les votes"
 
 #: inc/modules/lib.rateit.module.category.admin.php:128
 msgid "Enable vote for categories"
-msgstr "Activer le vote sur les catégories"
+msgstr "Autoriser le vote pour les catégories"
 
 #: inc/modules/lib.rateit.module.category.admin.php:130
 msgid "Title for categories:"
-msgstr "Titre pour les catégories"
+msgstr "Titre pour les catégories :"
 
 #: inc/modules/lib.rateit.module.category.admin.php:131
 #: inc/modules/lib.rateit.module.category.public.php:42
@@ -515,7 +518,7 @@ msgstr "catégories"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:41
 msgid "Enable cinecturlinks rating"
-msgstr "Activer le vote sur le cinecturlink"
+msgstr "Activer le vote pour le cinecturlink"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:44
 msgid "Include on cinecturlinks widget"
@@ -523,15 +526,15 @@ msgstr "Inclure dans le widget cinecturlink"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:47
 msgid "Include on cinecturlinks page"
-msgstr "Inclure sur la page des cinecturlink"
+msgstr "Inclure dans la page des cinecturlink"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:92
 msgid "There is no cinecturlink rating at this time"
 msgstr "Il n'y a pas de vote sur les cinecturlink pour l'instant"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:97
-msgid "This is a list of all the cinecturlink having rating"
-msgstr "Ceci est la liste des cinecturlink ayant des votes"
+msgid "List of all the cinecturlink having rating"
+msgstr "Liste des cinecturlink ayant des votes"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:107
 msgid "My note"
@@ -539,11 +542,11 @@ msgstr "Ma note"
 
 #: inc/modules/lib.rateit.module.cinecturlink2.admin.php:114
 msgid "Selected cinecturlink action:"
-msgstr "Action sur les cinecturlin selectionnés :"
+msgstr "Action sur les cinecturlin sélectionnés :"
 
 #: inc/modules/lib.rateit.module.comment.admin.php:50
 msgid "Enable comments rating"
-msgstr "Activer le vote sur les commentaires"
+msgstr "Activer le vote pour les commentaires"
 
 #: inc/modules/lib.rateit.module.comment.admin.php:53
 msgid "Include on comments"
@@ -557,9 +560,9 @@ msgstr "Pour utiliser cette option vous devez avoir le behavior \"publicCommentA
 msgid "There is no comment rating at this time"
 msgstr "Il n'y a pas de vote sur les commentaires pour l'instant"
 
-#: inc/modules/lib.rateit.module.comment.admin.php:104
-msgid "This is a list of all the comments having rating"
-msgstr "Ceci est la liste de tous les commentaires ayant reçu des votes"
+#: inc/modules/lib.rateit.module.comment.admin.php:106
+msgid "List of all the comments having rating"
+msgstr "Liste de tous les commentaires ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.comment.admin.php:134
 msgid "comments"
@@ -568,6 +571,46 @@ msgstr "commentaires"
 #: inc/modules/lib.rateit.module.comment.public.php:41
 msgid "Rate this comment"
 msgstr "Évaluer ce commentaire"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:37
+msgid "Enable events rating"
+msgstr "Activer le vote pour les événements"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:40
+msgid "Include on event page"
+msgstr "Inclure dans la page de l'événement"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:43
+msgid "Include on events page"
+msgstr "Inclure dans la page des événements"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:176
+msgid "List of all events having rating"
+msgstr "Liste des événements ayant reçu des votes"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:231
+msgid "Enable vote for events"
+msgstr "Autoriser le vote pour les événements"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:233
+msgid "Title for events:"
+msgstr "Titre pour les événements :"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:234
+msgid "Rate this event"
+msgstr "Evaluer cet événement"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:239
+msgid "events"
+msgstr "événements"
+
+#: inc/modules/lib.rateit.module.eventhandler.admin.php.php:293
+msgid "Do you really want to delete all votes for these events?"
+msgstr "Êtes-vous sûr de vouloir effacer les votes pour ces événements ?"
+
+#: ??
+msgid "Events"
+msgstr "Evénements"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:73
 #: inc/modules/lib.rateit.module.gallery.admin.php:94
@@ -590,12 +633,12 @@ msgid "There is no gallery rating at this time"
 msgstr "Il n'y a pas vote sur les galeries pour l'instant"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:150
-msgid "This is a list of all the galleries having rating"
-msgstr "Ceci est la liste des galeries ayant reçu des votes"
+msgid "List of all the galleries having rating"
+msgstr "Liste des galeries ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:164
 msgid "Selected galeries action:"
-msgstr "Action sur les galeries selectionnées :"
+msgstr "Action sur les galeries sélectionnées :"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:206
 msgid "There is no gallery item rating at this time"
@@ -607,7 +650,7 @@ msgstr "Ceci est la liste des images ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:225
 msgid "Selected galeries items action:"
-msgstr "Action sur les images selectionnées :"
+msgstr "Action sur les images sélectionnées :"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:237
 msgid "Enable vote for galleries"
@@ -637,7 +680,7 @@ msgstr "Évaluer cette image"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:249
 msgid "galleries"
-msgstr "galleries"
+msgstr "galeries"
 
 #: inc/modules/lib.rateit.module.gallery.admin.php:250
 msgid "galleries items"
@@ -676,9 +719,9 @@ msgstr "Inverser et exclure cette catégorie"
 msgid "Reviews"
 msgstr "Évaluations"
 
-#: inc/modules/lib.rateit.module.post.admin.php:214
-msgid "This is the list of all entries having rating"
-msgstr "Ceci est la liste des billets ayant reçu des votes"
+#: inc/modules/lib.rateit.module.post.admin.php:195
+msgid "List of all entries having rating"
+msgstr "Liste des billets ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.post.admin.php:269
 msgid "Enable vote for entries"
@@ -703,46 +746,52 @@ msgstr "Êtes-vous sûr de vouloir effacer les votes pour ces entrées ?"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:49
 msgid "Enable tags rating"
-msgstr "Activer le vote sur les tags"
+msgstr "Activer le vote sur les mots-clés"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:91
 msgid "There is no tag rating at this time"
-msgstr "Il n'y a pas de vote sur les tags pour l'instant"
+msgstr "Il n'y a pas de vote sur les mots-clés pour l'instant"
 
-#: inc/modules/lib.rateit.module.tag.admin.php:96
-msgid "This is a list of all the tags having rating"
-msgstr "Ceci est la liste des tags ayant reçu des votes"
+#: inc/modules/lib.rateit.module.tag.admin.php:98
+msgid "List of all the tags having rating"
+msgstr "Liste des mots-clés ayant reçu des votes"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:110
 msgid "Selected tags action:"
-msgstr "Action sur les tags selectionnés :"
+msgstr "Action sur les mots-clés sélectionnés :"
+
+msgid "Selected events action:"
+msgstr "Action sur les événements sélectionnés :"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:124
 msgid "Enable vote for tags"
-msgstr "Autoriser le vote pour les tags"
+msgstr "Autoriser le vote pour les mots-clés"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:126
 msgid "Title for tags:"
-msgstr "Titre pour les tags"
+msgstr "Titre pour les mots-clés"
 
 #: inc/modules/lib.rateit.module.tag.admin.php:127
 #: inc/modules/lib.rateit.module.tag.public.php:42
 msgid "Rate this tag"
-msgstr "Évaluer ce tag"
+msgstr "Évaluer ce mot-clé"
 
 #: index.php:33
 msgid "select a module"
 msgstr "sélectionner un module"
 
-#: index.php:40
+#: index.php:42
 msgid "Please wait"
 msgstr "Veuillez patienter"
 
-#: index.php:65
+#: index.php:54
+msgid "Select a module:"
+msgstr "Sélectionner un module :"
+
+#: index.php:72
 msgid "Configuration successfully saved"
 msgstr "Configuration sauvegardée avec succès"
 
-#: index.php:66
+#: index.php:73
 msgid "Records succesfully deleted"
 msgstr "Enregistrements effacés avec succès"
-

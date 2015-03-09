@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -322,7 +322,7 @@ class rateIt
 
 		$strReq .= " WHERE RI.blog_id = '".$this->blog."' ";
 
-		# rate type
+		#Â rate type
 		if (isset($params['rateit_type']))
 		{
 			if (is_array($params['rateit_type']) && !empty($params['rateit_type']))

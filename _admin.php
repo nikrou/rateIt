@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -14,7 +14,7 @@
 
 if (!defined('DC_CONTEXT_ADMIN')){return;}
 
-$_menu['Plugins']->addItem(
+$_menu['Blog']->addItem(
 	__('Rate it'),
 	'plugin.php?p=rateIt','index.php?pf=rateIt/icon.png',
 	preg_match('/plugin.php\?p=rateIt(&.*)?$/',$_SERVER['REQUEST_URI']),
@@ -98,4 +98,17 @@ class rateItBackup
 			$bk->cur_rateit->insert();
 		}
 	}
+}
+
+$core->addBehavior('adminDashboardFavorites','rateItDashboardFavorites');
+
+function rateItDashboardFavorites($core,$favs)
+{
+	$favs->register('rateIt', array(
+		'title' => __('Rate it'),
+		'url' => 'plugin.php?p=rateIt',
+		'small-icon' => 'index.php?pf=rateIt/icon.png',
+		'large-icon' => 'index.php?pf=rateIt/icon-b.png',
+		'permissions' => 'admin'
+	));
 }

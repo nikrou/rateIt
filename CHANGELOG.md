@@ -1,3 +1,13 @@
+rateIt 2.2.0 - 2015-03-09
+=========================
+* A great thanks to Pierre Van Glabeke for following changes:
+* Add options for widgets
+* Update help (need more translations)
+* Update admin pages to match dotclear 2.6
+* Update icons
+* Add link to favorite
+* Fix filter for events
+
 rateIt 2.1.0 - 2015-03-07
 =========================
 * Upgrade jquery rating plugin

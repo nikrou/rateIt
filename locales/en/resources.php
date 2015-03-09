@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -14,4 +14,5 @@
 
 if (!defined('DC_RC_PATH')) { return; }
 
-$__resources['help']['rateIt'] = dirname(__FILE__).'/help/help.html';
+$__resources['help']['rateIt_settings'] = dirname(__FILE__).'/help/rateIt_settings.html';
+$__resources['help']['rateIt_modules'] = dirname(__FILE__).'/help/rateIt_modules.html';
