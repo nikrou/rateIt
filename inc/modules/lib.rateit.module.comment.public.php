@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2016 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -59,7 +59,7 @@ class commentRateItModulePublic
 		$p['groups'][] = 'C.comment_author';
 		$p['groups'][] = 'P.post_url';
 
-		if ($core->con->driver() == 'mysql')
+		if ($core->con->driver() == 'mysqli')
 		{
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'comment C ON CAST(C.comment_id as char)=RI.rateit_id ';
 		}

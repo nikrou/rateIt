@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2016 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -18,7 +18,7 @@ $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your blogs",
 	/* Author */			"JC Denis, Nicolas Roudaire",
-	/* Version */			'2.2.0',
+	/* Version */			'2.2.1',
 	/* Properties */
 	array(
 		'permissions' => 'admin',

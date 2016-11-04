@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of rateIt, a plugin for Dotclear 2.
 #
-# Copyright(c) 2014-2015 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
+# Copyright(c) 2014-2016 Nicolas Roudaire <nikrou77@gmail.com> http://www.nikrou.net
 #
 # Copyright (c) 2009-2010 JC Denis and contributors
 # jcdenis@gdwd.com
@@ -58,7 +58,7 @@ class cinecturlink2RateItModulePublic
 		$p['groups'][] = 'C.link_id';
 		$p['groups'][] = 'C.link_title';
 
-		if ($core->con->driver() == 'mysql')
+		if ($core->con->driver() == 'mysqli')
 		{
 			$p['from'] .= ' INNER JOIN '.$core->prefix.'cinecturlink2 C ON CAST(C.link_id as char)=RI.rateit_id ';
 		}

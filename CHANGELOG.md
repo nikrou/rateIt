@@ -1,3 +1,7 @@
+rateIt 2.2.1 - 2016-11-04
+=========================
+* Fix issue with mysql db layer (use mysqli instead of mysql)
+
 rateIt 2.2.0 - 2015-03-09
 =========================
 * A great thanks to Pierre Van Glabeke for following changes:
