@@ -1,3 +1,7 @@
+rateIt 2.2.2 - 2016-11-07
+=========================
+* Fix issue that prevent to customize rateit.html template in theme.
+
 rateIt 2.2.1 - 2016-11-04
 =========================
 * Fix issue with mysql db layer (use mysqli instead of mysql)

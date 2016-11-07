@@ -122,7 +122,7 @@ class postRateItPublic extends dcUrlHandlers
 			$GLOBALS['rateit_params']['type'] = 'post';
 			$GLOBALS['rateit_params']['id'] = $_ctx->posts->post_id;
 
-			echo $core->tpl->getData('rateit.html');
+			self::serveDocument('rateit.html');
 		}
 		else
 		{

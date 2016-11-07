@@ -18,7 +18,7 @@ $this->registerModule(
 	/* Name */			"Rate it",
 	/* Description*/		"Rating system for your blogs",
 	/* Author */			"JC Denis, Nicolas Roudaire",
-	/* Version */			'2.2.1',
+	/* Version */			'2.2.2',
 	/* Properties */
 	array(
 		'permissions' => 'admin',
